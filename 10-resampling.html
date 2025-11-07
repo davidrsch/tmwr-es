@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <title>10&nbsp; Remuestrear Para Evaluar El Rendimiento – Modelado Ordenado con R</title>
@@ -86,14 +86,15 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87efc9f0321ca4df940afa6b8506b50b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -107,7 +108,7 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -132,7 +133,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -165,7 +166,9 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -178,7 +181,7 @@ window.Quarto = {
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/TMwRes">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/tmwr-es">
             Traducción
             </a>
           </li>
@@ -454,7 +457,7 @@ window.Quarto = {
 <p>Los modelos de random forest son muy potentes y pueden emular muy fielmente los patrones de datos subyacentes. Si bien este modelo puede requerir un uso intensivo de computación, requiere muy poco mantenimiento; se requiere muy poco preprocesamiento (como se documenta en <a href="pre-proc-table.html" class="quarto-xref">Apéndice&nbsp;<span>A</span></a>).</p>
 <p>Usando el mismo conjunto de predictores que el modelo lineal (sin los pasos de preprocesamiento adicionales), podemos ajustar un modelo de random forest al conjunto de entrenamiento a través del motor <code>"ranger"</code> (que usa el paquete R <span class="pkg">ranger</span> para cálculo). Este modelo no requiere procesamiento previo, por lo que se puede utilizar una fórmula simple:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rf_model</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rf_model</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">rand_forest</span><span class="op">(</span>trees <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"ranger"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span></span>
@@ -466,11 +469,11 @@ window.Quarto = {
 <span>      <span class="va">Latitude</span> <span class="op">+</span> <span class="va">Longitude</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">rf_model</span><span class="op">)</span> </span>
 <span></span>
-<span><span class="va">rf_fit</span> <span class="op">&lt;-</span> <span class="va">rf_wflow</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">ames_train</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">rf_fit</span> <span class="op">&lt;-</span> <span class="va">rf_wflow</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">ames_train</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>¿Cómo deberíamos comparar los modelos forestales lineales y aleatorios? A modo de demostración, predeciremos que el conjunto de entrenamiento producirá lo que se conoce como <em>métrica aparente</em> o <em>métrica de resustitución</em>. Esta función crea predicciones y formatea los resultados:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">estimate_perf</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span>, <span class="va">dat</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">estimate_perf</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span>, <span class="va">dat</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># Captura los nombres de los objetos `model` y `dat`</span></span>
 <span>  <span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.call.html">match.call</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="va">obj_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">cl</span><span class="op">$</span><span class="va">model</span><span class="op">)</span></span>
@@ -486,11 +489,11 @@ window.Quarto = {
 <span>    <span class="fu">reg_metrics</span><span class="op">(</span><span class="va">Sale_Price</span>, <span class="va">.pred</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>    <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">.estimator</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>    <span class="fu">mutate</span><span class="op">(</span>object <span class="op">=</span> <span class="va">obj_name</span>, data <span class="op">=</span> <span class="va">data_name</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="op">}</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Se calculan tanto RMSE como <span class="math inline">\(R^2\)</span>. Las estadísticas de resustitución son:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">estimate_perf</span><span class="op">(</span><span class="va">rf_fit</span>, <span class="va">ames_train</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">estimate_perf</span><span class="op">(</span><span class="va">rf_fit</span>, <span class="va">ames_train</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 2 × 4</span></span>
 <span><span class="co">##   .metric .estimate object data </span></span>
 <span><span class="co">##   &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;</span></span>
@@ -501,16 +504,16 @@ window.Quarto = {
 <span><span class="co">##   .metric .estimate object data </span></span>
 <span><span class="co">##   &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;</span></span>
 <span><span class="co">## 1 rmse       0.0754 lm_fit train</span></span>
-<span><span class="co">## 2 rsq        0.816  lm_fit train</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 2 rsq        0.816  lm_fit train</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>En base a estos resultados, el random forest es mucho más capaz de predecir los precios de venta; la estimación de RMSE es two, veces mejor que la regresión lineal. Si tuviéramos que elegir entre estos dos modelos para este problema de predicción de precios, probablemente elegiríamos el random fores porque, en la escala logarítmica que estamos usando, su RMSE es aproximadamente la mitad. El siguiente paso aplica el modelo de random forest al conjunto de prueba para la verificación final:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">estimate_perf</span><span class="op">(</span><span class="va">rf_fit</span>, <span class="va">ames_test</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">estimate_perf</span><span class="op">(</span><span class="va">rf_fit</span>, <span class="va">ames_test</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 2 × 4</span></span>
 <span><span class="co">##   .metric .estimate object data </span></span>
 <span><span class="co">##   &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;</span></span>
 <span><span class="co">## 1 rmse       0.0704 rf_fit test </span></span>
-<span><span class="co">## 2 rsq        0.852  rf_fit test</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 2 rsq        0.852  rf_fit test</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>¡La estimación RMSE del conjunto de prueba, 0.0704, es <em>much worse than the training set</em> valor de 0.0365! ¿Por qué pasó esto?</p>
 <p>Muchos modelos predictivos son capaces de aprender tendencias complejas a partir de los datos. En estadística, estos se conocen comúnmente como <em>modelos de bajo sesgo</em>.</p>
@@ -523,7 +526,7 @@ window.Quarto = {
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-rmse-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabla&nbsp;10.1: Estadísticas de rendimiento para conjuntos de entrenamiento y prueba.
 </figcaption><div aria-describedby="tbl-rmse-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="table cell caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<table class="table cell caption-top table-sm table-striped small">
 <colgroup>
 <col style="width: 33%">
 <col style="width: 33%">
@@ -622,7 +625,7 @@ Figura&nbsp;10.3: Uso de datos de validación cruzada V-fold
 </div>
 <p>La entrada principal es el marco de datos del conjunto de entrenamiento, así como el número de pliegues (por defecto, 10):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1001</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1001</span><span class="op">)</span></span>
 <span><span class="va">ames_folds</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">ames_train</span>, v <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="va">ames_folds</span></span>
 <span><span class="co">## #  10-fold cross-validation </span></span>
@@ -635,15 +638,15 @@ Figura&nbsp;10.3: Uso de datos de validación cruzada V-fold
 <span><span class="co">## 4 &lt;split [2108/234]&gt; Fold04</span></span>
 <span><span class="co">## 5 &lt;split [2108/234]&gt; Fold05</span></span>
 <span><span class="co">## 6 &lt;split [2108/234]&gt; Fold06</span></span>
-<span><span class="co">## # ℹ 4 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 4 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>La columna denominada <code>splits</code> contiene información sobre cómo dividir los datos (similar al objeto utilizado para crear la partición de entrenamiento/prueba inicial). Si bien cada fila de “divisiones” tiene una copia incrustada de todo el conjunto de entrenamiento, R es lo suficientemente inteligente como para no hacer copias de los datos en la memoria.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> El método de impresión dentro del tibble muestra la frecuencia de cada: <code>[2107/235]</code> indica que alrededor de dos mil muestras están en el conjunto de análisis y 235 están en ese conjunto de evaluación en particular.</p>
 <p>Estos objetos también contienen siempre una columna de caracteres llamada <code>id</code> que etiqueta la partición.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
 <p>Para recuperar manualmente los datos particionados, las funciones <code>analysis()</code> y <code>assessment()</code> devuelven los marcos de datos correspondientes:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Para el primer pliegue:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Para el primer pliegue:</span></span>
 <span><span class="va">ames_folds</span><span class="op">$</span><span class="va">splits</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">%&gt;%</span> <span class="fu">analysis</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## [1] 2107   74</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## [1] 2107   74</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Los paquetes <span class="pkg">tidymodels</span>, como <a href="https://tune.tidymodels.org/"><span class="pkg">tune</span></a>, contienen interfaces de usuario de alto nivel para que funciones como <code>analysis()</code> no sean generalmente necesarias para el trabajo diario. <a href="#sec-resampling-performance" class="quarto-xref"><span>Sección 10.3</span></a> demuestra una función para ajustar un modelo sobre estos remuestreos.</p>
 <p>Existe una variedad de variaciones de validación cruzada; repasaremos los más importantes.</p>
@@ -666,7 +669,7 @@ Figura&nbsp;10.4: Relación entre la varianza relativa en las estimaciones de de
 <p>Un mayor número de réplicas tiende a tener menos impacto en el error estándar. Sin embargo, si el valor de referencia de <span class="math inline">\(\sigma\)</span> es imprácticamente grande, los rendimientos decrecientes de la replicación aún pueden valer los costos computacionales adicionales.</p>
 <p>Para crear repeticiones, invoque <code>vfold_cv()</code> con un argumento adicional <code>repeats</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">vfold_cv</span><span class="op">(</span><span class="va">ames_train</span>, v <span class="op">=</span> <span class="fl">10</span>, repeats <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">vfold_cv</span><span class="op">(</span><span class="va">ames_train</span>, v <span class="op">=</span> <span class="fl">10</span>, repeats <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">## #  10-fold cross-validation repeated 5 times </span></span>
 <span><span class="co">## # A tibble: 50 × 3</span></span>
 <span><span class="co">##   splits             id      id2   </span></span>
@@ -677,7 +680,7 @@ Figura&nbsp;10.4: Relación entre la varianza relativa en las estimaciones de de
 <span><span class="co">## 4 &lt;split [2108/234]&gt; Repeat1 Fold04</span></span>
 <span><span class="co">## 5 &lt;split [2108/234]&gt; Repeat1 Fold05</span></span>
 <span><span class="co">## 6 &lt;split [2108/234]&gt; Repeat1 Fold06</span></span>
-<span><span class="co">## # ℹ 44 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 44 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="validación-cruzada-de-dejar-uno-fuera" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="validación-cruzada-de-dejar-uno-fuera">Validación cruzada de dejar uno fuera</h3>
 <p>Una variación de la validación cruzada es la validación cruzada de dejar uno fuera (LOO). Si hay <span class="math inline">\(n\)</span> muestras de conjuntos de entrenamiento, <span class="math inline">\(n\)</span> modelos se ajustan usando <span class="math inline">\(n-1\)</span> filas del conjunto de entrenamiento. Cada modelo predice el único punto de datos excluido. Al final del remuestreo, las predicciones <span class="math inline">\(n\)</span> se combinan para producir una única estadística de rendimiento.</p>
@@ -685,7 +688,7 @@ Figura&nbsp;10.4: Relación entre la varianza relativa en las estimaciones de de
 </section><section id="validación-cruzada-de-monte-carlo" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="validación-cruzada-de-monte-carlo">Validación cruzada de Monte Carlo</h3>
 <p>Otra variante de la validación cruzada <em>V</em> es la validación cruzada de Monte Carlo (MCCV, <span class="citation" data-cites="xu2001monte">Xu y Liang (<a href="references.html#ref-xu2001monte" role="doc-biblioref">2001</a>)</span>). Al igual que la validación cruzada <em>V</em> veces, asigna una proporción fija de datos a los conjuntos de evaluación. La diferencia entre MCCV y la validación cruzada regular es que, para MCCV, esta proporción de datos se selecciona aleatoriamente cada vez. Esto da como resultado conjuntos de evaluación que no son mutuamente excluyentes. Para crear estos objetos de remuestreo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">mc_cv</span><span class="op">(</span><span class="va">ames_train</span>, prop <span class="op">=</span> <span class="fl">9</span><span class="op">/</span><span class="fl">10</span>, times <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">mc_cv</span><span class="op">(</span><span class="va">ames_train</span>, prop <span class="op">=</span> <span class="fl">9</span><span class="op">/</span><span class="fl">10</span>, times <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="co">## # Monte Carlo cross-validation (0.9/0.1) with 20 resamples  </span></span>
 <span><span class="co">## # A tibble: 20 × 2</span></span>
 <span><span class="co">##   splits             id        </span></span>
@@ -696,7 +699,7 @@ Figura&nbsp;10.4: Relación entre la varianza relativa en las estimaciones de de
 <span><span class="co">## 4 &lt;split [2107/235]&gt; Resample04</span></span>
 <span><span class="co">## 5 &lt;split [2107/235]&gt; Resample05</span></span>
 <span><span class="co">## 6 &lt;split [2107/235]&gt; Resample06</span></span>
-<span><span class="co">## # ℹ 14 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 14 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="sec-validation" class="level3" data-number="10.2.2"><h3 data-number="10.2.2" class="anchored" data-anchor-id="sec-validation">
 <span class="header-section-number">10.2.2</span> Conjuntos de validación</h3>
@@ -729,7 +732,7 @@ Figura&nbsp;10.6: Una división inicial bidireccional en entrenamiento y pruebas
 </div>
 <p>Para construir sobre el código de <a href="05-data-spending.html#sec-what-about-a-validation-set" class="quarto-xref"><span>Sección 5.2</span></a>, la función <code>validation_set()</code> puede tomar los resultados de <code>initial_validation_split()</code> y convertirlos en un objeto rset similar a los producidos. mediante funciones como <code>vfold_cv()</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Previamente:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Previamente:</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">52</span><span class="op">)</span></span>
 <span><span class="co"># Para dedicar el 60 % al entrenamiento, el 20 % a la validación y el 20 % a las pruebas:</span></span>
@@ -744,7 +747,7 @@ Figura&nbsp;10.6: Una división inicial bidireccional en entrenamiento y pruebas
 <span><span class="co">## # A tibble: 1 × 2</span></span>
 <span><span class="co">##   splits             id        </span></span>
 <span><span class="co">##   &lt;list&gt;             &lt;chr&gt;     </span></span>
-<span><span class="co">## 1 &lt;split [1758/586]&gt; validation</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 &lt;split [1758/586]&gt; validation</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Como verá en <a href="#sec-resampling-performance" class="quarto-xref"><span>Sección 10.3</span></a>, la función <code>fit_resamples()</code> se utilizará para calcular estimaciones correctas de rendimiento mediante el remuestreo. El objeto <code>val_set</code> se puede utilizar en esta y otras funciones aunque sea una única “muestra” de los datos.</p>
 </section><section id="sec-bootstrap" class="level3" data-number="10.2.3"><h3 data-number="10.2.3" class="anchored" data-anchor-id="sec-bootstrap">
@@ -767,7 +770,7 @@ Figura&nbsp;10.7: Uso de datos Bootstraping
 <p>Tenga en cuenta que los tamaños de los conjuntos de evaluación varían.</p>
 <p>Usando el paquete <span class="pkg">rsample</span>, podemos crear tales remuestreos de bootstrap:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">bootstraps</span><span class="op">(</span><span class="va">ames_train</span>, times <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">bootstraps</span><span class="op">(</span><span class="va">ames_train</span>, times <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">## # Bootstrap sampling </span></span>
 <span><span class="co">## # A tibble: 5 × 2</span></span>
 <span><span class="co">##   splits             id        </span></span>
@@ -776,7 +779,7 @@ Figura&nbsp;10.7: Uso de datos Bootstraping
 <span><span class="co">## 2 &lt;split [2342/869]&gt; Bootstrap2</span></span>
 <span><span class="co">## 3 &lt;split [2342/859]&gt; Bootstrap3</span></span>
 <span><span class="co">## 4 &lt;split [2342/858]&gt; Bootstrap4</span></span>
-<span><span class="co">## 5 &lt;split [2342/873]&gt; Bootstrap5</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 5 &lt;split [2342/873]&gt; Bootstrap5</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Las muestras Bootstrap producen estimaciones de rendimiento que tienen una varianza muy baja (a diferencia de la validación cruzada) pero tienen un sesgo pesimista significativo. Esto significa que, si la precisión real de un modelo es del 90%, el bootstrap tendería a estimar que el valor es inferior al 90%. La cantidad de sesgo no se puede determinar empíricamente con suficiente precisión. Además, la cantidad de sesgo cambia a lo largo de la escala de la métrica de desempeño. Por ejemplo, es probable que el sesgo sea diferente cuando la precisión es del 90 % y cuando es del 70 %.</p>
 <p>El bootstrap también se utiliza en muchos modelos. Por ejemplo, el modelo de random forest mencionado anteriormente contenía 1000 árboles de decisión individuales. Cada árbol fue producto de una muestra de bootstrap diferente del conjunto de entrenamiento.</p>
@@ -804,7 +807,7 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 </ul>
 <p>Para los datos de un año, supongamos que seis conjuntos de bloques de 30 días definen el conjunto de análisis. Para conjuntos de evaluación de 30 días con un salto de 29 días, podemos usar el paquete <span class="pkg">rsample</span> para especificar:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">time_slices</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">time_slices</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">tibble</span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">365</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">rolling_origin</span><span class="op">(</span>initial <span class="op">=</span> <span class="fl">6</span> <span class="op">*</span> <span class="fl">30</span>, assess <span class="op">=</span> <span class="fl">30</span>, skip <span class="op">=</span> <span class="fl">29</span>, cumulative <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -831,7 +834,7 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <span><span class="co">## 3   241   270</span></span>
 <span><span class="co">## 4   271   300</span></span>
 <span><span class="co">## 5   301   330</span></span>
-<span><span class="co">## 6   331   360</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 6   331   360</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section></section><section id="sec-resampling-performance" class="level2" data-number="10.3"><h2 data-number="10.3" class="anchored" data-anchor-id="sec-resampling-performance">
 <span class="header-section-number">10.3</span> Estimación Del Rendimiento</h2>
@@ -843,9 +846,9 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <p>Esta secuencia se repite para cada nuevo muestreo. Si hay <em>B</em> remuestreos, hay <em>B</em> réplicas de cada una de las métricas de rendimiento. La estimación final del remuestreo es el promedio de estas estadísticas <em>B</em>. Si <em>B</em> = 1, como ocurre con un conjunto de validación, las estadísticas individuales representan el rendimiento general.</p>
 <p>Reconsideremos el modelo de random forest anterior contenido en el objeto <code>rf_wflow</code>. La función <code>fit_resamples()</code> es análoga a <code>fit()</code>, pero en lugar de tener un argumento <code>data</code>, <code>fit_resamples()</code> tiene <code>resamples</code>, que espera un objeto <code>rset</code> como los que se muestran en este capítulo Las posibles interfaces para la función son:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model_spec</span> <span class="op">%&gt;%</span> <span class="fu">fit_resamples</span><span class="op">(</span><span class="va">formula</span>,  <span class="va">resamples</span>, <span class="va">...</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model_spec</span> <span class="op">%&gt;%</span> <span class="fu">fit_resamples</span><span class="op">(</span><span class="va">formula</span>,  <span class="va">resamples</span>, <span class="va">...</span><span class="op">)</span></span>
 <span><span class="va">model_spec</span> <span class="op">%&gt;%</span> <span class="fu">fit_resamples</span><span class="op">(</span><span class="va">recipe</span>,   <span class="va">resamples</span>, <span class="va">...</span><span class="op">)</span></span>
-<span><span class="va">workflow</span>   <span class="op">%&gt;%</span> <span class="fu">fit_resamples</span><span class="op">(</span>          <span class="va">resamples</span>, <span class="va">...</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">workflow</span>   <span class="op">%&gt;%</span> <span class="fu">fit_resamples</span><span class="op">(</span>          <span class="va">resamples</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Hay una serie de otros argumentos opcionales, como por ejemplo:</p>
 <ul>
@@ -860,7 +863,7 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 </ul>
 <p>Para nuestro ejemplo, guardemos las predicciones para visualizar el ajuste y los residuos del modelo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">keep_pred</span> <span class="op">&lt;-</span> <span class="fu">control_resamples</span><span class="op">(</span>save_pred <span class="op">=</span> <span class="cn">TRUE</span>, save_workflow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">keep_pred</span> <span class="op">&lt;-</span> <span class="fu">control_resamples</span><span class="op">(</span>save_pred <span class="op">=</span> <span class="cn">TRUE</span>, save_workflow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1003</span><span class="op">)</span></span>
 <span><span class="va">rf_res</span> <span class="op">&lt;-</span> </span>
@@ -878,7 +881,7 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <span><span class="co">## 4 &lt;split [2108/234]&gt; Fold04 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [234 × 4]&gt;</span></span>
 <span><span class="co">## 5 &lt;split [2108/234]&gt; Fold05 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [234 × 4]&gt;</span></span>
 <span><span class="co">## 6 &lt;split [2108/234]&gt; Fold06 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [234 × 4]&gt;</span></span>
-<span><span class="co">## # ℹ 4 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 4 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El valor de retorno es un tibble similar a las muestras de entrada, junto con algunas columnas adicionales:</p>
 <ul>
@@ -888,18 +891,18 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 </ul>
 <p>Si bien estas columnas de lista pueden parecer desalentadoras, se pueden reconfigurar fácilmente usando <span class="pkg">tidyr</span> o con las funciones convenientes que proporciona tidymodels. Por ejemplo, para devolver las métricas de rendimiento en un formato más utilizable:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">collect_metrics</span><span class="op">(</span><span class="va">rf_res</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">collect_metrics</span><span class="op">(</span><span class="va">rf_res</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 2 × 6</span></span>
 <span><span class="co">##   .metric .estimator   mean     n std_err .config             </span></span>
 <span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               </span></span>
 <span><span class="co">## 1 rmse    standard   0.0721    10 0.00305 Preprocessor1_Model1</span></span>
-<span><span class="co">## 2 rsq     standard   0.831     10 0.0108  Preprocessor1_Model1</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 2 rsq     standard   0.831     10 0.0108  Preprocessor1_Model1</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Estas son las estimaciones de remuestreo promediadas sobre las réplicas individuales. Para obtener las métricas para cada remuestreo, use la opción <code>summarize = FALSE</code>.</p>
 <p>¡Observe cuánto más realistas son las estimaciones de rendimiento que las estimaciones de resustitución de <a href="#sec-resampling-resubstition" class="quarto-xref"><span>Sección 10.1</span></a>!</p>
 <p>Para obtener las predicciones del conjunto de evaluación:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">assess_res</span> <span class="op">&lt;-</span> <span class="fu">collect_predictions</span><span class="op">(</span><span class="va">rf_res</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">assess_res</span> <span class="op">&lt;-</span> <span class="fu">collect_predictions</span><span class="op">(</span><span class="va">rf_res</span><span class="op">)</span></span>
 <span><span class="va">assess_res</span></span>
 <span><span class="co">## # A tibble: 2,342 × 5</span></span>
 <span><span class="co">##   .pred id      .row Sale_Price .config             </span></span>
@@ -910,7 +913,7 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <span><span class="co">## 4  5.13 Fold01    52       5.10 Preprocessor1_Model1</span></span>
 <span><span class="co">## 5  5.13 Fold01    59       5.10 Preprocessor1_Model1</span></span>
 <span><span class="co">## 6  5.13 Fold01    63       5.11 Preprocessor1_Model1</span></span>
-<span><span class="co">## # ℹ 2,336 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 2,336 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Los nombres de las columnas de predicción siguen las convenciones analizadas para los modelos <span class="pkg">parsnip</span> en el <a href="06-fitting-models.html" class="quarto-xref">Capítulo&nbsp;<span>6</span></a>, para mayor coherencia y facilidad de uso. La columna de resultados observados siempre utiliza el nombre de la columna original de los datos de origen. La columna <code>.row</code> es un número entero que coincide con la fila del conjunto de entrenamiento original para que estos resultados puedan organizarse y unirse adecuadamente con los datos originales.</p>
 <div class="rmdnote">
@@ -918,17 +921,17 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 </div>
 <p>Dado que este análisis utilizó una validación cruzada de 10 veces, existe una predicción única para cada muestra del conjunto de entrenamiento. Estos datos pueden generar gráficos útiles del modelo para comprender dónde potencialmente falló. Por ejemplo, <span class="quarto-unresolved-ref">?fig-ames-resampled-performance</span> compara los valores observados y predichos retenidos (análogo a <a href="09-judging-model-effectiveness.html#fig-ames-performance-plot" class="quarto-xref">Figura&nbsp;<span>9.2</span></a>):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">assess_res</span> <span class="op">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">assess_res</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sale_Price</span>, y <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.15</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_abline</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">coord_obs_pred</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">ylab</span><span class="op">(</span><span class="st">"Predichos"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Precio de Venta"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Precio de Venta"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Hay dos casas en el conjunto de entrenamiento con un precio de venta bajo observado que el modelo sobreestima significativamente. ¿Qué casas son estas? Averigüemos por el resultado de <code>assess_res</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">over_predicted</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">over_predicted</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">assess_res</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>residual <span class="op">=</span> <span class="va">Sale_Price</span> <span class="op">-</span> <span class="va">.pred</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">residual</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
@@ -947,12 +950,12 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <span><span class="co">##   Gr_Liv_Area Neighborhood           Year_Built Bedroom_AbvGr Full_Bath</span></span>
 <span><span class="co">##         &lt;dbl&gt; &lt;fct&gt;                       &lt;dbl&gt;         &lt;dbl&gt;     &lt;dbl&gt;</span></span>
 <span><span class="co">## 1         832 Old_Town                     1923             2         1</span></span>
-<span><span class="co">## 2         733 Iowa_DOT_and_Rail_Road       1952             2         1</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 2         733 Iowa_DOT_and_Rail_Road       1952             2         1</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Identificar ejemplos como estos con un desempeño especialmente pobre puede ayudarnos a realizar un seguimiento e investigar por qué estas predicciones específicas son tan pobres.</p>
 <p>Volvamos a las casas en general. ¿Cómo podemos utilizar un conjunto de validación en lugar de validación cruzada? De nuestro objeto anterior <span class="pkg">rsample</span>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">val_res</span> <span class="op">&lt;-</span> <span class="va">rf_wflow</span> <span class="op">%&gt;%</span> <span class="fu">fit_resamples</span><span class="op">(</span>resamples <span class="op">=</span> <span class="va">val_set</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">val_res</span> <span class="op">&lt;-</span> <span class="va">rf_wflow</span> <span class="op">%&gt;%</span> <span class="fu">fit_resamples</span><span class="op">(</span>resamples <span class="op">=</span> <span class="va">val_set</span><span class="op">)</span></span>
 <span><span class="va">val_res</span></span>
 <span><span class="co">## # Resampling results</span></span>
 <span><span class="co">## # Validation Set (0.75/0.25) </span></span>
@@ -966,7 +969,7 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <span><span class="co">##   .metric .estimator   mean     n std_err .config             </span></span>
 <span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               </span></span>
 <span><span class="co">## 1 rmse    standard   0.0728     1      NA Preprocessor1_Model1</span></span>
-<span><span class="co">## 2 rsq     standard   0.822      1      NA Preprocessor1_Model1</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 2 rsq     standard   0.822      1      NA Preprocessor1_Model1</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Estos resultados también están mucho más cerca de los resultados del conjunto de pruebas que las estimaciones de rendimiento de resustitución.</p>
 <div class="rmdnote">
@@ -977,31 +980,31 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <p>Los modelos creados durante el remuestreo son independientes entre sí. Los cálculos de este tipo a veces se denominan <em>vergonzosamente paralelos</em>; cada modelo podría adaptarse simultáneamente sin problemas.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> El paquete <span class="pkg">tune</span> usa <a href="https://CRAN.R-project.org/%20package=foreach"><span class="pkg">foreach</span></a> paquete para facilitar los cálculos paralelos. Estos cálculos podrían dividirse entre procesadores de la misma computadora o entre computadoras diferentes, según la tecnología elegida.</p>
 <p>Para cálculos realizados en una sola computadora, el número de procesos de trabajo posibles está determinado por el paquete <span class="pkg">parallel</span>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># La cantidad de núcleos físicos en el hardware:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># La cantidad de núcleos físicos en el hardware:</span></span>
 <span><span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html">detectCores</a></span><span class="op">(</span>logical <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">## [1] 4</span></span>
 <span></span>
 <span><span class="co"># El número de posibles procesadors independientes que pueden</span></span>
 <span><span class="co"># ser utilizados simultáneamente:  </span></span>
 <span><span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html">detectCores</a></span><span class="op">(</span>logical <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">## [1] 4</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## [1] 4</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>La diferencia entre estos dos valores está relacionada con el procesador de la computadora. Por ejemplo, la mayoría de los procesadores Intel utilizan hyperthreading, que crea dos núcleos virtuales para cada núcleo físico. Si bien estos recursos adicionales pueden mejorar el rendimiento, la mayoría de las aceleraciones producidas por el procesamiento paralelo ocurren cuando el procesamiento utiliza menos núcleos físicos.</p>
 <p>Para <code>fit_resamples()</code> y otras funciones en <span class="pkg">tune</span>, el procesamiento paralelo ocurre cuando el usuario registra un paquete backend paralelo. Estos paquetes de R definen cómo ejecutar el procesamiento paralelo. En los sistemas operativos Unix y macOS, un método para dividir los cálculos es bifurcar subprocesos. Para habilitar esto, cargue el paquete <span class="pkg">doMC</span> y registre el número de núcleos paralelos con <span class="pkg">foreach</span>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Solo Unix y macOS</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Solo Unix y macOS</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">doMC</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/doMC/man/registerDoMC.html">registerDoMC</a></span><span class="op">(</span>cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Ahora ejecute fit_resamples()...</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co"># Ahora ejecute fit_resamples()...</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Esto indica a <code>fit_resamples()</code> que ejecute la mitad de los cálculos en cada uno de los dos núcleos. Para restablecer los cálculos al procesamiento secuencial:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/foreach/man/registerDoSEQ.html">registerDoSEQ</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/foreach/man/registerDoSEQ.html">registerDoSEQ</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Alternativamente, un enfoque diferente para paralelizar los cálculos utiliza sockets de red. El paquete <span class="pkg">doParallel</span> habilita este método (utilizable en todos los sistemas operativos):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Todos los sistemas operativos</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Todos los sistemas operativos</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RevolutionAnalytics/doparallel">doParallel</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Cree un objeto de clúster y luego regístrelo: </span></span>
@@ -1010,7 +1013,7 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <span></span>
 <span><span class="co"># Ahora ejecute fit_resamples()`...</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Otro paquete de R que facilita el procesamiento paralelo es el paquete <a href="https://future.futureverse.org/"><span class="pkg">future</span></a>. Al igual que <span class="pkg">foreach</span>, proporciona un marco para el paralelismo. Este paquete se usa junto con <span class="pkg">foreach</span> a través del paquete <span class="pkg">doFuture</span>.</p>
 <div class="rmdnote">
@@ -1024,7 +1027,7 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <p>Si bien estos modelos creados durante el remuestreo no se conservan, existe un método para conservarlos o algunos de sus componentes. La opción <code>extract</code> de <code>control_resamples()</code> especifica una función que toma un solo argumento; Usaremos <code>x</code>. Cuando se ejecuta, <code>x</code> da como resultado un objeto de flujo de trabajo ajustado, independientemente de si proporcionó a <code>fit_resamples()</code> un flujo de trabajo. Recuerde que el paquete <span class="pkg">workflows</span> tiene funciones que pueden extraer los diferentes componentes de los objetos (por ejemplo, el modelo, la receta, etc.).</p>
 <p>Ajustemos un modelo de regresión lineal usando la receta que desarrollamos en el <a href="08-feature-engineering.html" class="quarto-xref">Capítulo&nbsp;<span>8</span></a>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_rec</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_rec</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">recipe</span><span class="op">(</span><span class="va">Sale_Price</span> <span class="op">~</span> <span class="va">Neighborhood</span> <span class="op">+</span> <span class="va">Gr_Liv_Area</span> <span class="op">+</span> <span class="va">Year_Built</span> <span class="op">+</span> <span class="va">Bldg_Type</span> <span class="op">+</span> </span>
 <span>           <span class="va">Latitude</span> <span class="op">+</span> <span class="va">Longitude</span>, data <span class="op">=</span> <span class="va">ames_train</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">step_other</span><span class="op">(</span><span class="va">Neighborhood</span>, threshold <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
@@ -1057,20 +1060,20 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <span><span class="co">## • Dummy variables from: Neighborhood and Bldg_Type | Trained</span></span>
 <span><span class="co">## • Interactions with: Gr_Liv_Area:(Bldg_Type_TwoFmCon + Bldg_Type_Duplex +</span></span>
 <span><span class="co">##   Bldg_Type_Twnhs + Bldg_Type_TwnhsE) | Trained</span></span>
-<span><span class="co">## • Natural splines on: Latitude and Longitude | Trained</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## • Natural splines on: Latitude and Longitude | Trained</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Podemos guardar los coeficientes del modelo lineal para un objeto de modelo ajustado desde un flujo de trabajo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">get_model</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">get_model</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">extract_fit_parsnip</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Pruébelo usando:</span></span>
-<span><span class="co"># get_model(lm_fit)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co"># get_model(lm_fit)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Ahora apliquemos esta función a los diez ajustes remuestreados. Los resultados de la función de extracción se envuelven en un objeto de lista y se devuelven en un tibble:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ctrl</span> <span class="op">&lt;-</span> <span class="fu">control_resamples</span><span class="op">(</span>extract <span class="op">=</span> <span class="va">get_model</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ctrl</span> <span class="op">&lt;-</span> <span class="fu">control_resamples</span><span class="op">(</span>extract <span class="op">=</span> <span class="va">get_model</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lm_res</span> <span class="op">&lt;-</span> <span class="va">lm_wflow</span> <span class="op">%&gt;%</span>  <span class="fu">fit_resamples</span><span class="op">(</span>resamples <span class="op">=</span> <span class="va">ames_folds</span>, control <span class="op">=</span> <span class="va">ctrl</span><span class="op">)</span></span>
 <span><span class="va">lm_res</span></span>
@@ -1085,11 +1088,11 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <span><span class="co">## 4 &lt;split [2108/234]&gt; Fold04 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [1 × 2]&gt;</span></span>
 <span><span class="co">## 5 &lt;split [2108/234]&gt; Fold05 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [1 × 2]&gt;</span></span>
 <span><span class="co">## 6 &lt;split [2108/234]&gt; Fold06 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [1 × 2]&gt;</span></span>
-<span><span class="co">## # ℹ 4 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 4 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Ahora hay una columna <code>.extracts</code> con tibbles anidados. ¿Qué contienen estos? Averigüemos subconjuntos.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_res</span><span class="op">$</span><span class="va">.extracts</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_res</span><span class="op">$</span><span class="va">.extracts</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">## # A tibble: 1 × 2</span></span>
 <span><span class="co">##   .extracts         .config             </span></span>
 <span><span class="co">##   &lt;list&gt;            &lt;chr&gt;               </span></span>
@@ -1107,12 +1110,12 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <span><span class="co">## 4 Neighborhood_College_Creek -0.00163  0.0373       -0.0438 9.65e-  1</span></span>
 <span><span class="co">## 5 Neighborhood_Old_Town      -0.0757   0.0138       -5.47   4.92e-  8</span></span>
 <span><span class="co">## 6 Neighborhood_Edwards       -0.109    0.0310       -3.53   4.21e-  4</span></span>
-<span><span class="co">## # ℹ 67 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 67 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Esto podría parecer un método complicado para guardar los resultados del modelo. Sin embargo, <code>extract</code> es flexible y no supone que el usuario solo guardará un tibble por remuestreo. Por ejemplo, el método <code>tidy()</code> podría ejecutarse tanto en la receta como en el modelo. En este caso, se devolverá una lista de dos tibbles.</p>
 <p>Para nuestro ejemplo más simple, todos los resultados se pueden aplanar y recopilar usando:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">all_coef</span> <span class="op">&lt;-</span> <span class="fu">map_dfr</span><span class="op">(</span><span class="va">lm_res</span><span class="op">$</span><span class="va">.extracts</span>, <span class="op">~</span> <span class="va">.x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">all_coef</span> <span class="op">&lt;-</span> <span class="fu">map_dfr</span><span class="op">(</span><span class="va">lm_res</span><span class="op">$</span><span class="va">.extracts</span>, <span class="op">~</span> <span class="va">.x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co"># Muestre las réplicas de un único predictor:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">all_coef</span>, <span class="va">term</span> <span class="op">==</span> <span class="st">"Year_Built"</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 10 × 5</span></span>
@@ -1124,7 +1127,7 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <span><span class="co">## 4 Year_Built  0.00183  0.000147      12.5 1.90e-34</span></span>
 <span><span class="co">## 5 Year_Built  0.00184  0.000150      12.2 2.47e-33</span></span>
 <span><span class="co">## 6 Year_Built  0.00180  0.000150      12.0 3.35e-32</span></span>
-<span><span class="co">## # ℹ 4 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 4 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Los capítulos <a href="13-grid-search.html" class="quarto-xref"><span>13</span></a> y <a href="14-iterative-search.html" class="quarto-xref"><span>14</span></a> analizan un conjunto de funciones para ajustar modelos. Sus interfaces son similares a <code>fit_resamples()</code> y muchas de las características descritas aquí se aplican a esas funciones.</p>
 </section><section id="sec-resampling-summary" class="level2" data-number="10.6"><h2 data-number="10.6" class="anchored" data-anchor-id="sec-resampling-summary">
@@ -1133,7 +1136,7 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <p>Se introdujo una función importante del paquete <span class="pkg">tune</span>, llamada <code>fit_resamples()</code>. La interfaz para esta función también se utiliza en capítulos futuros que describen las herramientas de ajuste de modelos.</p>
 <p>El código de análisis de datos, hasta ahora, para los datos de Ames es:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">ames</span><span class="op">)</span></span>
 <span><span class="va">ames</span> <span class="op">&lt;-</span> <span class="fu">mutate</span><span class="op">(</span><span class="va">ames</span>, Sale_Price <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -1178,7 +1181,7 @@ Figura&nbsp;10.8: Uso de datos para el remuestreo continuo del origen de la prev
 <span><span class="va">keep_pred</span> <span class="op">&lt;-</span> <span class="fu">control_resamples</span><span class="op">(</span>save_pred <span class="op">=</span> <span class="cn">TRUE</span>, save_workflow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1003</span><span class="op">)</span></span>
-<span><span class="va">rf_res</span> <span class="op">&lt;-</span> <span class="va">rf_wflow</span> <span class="op">%&gt;%</span> <span class="fu">fit_resamples</span><span class="op">(</span>resamples <span class="op">=</span> <span class="va">ames_folds</span>, control <span class="op">=</span> <span class="va">keep_pred</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">rf_res</span> <span class="op">&lt;-</span> <span class="va">rf_wflow</span> <span class="op">%&gt;%</span> <span class="fu">fit_resamples</span><span class="op">(</span>resamples <span class="op">=</span> <span class="va">ames_folds</span>, control <span class="op">=</span> <span class="va">keep_pred</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
@@ -1218,15 +1221,15 @@ Xu, Q, y Y Liang. 2001. <span>«<span>Monte Carlo</span> cross validation»</spa
   // Chapter name
   const currentChapterFile = window.location.pathname.split('/').pop().replace('.html', '');
 
-  //Deffining urls
+  //Defining urls
   const originalURL = "https://github.com/tidymodels/TMwR";
-  const translationURL = "https://github.com/davidrsch/TMwRes";
+  const translationURL = "https://github.com/davidrsch/tmwr-es";
 
-  //Deffining texts
+  //Defining texts
   const edit_text = "Editar esta página";
   const issue_text = "Informar de un problema"
 
-  //Deffining git_i
+  //Defining git_i
   const git_i = '<div><i class="bi bi-github"></i></div>';
 
   // Adding TOC if not exist
@@ -1331,13 +1334,14 @@ Xu, Q, y Y Liang. 2001. <span>«<span>Monte Carlo</span> cross validation»</spa
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <title>4&nbsp; Los Datos De Vivienda De Ames – Modelado Ordenado con R</title>
@@ -86,14 +86,15 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87efc9f0321ca4df940afa6b8506b50b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -107,7 +108,7 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -139,7 +140,9 @@ div.csl-indent {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -152,7 +155,7 @@ div.csl-indent {
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/TMwRes">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/tmwr-es">
             Traducción
             </a>
           </li>
@@ -419,24 +422,24 @@ div.csl-indent {
 </ul>
 <p>Para cargar los datos:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modeldata.tidymodels.org">modeldata</a></span><span class="op">)</span> <span class="co"># Esto también lo carga el paquete tidymodels.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modeldata.tidymodels.org">modeldata</a></span><span class="op">)</span> <span class="co"># Esto también lo carga el paquete tidymodels.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">ames</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># o, en una línea:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">ames</span>, package <span class="op">=</span> <span class="st">"modeldata"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ames</span><span class="op">)</span></span>
-<span><span class="co">## [1] 2930   74</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## [1] 2930   74</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="sec-exploring-features-of-homes-in-ames" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="sec-exploring-features-of-homes-in-ames">
 <span class="header-section-number">4.1</span> Explorando Las Características De Las Casas En Ames</h2>
 <p>Comencemos nuestro análisis exploratorio de datos centrándonos en el resultado que queremos predecir: el último precio de venta de la casa (en USD). Podemos crear un histograma para ver la distribución de los precios de venta en <a href="#fig-ames-sale-price-hist" class="quarto-xref">Figura&nbsp;<span>4.1</span></a>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://tidymodels.tidymodels.org/reference/tidymodels_prefer.html">tidymodels_prefer</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">ames</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">geom_histogram</span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">50</span>, col<span class="op">=</span> <span class="st">"white"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">50</span>, col<span class="op">=</span> <span class="st">"white"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -452,9 +455,9 @@ Figura&nbsp;4.1: Precios de venta de casas en Ames (Iowa)
 </div>
 <p>Este gráfico nos muestra que los datos están sesgados hacia la derecha; Hay más casas baratas que caras. El precio de venta medio fue $160,000, y la casa más cara era $755,000. Al modelar este resultado, se puede argumentar con fuerza que el precio debe transformarse logarítmicamente. Las ventajas de este tipo de transformación son que no se pronosticarían casas con precios de venta negativos y que los errores al predecir casas caras no tendrán una influencia indebida en el modelo. Además, desde una perspectiva estadística, una transformada logarítmica también puede estabilizar la varianza de una manera que haga que la inferencia sea más legítima. Podemos usar pasos similares para visualizar ahora los datos transformados, que se muestran en <a href="#fig-ames-log-sale-price-hist" class="quarto-xref">Figura&nbsp;<span>4.2</span></a>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">ames</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">ames</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_histogram</span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">50</span>, col<span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_x_log10</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">scale_x_log10</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -475,7 +478,7 @@ Figura&nbsp;4.2: Precios de venta de casas en Ames, Iowa después de una transfo
 <p>Las unidades de los coeficientes del modelo podrían ser más difíciles de interpretar, al igual que las medidas de desempeño. Por ejemplo, el error cuadrático medio (RMSE) es una métrica de rendimiento común que se utiliza en los modelos de regresión. Utiliza la diferencia entre los valores observados y predichos en sus cálculos. Si el precio de venta está en la escala logarítmica, estas diferencias (es decir, los residuos) también están en la escala logarítmica. Puede resultar difícil comprender la calidad de un modelo cuyo RMSE es 0,15 en una escala logarítmica de este tipo.</p>
 <p>A pesar de estos inconvenientes, los modelos utilizados en este libro utilizan la transformación logarítmica para este resultado. <em>A partir de este momento</em>, la columna de resultados está preregistrada en el marco de datos <code>ames</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames</span> <span class="op">&lt;-</span> <span class="va">ames</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">mutate</span><span class="op">(</span>Sale_Price <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames</span> <span class="op">&lt;-</span> <span class="va">ames</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">mutate</span><span class="op">(</span>Sale_Price <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Otro aspecto importante de estos datos para nuestro modelado es su ubicación geográfica. Esta información espacial está contenida en los datos de dos maneras: una etiqueta cualitativa de <code>Vecindario</code> y datos cuantitativos de longitud y latitud. Para visualizar la información espacial, usemos ambos juntos para trazar los datos en un mapa en <a href="#fig-ames-map" class="quarto-xref">Figura&nbsp;<span>4.3</span></a>.</p>
 <div class="cell" data-layout-align="center">
@@ -567,9 +570,9 @@ Figura&nbsp;4.8: Casas etiquetadas como Departamento de Transporte de Iowa (DOT)
 <p>Este capítulo presentó el conjunto de datos de vivienda de Ames e investigó algunas de sus características. Este conjunto de datos se utilizará en capítulos posteriores para demostrar la sintaxis de tidymodels. El análisis de datos exploratorios como este es un componente esencial de cualquier proyecto de modelado; EDA descubre información que contribuye a una mejor práctica de modelado.</p>
 <p>El código importante para preparar el conjunto de datos de Ames que llevaremos a los capítulos siguientes es:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">ames</span><span class="op">)</span></span>
-<span><span class="va">ames</span> <span class="op">&lt;-</span> <span class="va">ames</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">mutate</span><span class="op">(</span>Sale_Price <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">ames</span> <span class="op">&lt;-</span> <span class="va">ames</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">mutate</span><span class="op">(</span>Sale_Price <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
@@ -586,15 +589,15 @@ De Cock, D. 2011. <span>«<span>Ames, Iowa</span>: Alternative to the <span>Bost
   // Chapter name
   const currentChapterFile = window.location.pathname.split('/').pop().replace('.html', '');
 
-  //Deffining urls
+  //Defining urls
   const originalURL = "https://github.com/tidymodels/TMwR";
-  const translationURL = "https://github.com/davidrsch/TMwRes";
+  const translationURL = "https://github.com/davidrsch/tmwr-es";
 
-  //Deffining texts
+  //Defining texts
   const edit_text = "Editar esta página";
   const issue_text = "Informar de un problema"
 
-  //Deffining git_i
+  //Defining git_i
   const git_i = '<div><i class="bi bi-github"></i></div>';
 
   // Adding TOC if not exist
@@ -699,13 +702,14 @@ De Cock, D. 2011. <span>«<span>Ames, Iowa</span>: Alternative to the <span>Bost
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

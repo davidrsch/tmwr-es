@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <title>13&nbsp; Búsqueda De Cuadrícula – Modelado Ordenado con R</title>
@@ -86,14 +86,15 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87efc9f0321ca4df940afa6b8506b50b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -107,7 +108,7 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -131,7 +132,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -164,7 +165,9 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -177,7 +180,7 @@ window.Quarto = {
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/TMwRes">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/tmwr-es">
             Traducción
             </a>
           </li>
@@ -460,17 +463,17 @@ window.Quarto = {
 </div>
 <p>Usando <span class="pkg">parsnip</span>, la especificación para un modelo de clasificación que se ajusta usando el paquete <span class="pkg">nnet</span> es:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://tidymodels.tidymodels.org/reference/tidymodels_prefer.html">tidymodels_prefer</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">mlp_spec</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">mlp</span><span class="op">(</span>hidden_units <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span>, penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span>, epochs <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"nnet"</span>, trace <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El argumento <code>trace = 0</code> evita el registro adicional del proceso de entrenamiento. Como se muestra en <a href="12-tuning-parameters.html#sec-tuning-params-tidymodels" class="quarto-xref"><span>Sección 12.6</span></a>, la función <code><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_parameter_set_dials()</a></code> puede extraer el conjunto de argumentos con valores desconocidos y establece sus objetos <span class="pkg">dials</span>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mlp_param</span> <span class="op">&lt;-</span> <span class="fu">extract_parameter_set_dials</span><span class="op">(</span><span class="va">mlp_spec</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mlp_param</span> <span class="op">&lt;-</span> <span class="fu">extract_parameter_set_dials</span><span class="op">(</span><span class="va">mlp_spec</span><span class="op">)</span></span>
 <span><span class="va">mlp_param</span> <span class="op">%&gt;%</span> <span class="fu">extract_parameter_dials</span><span class="op">(</span><span class="st">"hidden_units"</span><span class="op">)</span></span>
 <span><span class="co">## # Hidden Units (quantitative)</span></span>
 <span><span class="co">## Range: [1, 10]</span></span>
@@ -480,13 +483,13 @@ window.Quarto = {
 <span><span class="co">## Range (transformed scale): [-10, 0]</span></span>
 <span><span class="va">mlp_param</span> <span class="op">%&gt;%</span> <span class="fu">extract_parameter_dials</span><span class="op">(</span><span class="st">"epochs"</span><span class="op">)</span></span>
 <span><span class="co">## # Epochs (quantitative)</span></span>
-<span><span class="co">## Range: [10, 1000]</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## Range: [10, 1000]</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Esta salida indica que los objetos de parámetros están completos e imprime sus rangos predeterminados. Estos valores se utilizarán para demostrar cómo crear diferentes tipos de cuadrículas de parámetros.</p>
 <section id="cuadrículas-regulares" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="cuadrículas-regulares">Cuadrículas regulares</h3>
 <p>Las cuadrículas regulares son combinaciones de conjuntos separados de valores de parámetros. Primero, el usuario crea un conjunto distinto de valores para cada parámetro. El número de valores posibles no tiene por qué ser el mismo para cada parámetro. La función <span class="pkg">tidyr</span> <code>crossing()</code> es una forma de crear una cuadrícula regular:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">crossing</span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">crossing</span><span class="op">(</span></span>
 <span>  hidden_units <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
 <span>  penalty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.0</span>, <span class="fl">0.1</span><span class="op">)</span>,</span>
 <span>  epochs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">200</span><span class="op">)</span></span>
@@ -500,11 +503,11 @@ window.Quarto = {
 <span><span class="co">## 4            1     0.1    200</span></span>
 <span><span class="co">## 5            2     0      100</span></span>
 <span><span class="co">## 6            2     0      200</span></span>
-<span><span class="co">## # ℹ 6 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 6 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El objeto de parámetro conoce los rangos de los parámetros. El paquete <span class="pkg">dials</span> contiene un conjunto de funciones <code>grid_*()</code> que toman el objeto parámetro como entrada para producir diferentes tipos de cuadrículas. Por ejemplo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">grid_regular</span><span class="op">(</span><span class="va">mlp_param</span>, levels <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">grid_regular</span><span class="op">(</span><span class="va">mlp_param</span>, levels <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 8 × 3</span></span>
 <span><span class="co">##   hidden_units      penalty epochs</span></span>
 <span><span class="co">##          &lt;int&gt;        &lt;dbl&gt;  &lt;int&gt;</span></span>
@@ -514,11 +517,11 @@ window.Quarto = {
 <span><span class="co">## 4           10 1                10</span></span>
 <span><span class="co">## 5            1 0.0000000001   1000</span></span>
 <span><span class="co">## 6           10 0.0000000001   1000</span></span>
-<span><span class="co">## # ℹ 2 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 2 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El argumento <code>levels</code> es el número de niveles por parámetro a crear. También puede tomar un vector de valores con nombre:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mlp_param</span> <span class="op">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mlp_param</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">grid_regular</span><span class="op">(</span>levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>hidden_units <span class="op">=</span> <span class="fl">3</span>, penalty <span class="op">=</span> <span class="fl">2</span>, epochs <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 12 × 3</span></span>
 <span><span class="co">##   hidden_units      penalty epochs</span></span>
@@ -529,7 +532,7 @@ window.Quarto = {
 <span><span class="co">## 4            1 1                10</span></span>
 <span><span class="co">## 5            5 1                10</span></span>
 <span><span class="co">## 6           10 1                10</span></span>
-<span><span class="co">## # ℹ 6 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 6 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Existen técnicas para crear cuadrículas regulares que no utilizan todos los valores posibles de cada conjunto de parámetros. Estos <em>diseños factoriales fraccionales</em> <span class="citation" data-cites="BHH">(<a href="references.html#ref-BHH" role="doc-biblioref">Box, Hunter, y Hunter 2005</a>)</span> también podrían usarse. Para obtener más información, consulte la Vista de tareas de CRAN para el diseño experimental.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div class="rmdwarning">
@@ -539,7 +542,7 @@ window.Quarto = {
 </section><section id="rejillas-irregulares" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="rejillas-irregulares">Rejillas irregulares</h3>
 <p>Hay varias opciones para crear cuadrículas no regulares. La primera es utilizar un muestreo aleatorio en toda la gama de parámetros. La función <code>grid_random()</code> genera números aleatorios uniformes independientes en todos los rangos de parámetros. Si el objeto parámetro tiene una transformación asociada (como la que tenemos para “penalización”, <code>penalty</code>), los números aleatorios se generan en la escala transformada. Creemos una cuadrícula aleatoria para los parámetros de nuestra red neuronal de ejemplo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1301</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1301</span><span class="op">)</span></span>
 <span><span class="va">mlp_param</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">grid_random</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># 'size' es el número de combinaciones</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -549,12 +552,12 @@ window.Quarto = {
 <span><span class="co">##  Median : 5.00   Median :0.0000   Median :497  </span></span>
 <span><span class="co">##  Mean   : 5.38   Mean   :0.0437   Mean   :510  </span></span>
 <span><span class="co">##  3rd Qu.: 8.00   3rd Qu.:0.0027   3rd Qu.:761  </span></span>
-<span><span class="co">##  Max.   :10.00   Max.   :0.9814   Max.   :999</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  Max.   :10.00   Max.   :0.9814   Max.   :999</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Para la “penalización”, <code>penalty</code>, los números aleatorios son uniformes en la escala logarítmica (base-10), pero los valores en la cuadrícula están en unidades naturales.</p>
 <p>El problema con las cuadrículas aleatorias es que, en las cuadrículas pequeñas y medianas, los valores aleatorios pueden dar como resultado combinaciones de parámetros superpuestos. Además, la cuadrícula aleatoria debe cubrir todo el espacio de parámetros, pero la probabilidad de una buena cobertura aumenta con el número de valores de la cuadrícula. Incluso para una muestra de 15 puntos candidatos, <a href="#fig-random-grid" class="quarto-xref">Figura&nbsp;<span>13.1</span></a> muestra cierta superposición entre puntos para nuestro perceptrón multicapa de ejemplo.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggforce.data-imaginist.com">ggforce</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggforce.data-imaginist.com">ggforce</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1302</span><span class="op">)</span></span>
 <span><span class="va">mlp_param</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="co"># La opción 'original = FALSE' mantiene la penalización en log10 unidades</span></span>
@@ -563,7 +566,7 @@ window.Quarto = {
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_blank.html">geom_blank</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggforce.data-imaginist.com/reference/facet_matrix.html">facet_matrix</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">hidden_units</span>, <span class="va">penalty</span>, <span class="va">epochs</span><span class="op">)</span>, layer.diag <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Diseño aleatorio con 20 candidatos"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Diseño aleatorio con 20 candidatos"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -580,14 +583,14 @@ Figura&nbsp;13.1: Tres parámetros de ajuste con 15 puntos generados al azar
 <p>Un enfoque mucho mejor es utilizar un conjunto de diseños experimentales llamados <em>diseños de relleno de espacio</em>. Si bien los diferentes métodos de diseño tienen objetivos ligeramente diferentes, generalmente encuentran una configuración de puntos que cubre el espacio de parámetros con la menor posibilidad de superposición o valores redundantes. Ejemplos de tales diseños son los hipercubos latinos <span class="citation" data-cites="lhd">(<a href="references.html#ref-lhd" role="doc-biblioref">McKay, Beckman, y Conover 1979</a>)</span>, los diseños de máxima entropía <span class="citation" data-cites="maxent">(<a href="references.html#ref-maxent" role="doc-biblioref">Shewry y Wynn 1987</a>)</span>, los diseños de máxima proyección <span class="citation" data-cites="maxproj">(<a href="references.html#ref-maxproj" role="doc-biblioref">Joseph, Gul, y Ba 2015</a>)</span> y otros. Consulte <span class="citation" data-cites="santner2003design">Santner et&nbsp;al. (<a href="references.html#ref-santner2003design" role="doc-biblioref">2003</a>)</span> para obtener una descripción general.</p>
 <p>El paquete <span class="pkg">dials</span> contiene funciones para diseños de hipercubo latino y de máxima entropía. Al igual que con <code>grid_random()</code>, las entradas principales son el número de combinaciones de parámetros y un objeto de parámetro. Comparemos un diseño aleatorio con un diseño de hipercubo latino para 20 valores de parámetros candidatos en <a href="#fig-space-filling-design" class="quarto-xref">Figura&nbsp;<span>13.2</span></a>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1303</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1303</span><span class="op">)</span></span>
 <span><span class="va">mlp_param</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">grid_latin_hypercube</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">20</span>, original <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.panel_x</span>, y <span class="op">=</span> <span class="va">.panel_y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_blank.html">geom_blank</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggforce.data-imaginist.com/reference/facet_matrix.html">facet_matrix</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">hidden_units</span>, <span class="va">penalty</span>, <span class="va">epochs</span><span class="op">)</span>, layer.diag <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Diseño de Hipercubo Latino con 20 candidatos"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Diseño de Hipercubo Latino con 20 candidatos"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <pre><code>## Warning: `grid_latin_hypercube()` was deprecated in dials 1.3.0.
@@ -613,14 +616,14 @@ Figura&nbsp;13.2: Tres parámetros de ajuste con 20 puntos generados mediante un
 <p>Cada celda pertenece a una de dos clases. Dado que esto es parte de una prueba de laboratorio automatizada, la atención se centró en la capacidad de predicción en lugar de la inferencia.</p>
 <p>Los datos están incluidos en el paquete <span class="pkg">modeldata</span>. Eliminemos una columna que no es necesaria para el análisis (<code>caso</code>):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span>
-<span><span class="va">cells</span> <span class="op">&lt;-</span> <span class="va">cells</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">case</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">cells</span> <span class="op">&lt;-</span> <span class="va">cells</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">case</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Dadas las dimensiones de los datos, podemos calcular métricas de rendimiento utilizando una validación cruzada de 10 veces:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1304</span><span class="op">)</span></span>
-<span><span class="va">cell_folds</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1304</span><span class="op">)</span></span>
+<span><span class="va">cell_folds</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Debido al alto grado de correlación entre los predictores, tiene sentido utilizar la extracción de características PCA para descorrelacionar los predictores. La siguiente receta contiene pasos para transformar los predictores para aumentar la simetría, normalizarlos para que estén en la misma escala y luego realizar la extracción de características. También se ajusta la cantidad de componentes PCA que se conservarán, junto con los parámetros del modelo.</p>
 <div class="rmdwarning">
@@ -628,7 +631,7 @@ Figura&nbsp;13.2: Tres parámetros de ajuste con 20 puntos generados mediante un
 </div>
 <p>Muchos de los predictores tienen distribuciones sesgadas. Dado que el PCA se basa en la varianza, los valores extremos pueden tener un efecto perjudicial en estos cálculos. Para contrarrestar esto, agreguemos un paso de receta que estime una transformación de Yeo-Johnson para cada predictor <span class="citation" data-cites="yeo2000new">(<a href="references.html#ref-yeo2000new" role="doc-biblioref">Yeo y Johnson 2000</a>)</span>. Si bien originalmente se pensó como una transformación del resultado, también se puede utilizar para estimar transformaciones que fomentan distribuciones más simétricas. Este paso <code>step_YeoJohnson()</code> ocurre en la receta justo antes de la normalización inicial mediante <code>step_normalize()</code>. Luego, combinemos esta receta de ingeniería de características con nuestra especificación de modelo de red neuronal <code>mlp_spec</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mlp_rec</span> <span class="op">&lt;-</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mlp_rec</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu">recipe</span><span class="op">(</span><span class="va">class</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">cells</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">step_YeoJohnson</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
@@ -638,17 +641,17 @@ Figura&nbsp;13.2: Tres parámetros de ajuste con 20 puntos generados mediante un
 <span><span class="va">mlp_wflow</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">mlp_spec</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">mlp_rec</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">mlp_rec</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Creemos un objeto de parámetro <code>mlp_param</code> para ajustar algunos de los rangos predeterminados. Podemos cambiar el número de épocas para tener un rango más pequeño (50 a 200 épocas). Además, el rango predeterminado para <code>num_comp()</code> es un rango muy estrecho (de uno a cuatro componentes); podemos aumentar el rango a 40 componentes y establecer el valor mínimo en cero:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mlp_param</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mlp_param</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">mlp_wflow</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">extract_parameter_set_dials</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">Matrix</span><span class="fu">::</span><span class="fu">update</span><span class="op">(</span></span>
 <span>    epochs <span class="op">=</span> <span class="fu">epochs</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">200</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    num_comp <span class="op">=</span> <span class="fu">num_comp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="rmdnote">
 <p>En <code>step_pca()</code>, usar cero componentes PCA es un atajo para omitir la extracción de funciones. De esta manera, los predictores originales se pueden comparar directamente con los resultados que incluyen componentes PCA.</p>
@@ -661,7 +664,7 @@ Figura&nbsp;13.2: Tres parámetros de ajuste con 20 puntos generados mediante un
 <p>De lo contrario, la interfaz para <code><a href="https://tune.tidymodels.org/reference/tune_grid.html">tune_grid()</a></code> es la misma que <code><a href="https://tune.tidymodels.org/reference/fit_resamples.html">fit_resamples()</a></code>. El primer argumento es una especificación del modelo o un flujo de trabajo. Cuando se da un modelo, el segundo argumento puede ser una receta o una fórmula. El otro argumento requerido es un objeto de remuestreo <span class="pkg">rsample</span> (como <code>cell_folds</code>). La siguiente llamada también pasa un conjunto de métricas para que el área bajo la curva ROC se mida durante el remuestreo.</p>
 <p>Para comenzar, evaluemos una cuadrícula regular con tres niveles en los remuestreos:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">roc_res</span> <span class="op">&lt;-</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">roc_auc</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">roc_res</span> <span class="op">&lt;-</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">roc_auc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1305</span><span class="op">)</span></span>
 <span><span class="va">mlp_reg_tune</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">mlp_wflow</span> <span class="op">%&gt;%</span></span>
@@ -682,13 +685,13 @@ Figura&nbsp;13.2: Tres parámetros de ajuste con 20 puntos generados mediante un
 <span><span class="co">## 4 &lt;split [1817/202]&gt; Fold04 &lt;tibble [81 × 8]&gt; &lt;tibble [0 × 3]&gt;</span></span>
 <span><span class="co">## 5 &lt;split [1817/202]&gt; Fold05 &lt;tibble [81 × 8]&gt; &lt;tibble [0 × 3]&gt;</span></span>
 <span><span class="co">## 6 &lt;split [1817/202]&gt; Fold06 &lt;tibble [81 × 8]&gt; &lt;tibble [0 × 3]&gt;</span></span>
-<span><span class="co">## # ℹ 4 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 4 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Existen funciones de conveniencia de alto nivel que podemos utilizar para comprender los resultados. Primero, el método <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> para cuadrículas regulares muestra los perfiles de rendimiento en todos los parámetros de ajuste en <a href="#fig-regular-grid-plot" class="quarto-xref">Figura&nbsp;<span>13.3</span></a>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mlp_reg_tune</span><span class="op">)</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">mlp_reg_tune</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -704,7 +707,7 @@ Figura&nbsp;13.3: Los resultados regulares de la cuadrícula.
 </div>
 <p>Según estos datos, el monto de la penalización tiene el mayor impacto en el área bajo la curva ROC. El número de épocas no parece tener un efecto pronunciado en el rendimiento. El cambio en el número de unidades ocultas parece ser más importante cuando la cantidad de regularización es baja (y perjudica el rendimiento). Hay varias configuraciones de parámetros que tienen un rendimiento aproximadamente equivalente, como se ve usando la función <code><a href="https://tune.tidymodels.org/reference/show_best.html">show_best()</a></code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">show_best</span><span class="op">(</span><span class="va">mlp_reg_tune</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">.estimator</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">show_best</span><span class="op">(</span><span class="va">mlp_reg_tune</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">.estimator</span><span class="op">)</span></span>
 <span><span class="co">## Warning in show_best(mlp_reg_tune): No value of `metric` was given; "roc_auc" will</span></span>
 <span><span class="co">## be used.</span></span>
 <span><span class="co">## # A tibble: 5 × 9</span></span>
@@ -714,12 +717,12 @@ Figura&nbsp;13.3: Los resultados regulares de la cuadrícula.
 <span><span class="co">## 2           10       1    125        0 roc_auc 0.895    10 0.00898 Preprocessor1_Mo…</span></span>
 <span><span class="co">## 3           10       1     50        0 roc_auc 0.894    10 0.00960 Preprocessor1_Mo…</span></span>
 <span><span class="co">## 4            5       1    200        0 roc_auc 0.894    10 0.00784 Preprocessor1_Mo…</span></span>
-<span><span class="co">## 5            5       1    125        0 roc_auc 0.892    10 0.00822 Preprocessor1_Mo…</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 5            5       1    125        0 roc_auc 0.892    10 0.00822 Preprocessor1_Mo…</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Con base en estos resultados, tendría sentido realizar otra ejecución de búsqueda de cuadrícula con valores mayores de penalización por disminución de peso.</p>
 <p>Para utilizar un diseño que llene el espacio, al argumento <code>grid</code> se le puede dar un número entero o una de las funciones <code>grid_*()</code> puede producir un marco de datos. Para evaluar el mismo rango utilizando un diseño de máxima entropía con 20 valores candidatos:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1306</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1306</span><span class="op">)</span></span>
 <span><span class="va">mlp_sfd_tune</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">mlp_wflow</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">tune_grid</span><span class="op">(</span></span>
@@ -741,7 +744,7 @@ Figura&nbsp;13.3: Los resultados regulares de la cuadrícula.
 <span><span class="co">## 4 &lt;split [1817/202]&gt; Fold04 &lt;tibble [20 × 8]&gt; &lt;tibble [0 × 3]&gt;</span></span>
 <span><span class="co">## 5 &lt;split [1817/202]&gt; Fold05 &lt;tibble [20 × 8]&gt; &lt;tibble [0 × 3]&gt;</span></span>
 <span><span class="co">## 6 &lt;split [1817/202]&gt; Fold06 &lt;tibble [20 × 8]&gt; &lt;tibble [0 × 3]&gt;</span></span>
-<span><span class="co">## # ℹ 4 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 4 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El método <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> también funcionará con estos diseños, aunque el formato de los resultados será diferente. <a href="#fig-sfd-plot" class="quarto-xref">Figura&nbsp;<span>13.4</span></a> se produjo usando <code>autoplot(mlp_sfd_tune)</code>.</p>
 <div class="cell" data-layout-align="center">
@@ -763,7 +766,7 @@ Figura&nbsp;13.4: El método <code><a href="https://ggplot2.tidyverse.org/refere
 <p>El parámetro de penalización parece dar como resultado un mejor rendimiento con menores cantidades de pérdida de peso. Esto es lo opuesto a los resultados de la cuadrícula normal. Dado que cada punto de cada panel se comparte con los otros tres parámetros de ajuste, las tendencias de un panel pueden verse afectadas por los demás. Utilizando una cuadrícula regular, cada punto de cada panel se promedia por igual con respecto a los demás parámetros. Por esta razón, el efecto de cada parámetro se aísla mejor con cuadrículas regulares.</p>
 <p>Al igual que con la cuadrícula normal, <code><a href="https://tune.tidymodels.org/reference/show_best.html">show_best()</a></code> puede informar sobre los mejores resultados numéricamente:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">show_best</span><span class="op">(</span><span class="va">mlp_sfd_tune</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">.estimator</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">show_best</span><span class="op">(</span><span class="va">mlp_sfd_tune</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">.estimator</span><span class="op">)</span></span>
 <span><span class="co">## Warning in show_best(mlp_sfd_tune): No value of `metric` was given; "roc_auc" will</span></span>
 <span><span class="co">## be used.</span></span>
 <span><span class="co">## # A tibble: 5 × 9</span></span>
@@ -773,7 +776,7 @@ Figura&nbsp;13.4: El método <code><a href="https://ggplot2.tidyverse.org/refere
 <span><span class="co">## 2            3 0.00000000649    135        8 roc_auc 0.878    10 0.00955 Preprocess…</span></span>
 <span><span class="co">## 3            9 0.141            177       11 roc_auc 0.873    10 0.0104  Preprocess…</span></span>
 <span><span class="co">## 4            8 0.0000000103      74        9 roc_auc 0.869    10 0.00761 Preprocess…</span></span>
-<span><span class="co">## 5            6 0.00581          129       15 roc_auc 0.865    10 0.00658 Preprocess…</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 5            6 0.00581          129       15 roc_auc 0.865    10 0.00658 Preprocess…</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Generalmente, es una buena idea evaluar los modelos según múltiples métricas para tener en cuenta diferentes aspectos del ajuste del modelo. Además, a menudo tiene sentido elegir una combinación de parámetros ligeramente subóptima asociada con un modelo más simple. Para este modelo, la simplicidad corresponde a valores de penalización mayores y/o menos unidades ocultas.</p>
 <p>Al igual que con los resultados de <code><a href="https://tune.tidymodels.org/reference/fit_resamples.html">fit_resamples()</a></code>, normalmente no tiene ningún valor conservar los ajustes del modelo intermediario entre los remuestreos y los parámetros de ajuste. Sin embargo, como antes, la opción <code>extraer</code> de <code><a href="https://tune.tidymodels.org/reference/control_grid.html">control_grid()</a></code> permite conservar los modelos y/o recetas ajustados. Además, configurar la opción <code>save_pred</code> en <code>TRUE</code> conserva las predicciones del conjunto de evaluación y se puede acceder a ellas usando <code><a href="https://tune.tidymodels.org/reference/collect_predictions.html">collect_predictions()</a></code>.</p>
@@ -787,15 +790,15 @@ Figura&nbsp;13.4: El método <code><a href="https://ggplot2.tidyverse.org/refere
 </ul>
 <p>Por ejemplo, <code><a href="https://tune.tidymodels.org/reference/show_best.html">select_best()</a></code> elegirá los parámetros con los mejores resultados numéricamente. Volvamos a nuestros resultados habituales de la cuadrícula y veamos cuál es mejor:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">select_best</span><span class="op">(</span><span class="va">mlp_reg_tune</span>, metric <span class="op">=</span> <span class="st">"roc_auc"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">select_best</span><span class="op">(</span><span class="va">mlp_reg_tune</span>, metric <span class="op">=</span> <span class="st">"roc_auc"</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 1 × 5</span></span>
 <span><span class="co">##   hidden_units penalty epochs num_comp .config              </span></span>
 <span><span class="co">##          &lt;int&gt;   &lt;dbl&gt;  &lt;int&gt;    &lt;int&gt; &lt;chr&gt;                </span></span>
-<span><span class="co">## 1            5       1     50        0 Preprocessor1_Model08</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1            5       1     50        0 Preprocessor1_Model08</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Mirando hacia atrás en <a href="#fig-regular-grid-plot" class="quarto-xref">Figura&nbsp;<span>13.3</span></a>, podemos ver que un modelo con una sola unidad oculta entrenada durante 125 épocas en los predictores originales con una gran cantidad de penalización tiene un rendimiento competitivo con esta opción y es más simple. ¡Esto es básicamente una regresión logística penalizada! Para especificar manualmente estos parámetros, podemos crear un tibble con estos valores y luego usar una función de <em>finalización</em> para unir los valores nuevamente en el flujo de trabajo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">logistic_param</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">logistic_param</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">tibble</span><span class="op">(</span></span>
 <span>    num_comp <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>    epochs <span class="op">=</span> <span class="fl">125</span>,</span>
@@ -830,13 +833,13 @@ Figura&nbsp;13.4: El método <code><a href="https://ggplot2.tidyverse.org/refere
 <span><span class="co">## Engine-Specific Arguments:</span></span>
 <span><span class="co">##   trace = 0</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Computational engine: nnet</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## Computational engine: nnet</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>No se incluyen más valores de <code><a href="https://hardhat.tidymodels.org/reference/tune.html">tune()</a></code> en este flujo de trabajo finalizado. Ahora el modelo se puede ajustar a todo el conjunto de entrenamiento:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">final_mlp_fit</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">final_mlp_fit</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">final_mlp_wflow</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">fit</span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">fit</span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Este objeto ahora se puede utilizar para hacer predicciones futuras sobre nuevos datos.</p>
 <p>Si no usó un flujo de trabajo, la finalización de un modelo y/o receta se realiza usando <code><a href="https://tune.tidymodels.org/reference/finalize_model.html">finalize_model()</a></code> y <code><a href="https://tune.tidymodels.org/reference/finalize_model.html">finalize_recipe()</a></code>.</p>
@@ -845,17 +848,17 @@ Figura&nbsp;13.4: El método <code><a href="https://ggplot2.tidyverse.org/refere
 <p>El paquete <span class="pkg">usemodels</span> puede tomar un marco de datos y una fórmula de modelo, luego escribir código R para ajustar el modelo. El código también crea una receta adecuada cuyos pasos dependen del modelo solicitado, así como de los datos del predictor.</p>
 <p>Por ejemplo, para los datos de vivienda de Ames, el código de modelado <code>xgboost</code> podría crearse con:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://usemodels.tidymodels.org/">usemodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://usemodels.tidymodels.org/">usemodels</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">use_xgboost</span><span class="op">(</span><span class="va">Sale_Price</span> <span class="op">~</span> <span class="va">Neighborhood</span> <span class="op">+</span> <span class="va">Gr_Liv_Area</span> <span class="op">+</span> <span class="va">Year_Built</span> <span class="op">+</span> <span class="va">Bldg_Type</span> <span class="op">+</span> </span>
 <span>              <span class="va">Latitude</span> <span class="op">+</span> <span class="va">Longitude</span>, </span>
 <span>            data <span class="op">=</span> <span class="va">ames_train</span>,</span>
 <span>            <span class="co"># Agregue comentarios que expliquen parte del código:</span></span>
-<span>            verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>            verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El código resultante es el siguiente:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">xgboost_recipe</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">xgboost_recipe</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">recipe</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Sale_Price</span> <span class="op">~</span> <span class="va">Neighborhood</span> <span class="op">+</span> <span class="va">Gr_Liv_Area</span> <span class="op">+</span> <span class="va">Year_Built</span> <span class="op">+</span> <span class="va">Bldg_Type</span> <span class="op">+</span> </span>
 <span>    <span class="va">Latitude</span> <span class="op">+</span> <span class="va">Longitude</span>, data <span class="op">=</span> <span class="va">ames_train</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">step_novel</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
@@ -884,7 +887,7 @@ Figura&nbsp;13.4: El método <code><a href="https://ggplot2.tidyverse.org/refere
 <span><span class="va">xgboost_tune</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu">tune_grid</span><span class="op">(</span><span class="va">xgboost_workflow</span>, </span>
 <span>            resamples <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"agregue su objeto rsample"</span><span class="op">)</span>, </span>
-<span>            grid <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"agregar número de puntos candidatos"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>            grid <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"agregar número de puntos candidatos"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Según lo que entiende <span class="pkg">usemodels</span> sobre los datos, este código es el preprocesamiento mínimo requerido. Para otros modelos, se agregan operaciones como <code>step_normalize()</code> para satisfacer las necesidades básicas del modelo. Tenga en cuenta que es nuestra responsabilidad, como practicante del modelado, elegir qué remuestras, <code>resamples</code>, usar para la afinación, así como qué tipo de cuadrícula, <code>grid</code>.</p>
 <div class="rmdnote">
@@ -906,7 +909,7 @@ Figura&nbsp;13.4: El método <code><a href="https://ggplot2.tidyverse.org/refere
 <p>El paquete <span class="pkg">tune</span> aplica automáticamente este tipo de optimización cada vez que se ajusta un modelo aplicable.</p>
 <p>Por ejemplo, si se ajustó un modelo de clasificación C5.0 mejorado <span class="citation" data-cites="apm">(<a href="references.html#ref-apm" role="doc-biblioref">M. Kuhn y Johnson 2013</a>)</span> a los datos de la celda, podemos ajustar el número de iteraciones de refuerzo (“árboles”). Con todos los demás parámetros establecidos en sus valores predeterminados, podemos evaluar iteraciones de 1 a 100 en las mismas muestras utilizadas anteriormente:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">c5_spec</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">c5_spec</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">boost_tree</span><span class="op">(</span>trees <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"C5.0"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span></span>
@@ -918,7 +921,7 @@ Figura&nbsp;13.4: El método <code><a href="https://ggplot2.tidyverse.org/refere
 <span>    resamples <span class="op">=</span> <span class="va">cell_folds</span>,</span>
 <span>    grid <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>trees <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>,</span>
 <span>    metrics <span class="op">=</span> <span class="va">roc_res</span></span>
-<span>  <span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Sin la optimización del submodelo, la llamada a <code><a href="https://tune.tidymodels.org/reference/tune_grid.html">tune_grid()</a></code> usó 62.2 minutos para volver a muestrear 100 submodelos. Con la optimización, la misma llamada tomó 100 <em>segundos</em> (una aceleración de 37). El tiempo reducido es la diferencia entre <code><a href="https://tune.tidymodels.org/reference/tune_grid.html">tune_grid()</a></code> que ajusta 1000 modelos frente a 10 modelos.</p>
 <div class="rmdnote">
@@ -930,14 +933,14 @@ Figura&nbsp;13.4: El método <code><a href="https://ggplot2.tidyverse.org/refere
 <p>Consideremos dos esquemas de procesamiento paralelo diferentes.</p>
 <p>Al ajustar modelos mediante búsqueda de cuadrícula, hay dos bucles distintos: uno sobre remuestreos y otro sobre combinaciones únicas de parámetros de ajuste. En pseudocódigo, este proceso se vería así:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">rs</span> <span class="kw">in</span> <span class="va">resamples</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">rs</span> <span class="kw">in</span> <span class="va">resamples</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># Crear conjuntos de análisis y evaluación.</span></span>
 <span>  <span class="co"># Preprocesar datos (por ejemplo, fórmula o receta)</span></span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">mod</span> <span class="kw">in</span> <span class="va">configurations</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># Ajustar el modelo {mod} al conjunto de análisis {rs}</span></span>
 <span>    <span class="co"># Predecir el conjunto de evaluación {rs}</span></span>
 <span>  <span class="op">}</span></span>
-<span><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="op">}</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>De forma predeterminada, el paquete <span class="pkg">tune</span> paraleliza solo sobre remuestreos (el bucle externo), a diferencia de los bucles externo e interno.</p>
 <p>Este es el escenario óptimo cuando el método de preprocesamiento es costoso. Sin embargo, este enfoque tiene dos posibles desventajas:</p>
@@ -962,14 +965,14 @@ Figura&nbsp;13.5: Procesos de trabajo cuando el procesamiento paralelo hace coin
 <p>En las funciones de control para las funciones <code>tune_*()</code>, el argumento <code>parallel_over</code> controla cómo se ejecuta el proceso. Para utilizar la estrategia de paralelización anterior, el argumento es <code>parallel_over = "resamples"</code>.</p>
 <p>En lugar de procesar los remuestreos en paralelo, un esquema alternativo combina los bucles sobre los remuestreos y los modelos en un solo bucle. En pseudocódigo, este proceso se vería así:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">all_tasks</span> <span class="op">&lt;-</span> <span class="fu">crossing</span><span class="op">(</span><span class="va">resamples</span>, <span class="va">configurations</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">all_tasks</span> <span class="op">&lt;-</span> <span class="fu">crossing</span><span class="op">(</span><span class="va">resamples</span>, <span class="va">configurations</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">iter</span> <span class="kw">in</span> <span class="va">all_tasks</span><span class="op">)</span> <span class="op">{</span>                           </span>
 <span>  <span class="co"># Crear conjuntos de análisis y evaluación para {iter}</span></span>
 <span>  <span class="co"># Preprocesar datos (e.j. formula or recipe)</span></span>
 <span>  <span class="co"># Ajustar el modelo {iter} al conjunto de análisis {iter}</span></span>
 <span>  <span class="co"># Predecir el conjunto de evaluación {iter}</span></span>
-<span><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="op">}</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>En este caso, la paralelización se produce ahora en un bucle único. Por ejemplo, si utilizamos validación cruzada quíntuple con valores de parámetros de ajuste <span class="math inline">\(M\)</span>, el bucle se ejecuta en <span class="math inline">\(5\times M\)</span> iteraciones. Esto aumenta el número de trabajadores potenciales que se pueden utilizar. Sin embargo, el trabajo relacionado con el preprocesamiento de datos se repite varias veces. Si esas medidas son costosas, este enfoque será ineficiente.</p>
 <p>En tidymodels, los conjuntos de validación se tratan como un único remuestreo. En estos casos, este esquema de paralelización sería el mejor.</p>
@@ -1044,7 +1047,7 @@ Figura&nbsp;13.8: Aceleraciones en el ajuste del modelo frente al número de tra
 </div>
 <p>Si definimos una variable para usar como parámetro del modelo y luego la pasamos a una función como <code>linear_reg()</code>, la variable normalmente se define en el entorno global.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">coef_penalty</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">coef_penalty</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
 <span><span class="va">spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span>penalty <span class="op">=</span> <span class="va">coef_penalty</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></span>
 <span><span class="va">spec</span></span>
 <span><span class="co">## Linear Regression Model Specification (regression)</span></span>
@@ -1052,14 +1055,14 @@ Figura&nbsp;13.8: Aceleraciones en el ajuste del modelo frente al número de tra
 <span><span class="co">## Main Arguments:</span></span>
 <span><span class="co">##   penalty = coef_penalty</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Computational engine: glmnet</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## Computational engine: glmnet</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Los modelos creados con el paquete parsnip guardan argumentos como estos como <em>quosures</em>; se trata de objetos que rastrean tanto el nombre del objeto como el entorno donde vive:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">spec</span><span class="op">$</span><span class="va">args</span><span class="op">$</span><span class="va">penalty</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">spec</span><span class="op">$</span><span class="va">args</span><span class="op">$</span><span class="va">penalty</span></span>
 <span><span class="co">## &lt;quosure&gt;</span></span>
 <span><span class="co">## expr: ^coef_penalty</span></span>
-<span><span class="co">## env:  global</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## env:  global</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Observe que tenemos <code>env: global</code> porque esta variable se creó en el entorno global. La especificación del modelo definida por <code>spec</code> funciona correctamente cuando se ejecuta en la sesión normal de un usuario porque esa sesión también utiliza el entorno global; R puede encontrar fácilmente el objeto <code>coef_penalty</code>.</p>
 <div class="rmdwarning">
@@ -1067,15 +1070,15 @@ Figura&nbsp;13.8: Aceleraciones en el ajuste del modelo frente al número de tra
 </div>
 <p>Al escribir código que se ejecutará en paralelo, es una buena idea insertar los datos reales en los objetos en lugar de la referencia al objeto. Los paquetes <span class="pkg">rlang</span> y <span class="pkg">dplyr</span> pueden resultar muy útiles para esto. Por ejemplo, el operador <code>!!</code> puede unir un único valor en un objeto:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span>penalty <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="va">coef_penalty</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span>penalty <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="va">coef_penalty</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></span>
 <span><span class="va">spec</span><span class="op">$</span><span class="va">args</span><span class="op">$</span><span class="va">penalty</span></span>
 <span><span class="co">## &lt;quosure&gt;</span></span>
 <span><span class="co">## expr: ^0.1</span></span>
-<span><span class="co">## env:  empty</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## env:  empty</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Ahora la salida es <code>^0.1</code>, lo que indica que el valor está ahí en lugar de la referencia al objeto. Cuando tiene varios valores externos para insertar en un objeto, el operador <code>!!!</code> puede ayudar:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mcmc_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>chains <span class="op">=</span> <span class="fl">3</span>, iter <span class="op">=</span> <span class="fl">1000</span>, cores <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mcmc_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>chains <span class="op">=</span> <span class="fl">3</span>, iter <span class="op">=</span> <span class="fl">1000</span>, cores <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">set_engine</span><span class="op">(</span><span class="st">"stan"</span>, <span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="va">mcmc_args</span><span class="op">)</span></span>
 <span><span class="co">## Linear Regression Model Specification (regression)</span></span>
@@ -1085,18 +1088,18 @@ Figura&nbsp;13.8: Aceleraciones en el ajuste del modelo frente al número de tra
 <span><span class="co">##   iter = 1000</span></span>
 <span><span class="co">##   cores = 3</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Computational engine: stan</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## Computational engine: stan</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Los selectores de recetas son otro lugar donde es posible que desees acceder a variables globales. Suponga que tiene un paso de receta que debería utilizar todos los predictores en los datos de la celda que se midieron utilizando el segundo canal óptico. Podemos crear un vector de estos nombres de columnas:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org">stringr</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org">stringr</a></span><span class="op">)</span></span>
 <span><span class="va">ch_2_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_subset.html">str_subset</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cells</span><span class="op">)</span>, <span class="st">"ch_2"</span><span class="op">)</span></span>
 <span><span class="va">ch_2_vars</span></span>
-<span><span class="co">## [1] "avg_inten_ch_2"   "total_inten_ch_2"</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## [1] "avg_inten_ch_2"   "total_inten_ch_2"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Podríamos codificarlos en un paso de receta, pero sería mejor hacer referencia a ellos mediante programación en caso de que los datos cambien. Dos formas de hacer esto son:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Todavía utiliza una referencia a datos globales. (~_~;)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Todavía utiliza una referencia a datos globales. (~_~;)</span></span>
 <span><span class="fu">recipe</span><span class="op">(</span><span class="va">class</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">cells</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">step_spatialsign</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">ch_2_vars</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## </span></span>
@@ -1122,7 +1125,7 @@ Figura&nbsp;13.8: Aceleraciones en el ajuste del modelo frente al número de tra
 <span><span class="co">## predictor: 56</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## ── Operations</span></span>
-<span><span class="co">## • Spatial sign on: "avg_inten_ch_2" and "total_inten_ch_2"</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## • Spatial sign on: "avg_inten_ch_2" and "total_inten_ch_2"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Este último es mejor para el procesamiento paralelo porque toda la información necesaria está integrada en el objeto de receta.</p>
 </section><section id="sec-racing" class="level3" data-number="13.5.5"><h3 data-number="13.5.5" class="anchored" data-anchor-id="sec-racing">
@@ -1149,7 +1152,7 @@ Figura&nbsp;13.9: El proceso de carrera para 20 parámetros de afinación y 10 r
 </div>
 <p>El paquete <span class="pkg">finetune</span> contiene funciones para carreras. La función <code><a href="https://finetune.tidymodels.org/reference/tune_race_anova.html">tune_race_anova()</a></code> realiza un modelo ANOVA para probar la significancia estadística de las diferentes configuraciones del modelo. La sintaxis para reproducir el filtrado mostrado anteriormente es:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/finetune">finetune</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/finetune">finetune</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1308</span><span class="op">)</span></span>
 <span><span class="va">mlp_sfd_race</span> <span class="op">&lt;-</span></span>
@@ -1160,12 +1163,12 @@ Figura&nbsp;13.9: El proceso de carrera para 20 parámetros de afinación y 10 r
 <span>    param_info <span class="op">=</span> <span class="va">mlp_param</span>,</span>
 <span>    metrics <span class="op">=</span> <span class="va">roc_res</span>,</span>
 <span>    control <span class="op">=</span> <span class="fu"><a href="https://finetune.tidymodels.org/reference/control_race.html">control_race</a></span><span class="op">(</span>verbose_elim <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Los argumentos reflejan los de <code><a href="https://tune.tidymodels.org/reference/tune_grid.html">tune_grid()</a></code>. La función <code><a href="https://finetune.tidymodels.org/reference/control_race.html">control_race()</a></code> tiene opciones para el procedimiento de eliminación.</p>
 <p>Como se muestra en la animación anterior, se estaban considerando combinaciones de parámetros de ajuste four una vez que se evaluó el conjunto completo de remuestreos. <code><a href="https://tune.tidymodels.org/reference/show_best.html">show_best()</a></code> devuelve los mejores modelos (clasificados por rendimiento) pero solo devuelve las configuraciones que nunca fueron eliminadas:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://tune.tidymodels.org/reference/show_best.html">show_best</a></span><span class="op">(</span><span class="va">mlp_sfd_race</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://tune.tidymodels.org/reference/show_best.html">show_best</a></span><span class="op">(</span><span class="va">mlp_sfd_race</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">## Warning in show_best(mlp_sfd_race, n = 10): No value of `metric` was given;</span></span>
 <span><span class="co">## "roc_auc" will be used.</span></span>
 <span><span class="co">## # A tibble: 4 × 10</span></span>
@@ -1175,7 +1178,7 @@ Figura&nbsp;13.9: El proceso de carrera para 20 parámetros de afinación y 10 r
 <span><span class="co">## 2            3 4.02e- 2    151       10 roc_auc binary     0.881    10 0.00995</span></span>
 <span><span class="co">## 3            2 7.91e- 4    164        7 roc_auc binary     0.879    10 0.00813</span></span>
 <span><span class="co">## 4            5 1.30e-10     89        5 roc_auc binary     0.879    10 0.00967</span></span>
-<span><span class="co">## # ℹ 1 more variable: .config &lt;chr&gt;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 1 more variable: .config &lt;chr&gt;</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Existen otras técnicas de análisis intermedio para descartar configuraciones. Por ejemplo, <span class="citation" data-cites="krueger15a">Krueger, Panknin, y Braun (<a href="references.html#ref-krueger15a" role="doc-biblioref">2015</a>)</span> usa métodos de análisis secuencial tradicionales, mientras que <span class="citation" data-cites="kuhn2014futility">Max Kuhn (<a href="references.html#ref-kuhn2014futility" role="doc-biblioref">2014</a>)</span> trata los datos como una competencia deportiva y usa el modelo Bradley-Terry <span class="citation" data-cites="bradley1952rank">(<a href="references.html#ref-bradley1952rank" role="doc-biblioref">Bradley y Terry 1952</a>)</span> para medir la capacidad ganadora de la configuración de parámetros.</p>
 </section></section><section id="sec-grid-summary" class="level2" data-number="13.6"><h2 data-number="13.6" class="anchored" data-anchor-id="sec-grid-summary">
@@ -1183,7 +1186,7 @@ Figura&nbsp;13.9: El proceso de carrera para 20 parámetros de afinación y 10 r
 <p>Este capítulo analizó las dos clases principales de búsqueda de cuadrículas (regular y no regular) que se pueden usar para ajustar el modelo y demostró cómo construir estas cuadrículas, ya sea manualmente o usando la familia de funciones <code>grid_*()</code>. La función <code><a href="https://tune.tidymodels.org/reference/tune_grid.html">tune_grid()</a></code> puede evaluar estos conjuntos candidatos de parámetros del modelo mediante remuestreo. El capítulo también mostró cómo finalizar un modelo, receta o flujo de trabajo para actualizar los valores de los parámetros para el ajuste final. La búsqueda en cuadrícula puede ser costosa desde el punto de vista computacional, pero las decisiones bien pensadas en el diseño experimental de dichas búsquedas pueden hacerlas manejables.</p>
 <p>El código de análisis de datos que se reutilizará en el próximo capítulo es:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span>
 <span><span class="va">cells</span> <span class="op">&lt;-</span> <span class="va">cells</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">case</span><span class="op">)</span></span>
@@ -1191,7 +1194,7 @@ Figura&nbsp;13.9: El proceso de carrera para 20 parámetros de afinación y 10 r
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1304</span><span class="op">)</span></span>
 <span><span class="va">cell_folds</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">roc_res</span> <span class="op">&lt;-</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">roc_auc</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">roc_res</span> <span class="op">&lt;-</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">roc_auc</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
@@ -1251,15 +1254,15 @@ Yeo, I-K, y R Johnson. 2000. <span>«A new family of power transformations to im
   // Chapter name
   const currentChapterFile = window.location.pathname.split('/').pop().replace('.html', '');
 
-  //Deffining urls
+  //Defining urls
   const originalURL = "https://github.com/tidymodels/TMwR";
-  const translationURL = "https://github.com/davidrsch/TMwRes";
+  const translationURL = "https://github.com/davidrsch/tmwr-es";
 
-  //Deffining texts
+  //Defining texts
   const edit_text = "Editar esta página";
   const issue_text = "Informar de un problema"
 
-  //Deffining git_i
+  //Defining git_i
   const git_i = '<div><i class="bi bi-github"></i></div>';
 
   // Adding TOC if not exist
@@ -1364,13 +1367,14 @@ Yeo, I-K, y R Johnson. 2000. <span>«A new family of power transformations to im
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

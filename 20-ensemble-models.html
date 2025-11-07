@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <title>20&nbsp; Conjuntos De Modelos – Modelado Ordenado con R</title>
@@ -86,14 +86,15 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87efc9f0321ca4df940afa6b8506b50b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -107,7 +108,7 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -132,7 +133,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -165,7 +166,9 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -178,7 +181,7 @@ window.Quarto = {
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/TMwRes">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/tmwr-es">
             Traducción
             </a>
           </li>
@@ -459,7 +462,7 @@ window.Quarto = {
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ensemble-candidate-preds-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabla&nbsp;20.1: Predicciones a partir de configuraciones de parámetros de ajuste candidatos.
 </figcaption><div aria-describedby="tbl-ensemble-candidate-preds-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="table table-striped cell caption-top table-sm small" data-quarto-postprocess="true">
+<table class="table table-striped cell caption-top table-sm small">
 <colgroup>
 <col style="width: 12%">
 <col style="width: 12%">
@@ -561,7 +564,7 @@ Predicciones Candidatas Apiladas
 <p>Para resumir dónde nos encontramos hasta ahora, el primer paso para el apilamiento es ensamblar las predicciones del conjunto de evaluación para el conjunto de entrenamiento de cada modelo candidato. Podemos utilizar estas predicciones de conjuntos de evaluación para avanzar y construir un conjunto apilado.</p>
 <p>Para comenzar a ensamblar con el paquete <span class="pkg">stacks</span>, cree una pila de datos vacía usando la función <code><a href="https://stacks.tidymodels.org/reference/stacks.html">stacks()</a></code> y luego agregue modelos candidatos. Recuerde que utilizamos conjuntos de flujos de trabajo para ajustar una amplia variedad de modelos a estos datos. Usaremos los resultados de las carreras:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">race_results</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">race_results</span></span>
 <span><span class="co">## # A workflow set/tibble: 12 × 4</span></span>
 <span><span class="co">##   wflow_id    info             option    result   </span></span>
 <span><span class="co">##   &lt;chr&gt;       &lt;list&gt;           &lt;list&gt;    &lt;list&gt;   </span></span>
@@ -571,11 +574,11 @@ Predicciones Candidatas Apiladas
 <span><span class="co">## 4 RF          &lt;tibble [1 × 4]&gt; &lt;opts[3]&gt; &lt;race[+]&gt;</span></span>
 <span><span class="co">## 5 boosting    &lt;tibble [1 × 4]&gt; &lt;opts[3]&gt; &lt;race[+]&gt;</span></span>
 <span><span class="co">## 6 Cubist      &lt;tibble [1 × 4]&gt; &lt;opts[3]&gt; &lt;race[+]&gt;</span></span>
-<span><span class="co">## # ℹ 6 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 6 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>En este caso, nuestra sintaxis es:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stacks.tidymodels.org/">stacks</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://tidymodels.tidymodels.org/reference/tidymodels_prefer.html">tidymodels_prefer</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -597,7 +600,7 @@ Predicciones Candidatas Apiladas
 <span><span class="co">## #   neural_network: 5 model configurations</span></span>
 <span><span class="co">## #   full_quad_linear_reg: 5 model configurations</span></span>
 <span><span class="co">## #   full_quad_KNN: 1 model configuration</span></span>
-<span><span class="co">## # Outcome: compressive_strength (numeric)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # Outcome: compressive_strength (numeric)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Recuerde que los métodos de carrera (<a href="13-grid-search.html#sec-racing" class="quarto-xref"><span>Sección 13.5.5</span></a>) son más eficientes ya que es posible que no evalúen todas las configuraciones en todos los remuestreos. El apilamiento requiere que todos los miembros candidatos tengan el conjunto completo de remuestras. <code><a href="https://stacks.tidymodels.org/reference/add_candidates.html">add_candidates()</a></code> incluye solo las configuraciones del modelo que tienen resultados completos.</p>
 <div class="rmdnote">
@@ -614,16 +617,16 @@ Predicciones Candidatas Apiladas
 <p><span class="citation" data-cites="breiman1996stacked">Breiman (<a href="references.html#ref-breiman1996stacked" role="doc-biblioref">1996b</a>)</span> también sugirió que, cuando se utiliza un modelo lineal para combinar las predicciones, podría ser útil restringir los coeficientes de combinación para que no sean negativos. En general, hemos encontrado que este es un buen consejo y es el valor predeterminado para el paquete <span class="pkg">stacks</span> (pero se puede cambiar mediante un argumento opcional).</p>
 <p>Dado que nuestro resultado es numérico, se utiliza la regresión lineal para el metamodelo. Ajustar el metamodelo es tan sencillo como usar:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2001</span><span class="op">)</span></span>
-<span><span class="va">ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stacks.tidymodels.org/reference/blend_predictions.html">blend_predictions</a></span><span class="op">(</span><span class="va">concrete_stack</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2001</span><span class="op">)</span></span>
+<span><span class="va">ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stacks.tidymodels.org/reference/blend_predictions.html">blend_predictions</a></span><span class="op">(</span><span class="va">concrete_stack</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Esto evalúa el modelo de metaaprendizaje sobre una cuadrícula predefinida de valores de penalización de lazo y utiliza un método de remuestreo interno para determinar el mejor valor. El método <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code>, que se muestra en <a href="#fig-stacking-autoplot" class="quarto-xref">Figura&nbsp;<span>20.1</span></a>, nos ayuda a comprender si el método de penalización predeterminado fue suficiente:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">ens</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">ens</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-stacking-autoplot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Resultados del uso del método `autoplot()` en el objeto de pilas combinadas." data-fig-align="center">
+<div id="fig-stacking-autoplot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Resultados del uso del método `autoplot()` en el objeto de pilas combinadas.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-stacking-autoplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-stacking-autoplot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Resultados del uso del método `autoplot()` en el objeto de pilas combinadas." width="672">
 </div>
@@ -636,16 +639,16 @@ Figura&nbsp;20.1: Resultados del uso del método <code><a href="https://ggplot2.
 <p>El panel superior de <a href="#fig-stacking-autoplot" class="quarto-xref">Figura&nbsp;<span>20.1</span></a> muestra el número promedio de miembros candidatos del conjunto retenidos por el modelo de metaaprendizaje. Podemos ver que el número de miembros es bastante constante y, a medida que aumenta, el RMSE también aumenta.</p>
 <p>Es posible que el rango predeterminado no nos haya servido bien aquí. Para evaluar el modelo de metaaprendizaje con penalizaciones mayores, pasemos una opción adicional:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2002</span><span class="op">)</span></span>
-<span><span class="va">ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stacks.tidymodels.org/reference/blend_predictions.html">blend_predictions</a></span><span class="op">(</span><span class="va">concrete_stack</span>, penalty <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="op">-</span><span class="fl">0.5</span>, length <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2002</span><span class="op">)</span></span>
+<span><span class="va">ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stacks.tidymodels.org/reference/blend_predictions.html">blend_predictions</a></span><span class="op">(</span><span class="va">concrete_stack</span>, penalty <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="op">-</span><span class="fl">0.5</span>, length <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Ahora, en <a href="#fig-stacking-autoplot-redo" class="quarto-xref">Figura&nbsp;<span>20.2</span></a>, vemos un rango en el que el modelo de conjunto se vuelve peor que con nuestra primera combinación (pero no mucho). Los valores de <span class="math inline">\(R^2\)</span> aumentan con más miembros y sanciones mayores.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">ens</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">ens</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-stacking-autoplot-redo" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Los resultados del uso del método `autoplot()` en el objeto de pilas combinadas actualizado." data-fig-align="center">
+<div id="fig-stacking-autoplot-redo" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Los resultados del uso del método `autoplot()` en el objeto de pilas combinadas actualizado.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-stacking-autoplot-redo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-stacking-autoplot-redo-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Los resultados del uso del método `autoplot()` en el objeto de pilas combinadas actualizado." width="672">
 </div>
@@ -658,7 +661,7 @@ Figura&nbsp;20.2: Los resultados del uso del método <code><a href="https://ggpl
 <p>Al combinar predicciones utilizando un modelo de regresión, es común restringir los parámetros de combinación para que no sean negativos. Para estos datos, esta restricción tiene el efecto de eliminar muchos de los miembros potenciales del conjunto; Incluso con sanciones bastante bajas, el conjunto se limita a una fracción de los dieciocho originales.</p>
 <p>El valor de penalización asociado con el RMSE más pequeño fue 0.074. Imprimir el objeto muestra los detalles del modelo de metaaprendizaje:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ens</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ens</span></span>
 <span><span class="co">## ── A stacked ensemble model ─────────────────────────────────────</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
@@ -681,18 +684,18 @@ Figura&nbsp;20.2: Los resultados del uso del método <code><a href="https://ggpl
 <span><span class="co">## 6 neural_network_1_17       mlp          0.00708</span></span>
 <span><span class="co">## # ℹ 1 more row</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Members have not yet been fitted with `fit_members()`.</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## Members have not yet been fitted with `fit_members()`.</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El modelo de metaaprendizaje de regresión lineal regularizado contenía coeficientes de combinación seven entre tipos de modelos four. El método <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> se puede utilizar nuevamente para mostrar las contribuciones de cada tipo de modelo, para producir <a href="#fig-blending-weights" class="quarto-xref">Figura&nbsp;<span>20.3</span></a>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">ens</span>, <span class="st">"weights"</span><span class="op">)</span> <span class="op">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">ens</span>, <span class="st">"weights"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">weight</span> <span class="op">+</span> <span class="fl">0.01</span>, label <span class="op">=</span> <span class="va">model</span><span class="op">)</span>, hjust <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">lims</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.01</span>, <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">lims</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.01</span>, <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-blending-weights" class="quarto-float quarto-figure quarto-figure-center anchored" alt="blending_alt" data-fig-align="center">
+<div id="fig-blending-weights" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="blending_alt">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-blending-weights-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-blending-weights-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="blending_alt" width="672">
 </div>
@@ -733,14 +736,14 @@ Figura&nbsp;20.3: Coeficientes de mezcla para el conjunto de apilamiento.
 </div>
 <p>El paquete <span class="pkg">stacks</span> tiene una función, <code><a href="https://stacks.tidymodels.org/reference/fit_members.html">fit_members()</a></code>, que entrena y devuelve estos modelos:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stacks.tidymodels.org/reference/fit_members.html">fit_members</a></span><span class="op">(</span><span class="va">ens</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stacks.tidymodels.org/reference/fit_members.html">fit_members</a></span><span class="op">(</span><span class="va">ens</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Esto actualiza el objeto de apilamiento con los objetos de flujo de trabajo ajustados para cada miembro. En este punto, el modelo de apilamiento se puede utilizar para la predicción.</p>
 </section><section id="resultados-del-conjunto-de-pruebas" class="level2" data-number="20.4"><h2 data-number="20.4" class="anchored" data-anchor-id="resultados-del-conjunto-de-pruebas">
 <span class="header-section-number">20.4</span> Resultados Del Conjunto De Pruebas</h2>
 <p>Dado que el proceso de combinación utilizó remuestreo, podemos estimar que el conjunto con miembros seven tenía un RMSE estimado de 4.11. Recuerde del <a href="15-workflow-sets.html" class="quarto-xref">Capítulo&nbsp;<span>15</span></a> que el árbol mejor impulsado tenía un conjunto de prueba RMSE de 3.41. ¿Cómo se comparará el modelo de conjunto en el conjunto de prueba? Podemos usar <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> para averiguarlo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">reg_metrics</span> <span class="op">&lt;-</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">reg_metrics</span> <span class="op">&lt;-</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span><span class="op">)</span></span>
 <span><span class="va">ens_test_pred</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ens</span>, <span class="va">concrete_test</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">bind_cols</span><span class="op">(</span><span class="va">concrete_test</span><span class="op">)</span></span>
@@ -751,7 +754,7 @@ Figura&nbsp;20.3: Coeficientes de mezcla para el conjunto de apilamiento.
 <span><span class="co">##   .metric .estimator .estimate</span></span>
 <span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;</span></span>
 <span><span class="co">## 1 rmse    standard       3.40 </span></span>
-<span><span class="co">## 2 rsq     standard       0.955</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 2 rsq     standard       0.955</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Esto es moderadamente mejor que nuestro mejor modelo individual. Es bastante común que el apilamiento produzca beneficios incrementales en comparación con el mejor modelo individual.</p>
 </section><section id="sec-ensembles-summary" class="level2" data-number="20.5"><h2 data-number="20.5" class="anchored" data-anchor-id="sec-ensembles-summary">
@@ -787,15 +790,15 @@ Wolpert, D. 1992. <span>«Stacked generalization»</span>. <em>Neural Networks</
   // Chapter name
   const currentChapterFile = window.location.pathname.split('/').pop().replace('.html', '');
 
-  //Deffining urls
+  //Defining urls
   const originalURL = "https://github.com/tidymodels/TMwR";
-  const translationURL = "https://github.com/davidrsch/TMwRes";
+  const translationURL = "https://github.com/davidrsch/tmwr-es";
 
-  //Deffining texts
+  //Defining texts
   const edit_text = "Editar esta página";
   const issue_text = "Informar de un problema"
 
-  //Deffining git_i
+  //Defining git_i
   const git_i = '<div><i class="bi bi-github"></i></div>';
 
   // Adding TOC if not exist
@@ -900,13 +903,14 @@ Wolpert, D. 1992. <span>«Stacked generalization»</span>. <em>Neural Networks</
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

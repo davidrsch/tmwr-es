@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <title>5&nbsp; Gastar Nuestros Datos – Modelado Ordenado con R</title>
@@ -86,14 +86,15 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87efc9f0321ca4df940afa6b8506b50b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -107,7 +108,7 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -131,7 +132,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -164,7 +165,9 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -177,7 +180,7 @@ window.Quarto = {
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/TMwRes">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/tmwr-es">
             Traducción
             </a>
           </li>
@@ -443,7 +446,7 @@ window.Quarto = {
 </div>
 <p>Supongamos que asignamos el 80% de los datos al conjunto de entrenamiento y el 20% restante a las pruebas. El método más común es utilizar muestreo aleatorio simple. El paquete <a href="https://rsample.tidymodels.org/"><span class="pkg">rsample</span></a> tiene herramientas para realizar divisiones de datos como esta; la función <code>initial_split()</code> fue creada para este propósito. Toma el marco de datos como argumento, así como la proporción que se colocará en el entrenamiento. Usando el marco de datos producido por el fragmento de código del resumen en <a href="04-ames.html#sec-ames-summary" class="quarto-xref"><span>Sección 4.2</span></a> que preparó el conjunto de datos de Ames:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://tidymodels.tidymodels.org/reference/tidymodels_prefer.html">tidymodels_prefer</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Configure el flujo de números aleatorios usando `set.seed()` para que los resultados puedan ser</span></span>
@@ -454,16 +457,16 @@ window.Quarto = {
 <span><span class="va">ames_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">ames</span>, prop <span class="op">=</span> <span class="fl">0.80</span><span class="op">)</span></span>
 <span><span class="va">ames_split</span></span>
 <span><span class="co">## &lt;Training/Testing/Total&gt;</span></span>
-<span><span class="co">## &lt;2344/586/2930&gt;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## &lt;2344/586/2930&gt;</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>La información impresa denota la cantidad de datos en el conjunto de entrenamiento (<span class="math inline">\(n = 2,344\)</span>), la cantidad en el conjunto de prueba (<span class="math inline">\(n = 586\)</span>), y el tamaño del conjunto original de muestras. (<span class="math inline">\(n = 2,930\)</span>).</p>
 <p>El objeto <code>ames_split</code> es un objeto <code>rsplit</code> y contiene sólo la información de partición; Para obtener los conjuntos de datos resultantes, aplicamos dos funciones más:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">ames_split</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">ames_split</span><span class="op">)</span></span>
 <span><span class="va">ames_test</span>  <span class="op">&lt;-</span>  <span class="fu">testing</span><span class="op">(</span><span class="va">ames_split</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ames_train</span><span class="op">)</span></span>
-<span><span class="co">## [1] 2344   74</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## [1] 2344   74</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Estos objetos son marcos de datos con las mismas columnas que los datos originales pero solo las filas apropiadas para cada conjunto.</p>
 <p>El muestreo aleatorio simple es apropiado en muchos casos, pero existen excepciones. Cuando hay un <em>desequilibrio de clases</em> dramático en los problemas de clasificación, una clase ocurre con mucha menos frecuencia que otra. El uso de una muestra aleatoria simple puede asignar al azar estas muestras poco frecuentes de manera desproporcionada al conjunto de entrenamiento o prueba. Para evitar esto, se puede utilizar <em>muestreo estratificado</em>. La división de entrenamiento/prueba se realiza por separado dentro de cada clase y luego estas submuestras se combinan en el conjunto general de entrenamiento y prueba. Para problemas de regresión, los datos de resultados se pueden agrupar artificialmente en cuartiles y luego se puede realizar un muestreo estratificado en cuatro ocasiones distintas. Este es un método eficaz para mantener similares las distribuciones del resultado entre el conjunto de entrenamiento y de prueba. La distribución del resultado del precio de venta para los datos de vivienda de Ames se muestra en <a href="#fig-ames-sale-price" class="quarto-xref">Figura&nbsp;<span>5.1</span></a>.</p>
@@ -481,13 +484,13 @@ Figura&nbsp;5.1: La distribución del precio de venta (en unidades logarítmicas
 </div>
 <p>Como se analiza en el <a href="04-ames.html" class="quarto-xref">Capítulo&nbsp;<span>4</span></a>, la distribución del precio de venta está sesgada hacia la derecha, con proporcionalmente más casas económicas que caras a ambos lados del centro de la distribución. La preocupación aquí con una simple división es que las casas más caras no estarían bien representadas en el conjunto de capacitación; esto aumentaría el riesgo de que nuestro modelo fuera ineficaz para predecir el precio de dichas propiedades. Las líneas verticales de puntos en <a href="#fig-ames-sale-price" class="quarto-xref">Figura&nbsp;<span>5.1</span></a> indican los cuatro cuartiles de estos datos. Una muestra aleatoria estratificada realizaría la división 80/20 dentro de cada uno de estos subconjuntos de datos y luego agruparía los resultados. En <span class="pkg">rsample</span>, esto se logra usando el argumento <code>strata</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">502</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">502</span><span class="op">)</span></span>
 <span><span class="va">ames_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">ames</span>, prop <span class="op">=</span> <span class="fl">0.80</span>, strata <span class="op">=</span> <span class="va">Sale_Price</span><span class="op">)</span></span>
 <span><span class="va">ames_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">ames_split</span><span class="op">)</span></span>
 <span><span class="va">ames_test</span>  <span class="op">&lt;-</span>  <span class="fu">testing</span><span class="op">(</span><span class="va">ames_split</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ames_train</span><span class="op">)</span></span>
-<span><span class="co">## [1] 2342   74</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## [1] 2342   74</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Sólo se puede utilizar una columna para la estratificación.</p>
 <div class="rmdnote">
@@ -506,19 +509,19 @@ Figura&nbsp;5.1: La distribución del precio de venta (en unidades logarítmicas
 </div>
 <p>Los conjuntos de validación se analizan más en <a href="10-resampling.html#sec-validation" class="quarto-xref"><span>Sección 10.2.2</span></a> como un caso especial de métodos de <em>remuestreo</em> que se utilizan en el conjunto de entrenamiento. Si va a utilizar un conjunto de validación, puede comenzar con una función de división diferente <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">52</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">52</span><span class="op">)</span></span>
 <span><span class="co"># Para dedicar el 60 % a la capacitación, el 20 % a la validación y el 20 % a las pruebas:</span></span>
 <span><span class="va">ames_val_split</span> <span class="op">&lt;-</span> <span class="fu">initial_validation_split</span><span class="op">(</span><span class="va">ames</span>, prop <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.6</span>, <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">ames_val_split</span></span>
 <span><span class="co">## &lt;Training/Validation/Testing/Total&gt;</span></span>
-<span><span class="co">## &lt;1758/586/586/2930&gt;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## &lt;1758/586/586/2930&gt;</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Al imprimir la división ahora se muestra el tamaño del conjunto de entrenamiento. (1,758), del conjunto de validación (586), y del conjunto de prueba ((586).</p>
 <p>Para obtener los datos de entrenamiento, validación y prueba, se utiliza la misma sintaxis:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">ames_val_split</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">ames_val_split</span><span class="op">)</span></span>
 <span><span class="va">ames_test</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">ames_val_split</span><span class="op">)</span></span>
-<span><span class="va">ames_val</span> <span class="op">&lt;-</span> <span class="fu">validation</span><span class="op">(</span><span class="va">ames_val_split</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">ames_val</span> <span class="op">&lt;-</span> <span class="fu">validation</span><span class="op">(</span><span class="va">ames_val_split</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><a href="10-resampling.html#sec-validation" class="quarto-xref"><span>Sección 10.2.2</span></a> demostrará cómo utilizar el objeto <code>ames_val_split</code> para remuestreo y optimización del modelo.</p>
 </section><section id="datos-multinivel" class="level2" data-number="5.3"><h2 data-number="5.3" class="anchored" data-anchor-id="datos-multinivel">
@@ -546,14 +549,14 @@ Figura&nbsp;5.1: La distribución del precio de venta (en unidades logarítmicas
 <p>La división de datos es la estrategia fundamental para la validación empírica de modelos. Incluso en la era de la recopilación de datos desenfrenada, un proyecto de modelado típico tiene una cantidad limitada de datos apropiados, y es necesario gastar sabiamente los datos de un proyecto. En este capítulo, analizamos varias estrategias para dividir los datos en distintos grupos para modelado y evaluación.</p>
 <p>En este punto de control, los fragmentos de código importantes para preparar y dividir son:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">ames</span><span class="op">)</span></span>
 <span><span class="va">ames</span> <span class="op">&lt;-</span> <span class="va">ames</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>Sale_Price <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">502</span><span class="op">)</span></span>
 <span><span class="va">ames_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">ames</span>, prop <span class="op">=</span> <span class="fl">0.80</span>, strata <span class="op">=</span> <span class="va">Sale_Price</span><span class="op">)</span></span>
 <span><span class="va">ames_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">ames_split</span><span class="op">)</span></span>
-<span><span class="va">ames_test</span>  <span class="op">&lt;-</span>  <span class="fu">testing</span><span class="op">(</span><span class="va">ames_split</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">ames_test</span>  <span class="op">&lt;-</span>  <span class="fu">testing</span><span class="op">(</span><span class="va">ames_split</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
@@ -573,15 +576,15 @@ Kuhn, M, y K Johnson. 2020. <em>Feature engineering and selection: A practical a
   // Chapter name
   const currentChapterFile = window.location.pathname.split('/').pop().replace('.html', '');
 
-  //Deffining urls
+  //Defining urls
   const originalURL = "https://github.com/tidymodels/TMwR";
-  const translationURL = "https://github.com/davidrsch/TMwRes";
+  const translationURL = "https://github.com/davidrsch/tmwr-es";
 
-  //Deffining texts
+  //Defining texts
   const edit_text = "Editar esta página";
   const issue_text = "Informar de un problema"
 
-  //Deffining git_i
+  //Defining git_i
   const git_i = '<div><i class="bi bi-github"></i></div>';
 
   // Adding TOC if not exist
@@ -686,13 +689,14 @@ Kuhn, M, y K Johnson. 2020. <em>Feature engineering and selection: A practical a
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

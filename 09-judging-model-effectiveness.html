@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <title>9&nbsp; Juzgar La Eficacia Del Modelo – Modelado Ordenado con R</title>
@@ -86,14 +86,15 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87efc9f0321ca4df940afa6b8506b50b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -107,7 +108,7 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -131,7 +132,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -164,7 +165,9 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -177,7 +180,7 @@ window.Quarto = {
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/TMwRes">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/tmwr-es">
             Traducción
             </a>
           </li>
@@ -435,7 +438,7 @@ window.Quarto = {
 <p>Al juzgar la eficacia del modelo, su decisión sobre qué métricas examinar puede ser fundamental. En capítulos posteriores, se optimizarán empíricamente ciertos parámetros del modelo y se utilizará una métrica de rendimiento primaria para elegir el mejor submodelo. Elegir la métrica incorrecta puede fácilmente tener consecuencias no deseadas. Por ejemplo, dos métricas comunes para los modelos de regresión son la raíz del error cuadrático medio (RMSE) y el coeficiente de determinación (también conocido como <span class="math inline">\(R^2\)</span>). El primero mide la <em>precisión</em> mientras que el segundo mide la <em>correlación</em>. Estos no son necesariamente lo mismo. <a href="#fig-performance-reg-metrics" class="quarto-xref">Figura&nbsp;<span>9.1</span></a> demuestra la diferencia entre los dos.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-performance-reg-metrics" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Gráficos de dispersión de valores numéricos observados versus valores predichos para modelos optimizados utilizando el RMSE y el coeficiente de determinación. El primero produce resultados cercanos a la línea de identidad de 45 grados, mientras que el segundo muestra resultados con una estrecha correlación lineal pero se aleja mucho de la línea de identidad." data-fig-align="center">
+<div id="fig-performance-reg-metrics" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Gráficos de dispersión de valores numéricos observados versus valores predichos para modelos optimizados utilizando el RMSE y el coeficiente de determinación. El primero produce resultados cercanos a la línea de identidad de 45 grados, mientras que el segundo muestra resultados con una estrecha correlación lineal pero se aleja mucho de la línea de identidad.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-performance-reg-metrics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-performance-reg-metrics-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Gráficos de dispersión de valores numéricos observados versus valores predichos para modelos optimizados utilizando el RMSE y el coeficiente de determinación. El primero produce resultados cercanos a la línea de identidad de 45 grados, mientras que el segundo muestra resultados con una estrecha correlación lineal pero se aleja mucho de la línea de identidad." width="672">
 </div>
@@ -466,11 +469,11 @@ Figura&nbsp;9.1: Valores observados versus valores predichos para modelos optimi
 </section><section id="métricas-de-regresión" class="level2" data-number="9.2"><h2 data-number="9.2" class="anchored" data-anchor-id="métricas-de-regresión">
 <span class="header-section-number">9.2</span> Métricas De Regresión</h2>
 <p>Recuerde de <a href="06-fitting-models.html#sec-parsnip-predictions" class="quarto-xref"><span>Sección 6.3</span></a> que las funciones de predicción de tidymodels producen tibbles con columnas para los valores predichos. Estas columnas tienen nombres consistentes y las funciones en el paquete <span class="pkg">yardstick</span> que producen métricas de rendimiento tienen interfaces consistentes. Las funciones están basadas en marcos de datos, a diferencia de vectores, con la sintaxis general de:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(data, truth, ...)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(data, truth, ...)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>donde <code>data</code> es un marco de datos o tibble y <code>truth</code> es la columna con los valores de resultados observados. Las elipses u otros argumentos se utilizan para especificar las columnas que contienen las predicciones.</p>
 <p>Para ilustrar, tomemos el modelo de <a href="08-feature-engineering.html#sec-recipes-summary" class="quarto-xref"><span>Sección 8.8</span></a>. Este modelo <code>lm_wflow_fit</code> combina un modelo de regresión lineal con un conjunto de predictores complementado con una interacción y funciones spline para longitud y latitud. Fue creado a partir de un conjunto de entrenamiento (llamado <code>ames_train</code>). Aunque no recomendamos utilizar el conjunto de pruebas en este punto del proceso de modelado, se utilizará aquí para ilustrar la funcionalidad y la sintaxis. El marco de datos <code>ames_test</code> consta de las propiedades 588. Para empezar, hagamos predicciones:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_test_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">ames_test</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_test_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">ames_test</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">ames_test_res</span></span>
 <span><span class="co">## # A tibble: 588 × 1</span></span>
 <span><span class="co">##   .pred</span></span>
@@ -481,11 +484,11 @@ Figura&nbsp;9.1: Valores observados versus valores predichos para modelos optimi
 <span><span class="co">## 4  5.33</span></span>
 <span><span class="co">## 5  5.30</span></span>
 <span><span class="co">## 6  5.24</span></span>
-<span><span class="co">## # ℹ 582 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 582 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El resultado numérico previsto por el modelo de regresión se denomina <code>.pred</code>. Hagamos coincidir los valores predichos con sus correspondientes valores de resultado observados:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_test_res</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span><span class="va">ames_test_res</span>, <span class="va">ames_test</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_test_res</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span><span class="va">ames_test_res</span>, <span class="va">ames_test</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">ames_test_res</span></span>
 <span><span class="co">## # A tibble: 588 × 2</span></span>
 <span><span class="co">##   .pred Sale_Price</span></span>
@@ -496,22 +499,22 @@ Figura&nbsp;9.1: Valores observados versus valores predichos para modelos optimi
 <span><span class="co">## 4  5.33       5.28</span></span>
 <span><span class="co">## 5  5.30       5.28</span></span>
 <span><span class="co">## 6  5.24       5.26</span></span>
-<span><span class="co">## # ℹ 582 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 582 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Vemos que estos valores en su mayoría parecen cercanos, pero aún no tenemos una comprensión cuantitativa de cómo funciona el modelo porque no hemos calculado ninguna métrica de rendimiento. Tenga en cuenta que tanto los resultados previstos como los observados están en unidades log-10. Es una buena práctica analizar las predicciones en la escala transformada (si se usara una), incluso si las predicciones se informan utilizando las unidades originales.</p>
 <p>Trazamos los datos en <a href="#fig-ames-performance-plot" class="quarto-xref">Figura&nbsp;<span>9.2</span></a> antes de calcular las métricas:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">ames_test_res</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sale_Price</span>, y <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">ames_test_res</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sale_Price</span>, y <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="co"># Crear una línea diagonal:</span></span>
 <span>  <span class="fu">geom_abline</span><span class="op">(</span>lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">labs</span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Precio de Venta Predecido (log10)"</span>, x <span class="op">=</span> <span class="st">"Precio de Venta (log10)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Escale y dimensione los ejes x e y de manera uniforme:</span></span>
-<span>  <span class="fu">coord_obs_pred</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">coord_obs_pred</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-ames-performance-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Gráficos de dispersión de valores numéricos observados versus valores predichos para un modelo de regresión de Ames. Ambos ejes utilizan unidades log-10. El modelo muestra una buena concordancia con algunos puntos que no se ajustan bien a precios altos y bajos." data-fig-align="center">
+<div id="fig-ames-performance-plot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Gráficos de dispersión de valores numéricos observados versus valores predichos para un modelo de regresión de Ames. Ambos ejes utilizan unidades log-10. El modelo muestra una buena concordancia con algunos puntos que no se ajustan bien a precios altos y bajos.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ames-performance-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-ames-performance-plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Gráficos de dispersión de valores numéricos observados versus valores predichos para un modelo de regresión de Ames. Ambos ejes utilizan unidades log-10. El modelo muestra una buena concordancia con algunos puntos que no se ajustan bien a precios altos y bajos." width="672">
 </div>
@@ -524,23 +527,23 @@ Figura&nbsp;9.2: Valores observados versus valores predichos para un modelo de r
 <p>Hay una propiedad de bajo precio que está sustancialmente sobreestimada, es decir, bastante por encima de la línea discontinua.</p>
 <p>Calculemos la raíz del error cuadrático medio para este modelo usando la función <code>rmse()</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">rmse</span><span class="op">(</span><span class="va">ames_test_res</span>, truth <span class="op">=</span> <span class="va">Sale_Price</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">rmse</span><span class="op">(</span><span class="va">ames_test_res</span>, truth <span class="op">=</span> <span class="va">Sale_Price</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 1 × 3</span></span>
 <span><span class="co">##   .metric .estimator .estimate</span></span>
 <span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 rmse    standard      0.0736</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 rmse    standard      0.0736</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Esto nos muestra el formato estándar de salida de las funciones <span class="pkg">yardstick</span>. Las métricas para resultados numéricos suelen tener un valor “estándar” para la columna <code>.estimator</code>. En las siguientes secciones se muestran ejemplos con diferentes valores para esta columna.</p>
 <p>Para calcular varias métricas a la vez, podemos crear un <em>conjunto de métricas</em>. Sumemos <span class="math inline">\(R^2\)</span> y el error absoluto medio:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_metrics</span> <span class="op">&lt;-</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span>, <span class="va">mae</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_metrics</span> <span class="op">&lt;-</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span>, <span class="va">mae</span><span class="op">)</span></span>
 <span><span class="fu">ames_metrics</span><span class="op">(</span><span class="va">ames_test_res</span>, truth <span class="op">=</span> <span class="va">Sale_Price</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 3 × 3</span></span>
 <span><span class="co">##   .metric .estimator .estimate</span></span>
 <span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;</span></span>
 <span><span class="co">## 1 rmse    standard      0.0736</span></span>
 <span><span class="co">## 2 rsq     standard      0.836 </span></span>
-<span><span class="co">## 3 mae     standard      0.0549</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 3 mae     standard      0.0549</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Este formato de datos ordenado apila las métricas verticalmente. Las métricas del error cuadrático medio y del error absoluto medio están en la escala del resultado (por lo tanto, <code>log10(Sale_Price)</code> para nuestro ejemplo) y miden la diferencia entre los valores previstos y observados. El valor de <span class="math inline">\(R^2\)</span> mide la correlación al cuadrado entre los valores previstos y observados, por lo que los valores más cercanos a uno son mejores.</p>
 <div class="rmdwarning">
@@ -550,7 +553,7 @@ Figura&nbsp;9.2: Valores observados versus valores predichos para un modelo de r
 <span class="header-section-number">9.3</span> Métricas De Clasificación Binaria</h2>
 <p>Para ilustrar otras formas de medir el rendimiento del modelo, cambiaremos a un ejemplo diferente. El paquete <span class="pkg">modeldata</span> (otro de los paquetes tidymodels) contiene predicciones de ejemplo de un conjunto de datos de prueba con dos clases (“Class1” y “Class2”):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">two_class_example</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">two_class_example</span><span class="op">)</span></span>
 <span><span class="fu">tibble</span><span class="op">(</span><span class="va">two_class_example</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 500 × 4</span></span>
 <span><span class="co">##   truth   Class1   Class2 predicted</span></span>
@@ -561,12 +564,12 @@ Figura&nbsp;9.2: Valores observados versus valores predichos para un modelo de r
 <span><span class="co">## 4 Class1 0.735   0.265    Class1   </span></span>
 <span><span class="co">## 5 Class2 0.0162  0.984    Class2   </span></span>
 <span><span class="co">## 6 Class1 0.999   0.000725 Class1   </span></span>
-<span><span class="co">## # ℹ 494 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 494 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>La segunda y tercera columnas son las probabilidades de clase predichas para el conjunto de prueba, mientras que <code>predicted</code> son las predicciones discretas.</p>
 <p>Para las predicciones de clases difíciles, una variedad de funciones <span class="pkg">yardstick</span> son útiles:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Una matriz de confusión:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Una matriz de confusión:</span></span>
 <span><span class="fu">conf_mat</span><span class="op">(</span><span class="va">two_class_example</span>, truth <span class="op">=</span> <span class="va">truth</span>, estimate <span class="op">=</span> <span class="va">predicted</span><span class="op">)</span></span>
 <span><span class="co">##           Truth</span></span>
 <span><span class="co">## Prediction Class1 Class2</span></span>
@@ -602,7 +605,7 @@ Figura&nbsp;9.2: Valores observados versus valores predichos para un modelo de r
 <span><span class="co">##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;</span></span>
 <span><span class="co">## 1 accuracy binary         0.838</span></span>
 <span><span class="co">## 2 mcc      binary         0.677</span></span>
-<span><span class="co">## 3 f_meas   binary         0.849</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 3 f_meas   binary         0.849</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El coeficiente de correlación de Matthews y la puntuación F1 resumen la matriz de confusión, pero en comparación con <code>mcc()</code>, que mide la calidad de ejemplos tanto positivos como negativos, la métrica <code>f_meas()</code> enfatiza la clase positiva, es decir, el evento de interés. Para conjuntos de datos de clasificación binaria como este ejemplo, las funciones <span class="pkg">yardstick</span> tienen un argumento estándar llamado <code>event_level</code> para distinguir los niveles positivos y negativos. El valor predeterminado (que utilizamos en este código) es que el <em>primer</em> nivel del factor de resultado es el evento de interés.</p>
 <div class="rmdnote">
@@ -610,17 +613,17 @@ Figura&nbsp;9.2: Valores observados versus valores predichos para un modelo de r
 </div>
 <p>Como ejemplo donde el segundo nivel es el evento:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">f_meas</span><span class="op">(</span><span class="va">two_class_example</span>, <span class="va">truth</span>, <span class="va">predicted</span>, event_level <span class="op">=</span> <span class="st">"second"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">f_meas</span><span class="op">(</span><span class="va">two_class_example</span>, <span class="va">truth</span>, <span class="va">predicted</span>, event_level <span class="op">=</span> <span class="st">"second"</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 1 × 3</span></span>
 <span><span class="co">##   .metric .estimator .estimate</span></span>
 <span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 f_meas  binary         0.826</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 f_meas  binary         0.826</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>En este resultado, el valor <code>.estimator</code> de “binario” indica que se utilizará la fórmula estándar para clases binarias.</p>
 <p>Existen numerosas métricas de clasificación que utilizan las probabilidades predichas como entradas en lugar de las predicciones de clase estrictas. Por ejemplo, la curva de características operativas del receptor (ROC) calcula la sensibilidad y la especificidad sobre un continuo de diferentes umbrales de eventos. La columna de clase prevista no se utiliza. Hay dos funciones <span class="pkg">yardstick</span> para este método: <code>roc_curve()</code> calcula los puntos de datos que forman la curva ROC y <code>roc_auc()</code> calcula el área bajo la curva.</p>
 <p>Las interfaces para estos tipos de funciones métricas utilizan el marcador de posición del argumento <code>...</code> para pasar la columna de probabilidad de clase apropiada. Para problemas de dos clases, la columna de probabilidad del evento de interés se pasa a la función:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">two_class_curve</span> <span class="op">&lt;-</span> <span class="fu">roc_curve</span><span class="op">(</span><span class="va">two_class_example</span>, <span class="va">truth</span>, <span class="va">Class1</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">two_class_curve</span> <span class="op">&lt;-</span> <span class="fu">roc_curve</span><span class="op">(</span><span class="va">two_class_example</span>, <span class="va">truth</span>, <span class="va">Class1</span><span class="op">)</span></span>
 <span><span class="va">two_class_curve</span></span>
 <span><span class="co">## # A tibble: 502 × 3</span></span>
 <span><span class="co">##   .threshold specificity sensitivity</span></span>
@@ -637,15 +640,15 @@ Figura&nbsp;9.2: Valores observados versus valores predichos para un modelo de r
 <span><span class="co">## # A tibble: 1 × 3</span></span>
 <span><span class="co">##   .metric .estimator .estimate</span></span>
 <span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 roc_auc binary         0.939</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 roc_auc binary         0.939</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El objeto <code>two_class_curve</code> se puede usar en una llamada <code>ggplot</code> para visualizar la curva, como se muestra en <a href="#fig-example-roc-curve" class="quarto-xref">Figura&nbsp;<span>9.3</span></a>. Existe un método <code>autoplot()</code> que se encargará de los detalles:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">autoplot</span><span class="op">(</span><span class="va">two_class_curve</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">autoplot</span><span class="op">(</span><span class="va">two_class_curve</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-example-roc-curve" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un ejemplo de curva ROC. El eje x es uno menos la especificidad y el eje y es la sensibilidad. La curva se inclina hacia el lado superior izquierdo del área de la gráfica." data-fig-align="center">
+<div id="fig-example-roc-curve" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un ejemplo de curva ROC. El eje x es uno menos la especificidad y el eje y es la sensibilidad. La curva se inclina hacia el lado superior izquierdo del área de la gráfica.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-example-roc-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-example-roc-curve-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Un ejemplo de curva ROC. El eje x es uno menos la especificidad y el eje y es la sensibilidad. La curva se inclina hacia el lado superior izquierdo del área de la gráfica." width="672">
 </div>
@@ -661,7 +664,7 @@ Figura&nbsp;9.3: Ejemplo de curva ROC
 <span class="header-section-number">9.4</span> Métricas De Clasificación Multiclase</h2>
 <p>¿Qué pasa con los datos con tres o más clases? Para demostrarlo, exploremos un conjunto de datos de ejemplo diferente que tiene cuatro clases:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">hpc_cv</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">hpc_cv</span><span class="op">)</span></span>
 <span><span class="fu">tibble</span><span class="op">(</span><span class="va">hpc_cv</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 3,467 × 7</span></span>
 <span><span class="co">##   obs   pred     VF      F       M          L Resample</span></span>
@@ -672,12 +675,12 @@ Figura&nbsp;9.3: Ejemplo de curva ROC
 <span><span class="co">## 4 VF    VF    0.929 0.0653 0.00579 0.0000156  Fold01  </span></span>
 <span><span class="co">## 5 VF    VF    0.942 0.0543 0.00381 0.00000729 Fold01  </span></span>
 <span><span class="co">## 6 VF    VF    0.951 0.0462 0.00272 0.00000384 Fold01  </span></span>
-<span><span class="co">## # ℹ 3,461 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 3,461 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Como antes, hay factores para los resultados observados y previstos junto con otras cuatro columnas de probabilidades previstas para cada clase. (Estos datos también incluyen una columna <code>Resample</code>. Estos resultados <code>hpc_cv</code> son para predicciones fuera de muestra asociadas con una validación cruzada de 10 veces. Por el momento, esta columna se ignorará y discutiremos el remuestreo en profundidad en <a href="10-resampling.html" class="quarto-xref">Capítulo&nbsp;<span>10</span></a>.)</p>
 <p>Las funciones para las métricas que utilizan predicciones de clases discretas son idénticas a sus contrapartes binarias:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">accuracy</span><span class="op">(</span><span class="va">hpc_cv</span>, <span class="va">obs</span>, <span class="va">pred</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">accuracy</span><span class="op">(</span><span class="va">hpc_cv</span>, <span class="va">obs</span>, <span class="va">pred</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 1 × 3</span></span>
 <span><span class="co">##   .metric  .estimator .estimate</span></span>
 <span><span class="co">##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;</span></span>
@@ -687,7 +690,7 @@ Figura&nbsp;9.3: Ejemplo de curva ROC
 <span><span class="co">## # A tibble: 1 × 3</span></span>
 <span><span class="co">##   .metric .estimator .estimate</span></span>
 <span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 mcc     multiclass     0.515</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 mcc     multiclass     0.515</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Tenga en cuenta que, en estos resultados, aparece un <code>.estimator</code> “multiclase”. Al igual que “binario”, esto indica que se utilizó la fórmula para resultados con tres o más niveles de clase. El coeficiente de correlación de Matthews se diseñó originalmente para dos clases, pero se ha extendido a casos con más niveles de clase.</p>
 <p>Existen métodos para tomar métricas diseñadas para manejar resultados con solo dos clases y extenderlas para resultados con más de dos clases. Por ejemplo, una métrica como la sensibilidad mide la tasa de verdaderos positivos que, por definición, es específica de dos clases (es decir, “evento” y “no evento”). ¿Cómo se puede utilizar esta métrica en nuestros datos de ejemplo?</p>
@@ -700,7 +703,7 @@ Figura&nbsp;9.3: Ejemplo de curva ROC
 <p>Consulte <span class="citation" data-cites="wu2017unified">Wu y Zhou (<a href="references.html#ref-wu2017unified" role="doc-biblioref">2017</a>)</span> y <span class="citation" data-cites="OpitzBurst">Opitz y Burst (<a href="references.html#ref-OpitzBurst" role="doc-biblioref">2019</a>)</span> para obtener más información sobre cómo ampliar las métricas de clasificación a resultados con más de dos clases.</p>
 <p>Usando la sensibilidad como ejemplo, el cálculo habitual de dos clases es la relación entre el número de eventos predichos correctamente dividido por el número de eventos verdaderos. Los cálculos manuales para estos métodos de promediación son:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">class_totals</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">class_totals</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">count</span><span class="op">(</span><span class="va">hpc_cv</span>, <span class="va">obs</span>, name <span class="op">=</span> <span class="st">"totals"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>class_wts <span class="op">=</span> <span class="va">totals</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">totals</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">class_totals</span></span>
@@ -741,11 +744,11 @@ Figura&nbsp;9.3: Ejemplo de curva ROC
 <span><span class="co">## # A tibble: 1 × 3</span></span>
 <span><span class="co">##   macro macro_wts micro</span></span>
 <span><span class="co">##   &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 0.560     0.709 0.709</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 0.560     0.709 0.709</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Afortunadamente, no es necesario implementar manualmente estos métodos de promedio. En cambio, las funciones <span class="pkg">yardstick</span> pueden aplicar automáticamente estos métodos a través del argumento <code>estimator</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">sensitivity</span><span class="op">(</span><span class="va">hpc_cv</span>, <span class="va">obs</span>, <span class="va">pred</span>, estimator <span class="op">=</span> <span class="st">"macro"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">sensitivity</span><span class="op">(</span><span class="va">hpc_cv</span>, <span class="va">obs</span>, <span class="va">pred</span>, estimator <span class="op">=</span> <span class="st">"macro"</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 1 × 3</span></span>
 <span><span class="co">##   .metric     .estimator .estimate</span></span>
 <span><span class="co">##   &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt;</span></span>
@@ -759,27 +762,27 @@ Figura&nbsp;9.3: Ejemplo de curva ROC
 <span><span class="co">## # A tibble: 1 × 3</span></span>
 <span><span class="co">##   .metric     .estimator .estimate</span></span>
 <span><span class="co">##   &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 sensitivity micro          0.709</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 sensitivity micro          0.709</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Cuando se trata de estimaciones de probabilidad, existen algunas métricas con análogos multiclase. Por ejemplo, <span class="citation" data-cites="HandTill">Hand y Till (<a href="references.html#ref-HandTill" role="doc-biblioref">2001</a>)</span> determinó una técnica multiclase para curvas ROC. En este caso, <em>todas</em> las columnas de probabilidad de clase deben asignarse a la función:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">roc_auc</span><span class="op">(</span><span class="va">hpc_cv</span>, <span class="va">obs</span>, <span class="va">VF</span>, <span class="cn">F</span>, <span class="va">M</span>, <span class="va">L</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">roc_auc</span><span class="op">(</span><span class="va">hpc_cv</span>, <span class="va">obs</span>, <span class="va">VF</span>, <span class="cn">F</span>, <span class="va">M</span>, <span class="va">L</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 1 × 3</span></span>
 <span><span class="co">##   .metric .estimator .estimate</span></span>
 <span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 roc_auc hand_till      0.829</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 roc_auc hand_till      0.829</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El promedio macroponderado también está disponible como opción para aplicar esta métrica a un resultado multiclase:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">roc_auc</span><span class="op">(</span><span class="va">hpc_cv</span>, <span class="va">obs</span>, <span class="va">VF</span>, <span class="cn">F</span>, <span class="va">M</span>, <span class="va">L</span>, estimator <span class="op">=</span> <span class="st">"macro_weighted"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">roc_auc</span><span class="op">(</span><span class="va">hpc_cv</span>, <span class="va">obs</span>, <span class="va">VF</span>, <span class="cn">F</span>, <span class="va">M</span>, <span class="va">L</span>, estimator <span class="op">=</span> <span class="st">"macro_weighted"</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 1 × 3</span></span>
 <span><span class="co">##   .metric .estimator     .estimate</span></span>
 <span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;              &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 roc_auc macro_weighted     0.868</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 roc_auc macro_weighted     0.868</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Finalmente, todas estas métricas de rendimiento se pueden calcular utilizando agrupaciones <span class="pkg">dplyr</span>. Recuerde que estos datos tienen una columna para los grupos de remuestreo. Aún no hemos analizado el remuestreo en detalle, pero observe cómo podemos pasar un marco de datos agrupados a la función métrica para calcular las métricas para cada grupo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hpc_cv</span> <span class="op">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hpc_cv</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">Resample</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">accuracy</span><span class="op">(</span><span class="va">obs</span>, <span class="va">pred</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 10 × 4</span></span>
@@ -791,19 +794,19 @@ Figura&nbsp;9.3: Ejemplo de curva ROC
 <span><span class="co">## 4 Fold04   accuracy multiclass     0.712</span></span>
 <span><span class="co">## 5 Fold05   accuracy multiclass     0.712</span></span>
 <span><span class="co">## 6 Fold06   accuracy multiclass     0.697</span></span>
-<span><span class="co">## # ℹ 4 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 4 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Las agrupaciones también se traducen a los métodos <code>autoplot()</code>, y los resultados se muestran en <a href="#fig-grouped-roc-curves" class="quarto-xref">Figura&nbsp;<span>9.4</span></a>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Cuatro curvas ROC 1 contra todos para cada pliegue</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Cuatro curvas ROC 1 contra todos para cada pliegue</span></span>
 <span><span class="va">hpc_cv</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">Resample</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">roc_curve</span><span class="op">(</span><span class="va">obs</span>, <span class="va">VF</span>, <span class="cn">F</span>, <span class="va">M</span>, <span class="va">L</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">autoplot</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">autoplot</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-grouped-roc-curves" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Curvas ROC remuestreadas para cada una de las cuatro clases de resultados. Hay cuatro paneles para las clases VF, F, M y L. Cada panel contiene diez curvas ROC para cada uno de los conjuntos de datos remuestreados." data-fig-align="center">
+<div id="fig-grouped-roc-curves" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Curvas ROC remuestreadas para cada una de las cuatro clases de resultados. Hay cuatro paneles para las clases VF, F, M y L. Cada panel contiene diez curvas ROC para cada uno de los conjuntos de datos remuestreados.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-grouped-roc-curves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-grouped-roc-curves-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Curvas ROC remuestreadas para cada una de las cuatro clases de resultados. Hay cuatro paneles para las clases VF, F, M y L. Cada panel contiene diez curvas ROC para cada uno de los conjuntos de datos remuestreados." width="672">
 </div>
@@ -844,15 +847,15 @@ Wu, X, y Z Zhou. 2017. <span>«A unified view of multi-label performance measure
   // Chapter name
   const currentChapterFile = window.location.pathname.split('/').pop().replace('.html', '');
 
-  //Deffining urls
+  //Defining urls
   const originalURL = "https://github.com/tidymodels/TMwR";
-  const translationURL = "https://github.com/davidrsch/TMwRes";
+  const translationURL = "https://github.com/davidrsch/tmwr-es";
 
-  //Deffining texts
+  //Defining texts
   const edit_text = "Editar esta página";
   const issue_text = "Informar de un problema"
 
-  //Deffining git_i
+  //Defining git_i
   const git_i = '<div><i class="bi bi-github"></i></div>';
 
   // Adding TOC if not exist
@@ -957,13 +960,14 @@ Wu, X, y Z Zhou. 2017. <span>«A unified view of multi-label performance measure
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

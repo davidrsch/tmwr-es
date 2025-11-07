@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <title>18&nbsp; Explicando Modelos Y Predicciones – Modelado Ordenado con R</title>
@@ -86,14 +86,15 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87efc9f0321ca4df940afa6b8506b50b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -107,7 +108,7 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -131,7 +132,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -164,7 +165,9 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -177,7 +180,7 @@ window.Quarto = {
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/TMwRes">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/tmwr-es">
             Traducción
             </a>
           </li>
@@ -444,7 +447,7 @@ window.Quarto = {
 <p>En los capítulos <a href="10-resampling.html" class="quarto-xref"><span>10</span></a> y <a href="11-comparing-models.html" class="quarto-xref"><span>11</span></a>, entrenamos y comparamos varios modelos para predecir el precio de las viviendas en Ames, IA, incluido un modelo lineal con interacciones y un modelo forestal aleatorio, y los resultados se muestran en <a href="#fig-explain-obs-pred" class="quarto-xref">Figura&nbsp;<span>18.1</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-explain-obs-pred" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Comparación de precios previstos para un modelo lineal con interacciones y un modelo forestal aleatorio. El bosque aleatorio da como resultado predicciones más precisas." data-fig-align="center">
+<div id="fig-explain-obs-pred" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Comparación de precios previstos para un modelo lineal con interacciones y un modelo forestal aleatorio. El bosque aleatorio da como resultado predicciones más precisas.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-explain-obs-pred-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-explain-obs-pred-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Comparación de precios previstos para un modelo lineal con interacciones y un modelo forestal aleatorio. El bosque aleatorio da como resultado predicciones más precisas." width="672">
 </div>
@@ -456,7 +459,7 @@ Figura&nbsp;18.1: Comparación de precios previstos para un modelo lineal con in
 </div>
 <p>Construyamos explicadores independientes del modelo para ambos modelos para descubrir por qué hacen estas predicciones. Podemos usar el paquete complementario <span class="pkg">DALEXtra</span> para <span class="pkg">DALEX</span>, que proporciona soporte para tidymodels. <span class="citation" data-cites="Biecek2021">Biecek y Burzykowski (<a href="references.html#ref-Biecek2021" role="doc-biblioref">2021</a>)</span> proporciona una exploración exhaustiva de cómo utilizar <span class="pkg">DALEX</span> para explicaciones de modelos; Este capítulo sólo resume algunos enfoques importantes, específicos de tidymodels. Para calcular cualquier tipo de explicación de modelo, global o local, usando <span class="pkg">DALEX</span>, primero preparamos los datos apropiados y luego creamos un <em>explicador</em> para cada modelo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ModelOriented.github.io/DALEXtra/">DALEXtra</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ModelOriented.github.io/DALEXtra/">DALEXtra</a></span><span class="op">)</span></span>
 <span><span class="va">vip_features</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Neighborhood"</span>, <span class="st">"Gr_Liv_Area"</span>, <span class="st">"Year_Built"</span>, </span>
 <span>                  <span class="st">"Bldg_Type"</span>, <span class="st">"Latitude"</span>, <span class="st">"Longitude"</span><span class="op">)</span></span>
 <span></span>
@@ -480,7 +483,7 @@ Figura&nbsp;18.1: Comparación de precios previstos para un modelo lineal con in
 <span>    y <span class="op">=</span> <span class="va">ames_train</span><span class="op">$</span><span class="va">Sale_Price</span>,</span>
 <span>    label <span class="op">=</span> <span class="st">"random forest"</span>,</span>
 <span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="rmdwarning">
 <p>Un modelo lineal suele ser sencillo de interpretar y explicar; Es posible que no se encuentre frecuentemente utilizando algoritmos de explicación de modelos separados para un modelo lineal. Sin embargo, a veces puede resultar difícil comprender o explicar las predicciones incluso de un modelo lineal una vez que tiene splines y términos de interacción.</p>
@@ -495,16 +498,16 @@ Figura&nbsp;18.1: Comparación de precios previstos para un modelo lineal con in
 <span class="header-section-number">18.2</span> Explicaciones Locales</h2>
 <p>Las explicaciones de los modelos locales proporcionan información sobre una predicción para una sola observación. Por ejemplo, consideremos un dúplex antiguo en el vecindario de North Ames (<a href="04-ames.html#sec-exploring-features-of-homes-in-ames" class="quarto-xref"><span>Sección 4.1</span></a>):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">duplex</span> <span class="op">&lt;-</span> <span class="va">vip_train</span><span class="op">[</span><span class="fl">120</span>,<span class="op">]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">duplex</span> <span class="op">&lt;-</span> <span class="va">vip_train</span><span class="op">[</span><span class="fl">120</span>,<span class="op">]</span></span>
 <span><span class="va">duplex</span></span>
 <span><span class="co">## # A tibble: 1 × 6</span></span>
 <span><span class="co">##   Neighborhood Gr_Liv_Area Year_Built Bldg_Type Latitude Longitude</span></span>
 <span><span class="co">##   &lt;fct&gt;              &lt;dbl&gt;      &lt;dbl&gt; &lt;fct&gt;        &lt;dbl&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 North_Ames          1040       1949 Duplex        42.0     -93.6</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 North_Ames          1040       1949 Duplex        42.0     -93.6</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Existen múltiples enfoques posibles para comprender por qué un modelo predice un precio determinado para este dúplex. Una es una explicación detallada, implementada con la función <span class="pkg">DALEX</span> <code><a href="https://modeloriented.github.io/DALEX/reference/predict_parts.html">predict_parts()</a></code>; calcula cómo las contribuciones atribuidas a características individuales cambian la predicción del modelo medio para una observación particular, como nuestro dúplex. Para el modelo lineal, el estado dúplex (<code>Bldg_Type = 3</code>),<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> el tamaño, la longitud y la antigüedad son los que más contribuyen a que el precio baje desde la intersección:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_breakdown</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/predict_parts.html">predict_parts</a></span><span class="op">(</span>explainer <span class="op">=</span> <span class="va">explainer_lm</span>, new_observation <span class="op">=</span> <span class="va">duplex</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_breakdown</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/predict_parts.html">predict_parts</a></span><span class="op">(</span>explainer <span class="op">=</span> <span class="va">explainer_lm</span>, new_observation <span class="op">=</span> <span class="va">duplex</span><span class="op">)</span></span>
 <span><span class="va">lm_breakdown</span></span>
 <span><span class="co">##                                              contribution</span></span>
 <span><span class="co">## lm + interactions: intercept                        5.221</span></span>
@@ -514,12 +517,12 @@ Figura&nbsp;18.1: Comparación de precios previstos para un modelo lineal con in
 <span><span class="co">## lm + interactions: Year_Built = 1949               -0.039</span></span>
 <span><span class="co">## lm + interactions: Latitude = 42.035841            -0.007</span></span>
 <span><span class="co">## lm + interactions: Neighborhood = North_Ames        0.001</span></span>
-<span><span class="co">## lm + interactions: prediction                       5.002</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## lm + interactions: prediction                       5.002</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Dado que este modelo lineal se entrenó utilizando términos spline para latitud y longitud, la contribución al precio de “Longitud”, <code>Longitude</code> que se muestra aquí combina los efectos de todos sus términos spline individuales. La contribución se realiza en términos de la característica “Longitud” original, no de las características spline derivadas.</p>
 <p>Las características más importantes son ligeramente diferentes para el modelo de bosque aleatorio, siendo el tamaño, la edad y el estado dúplex los más importantes:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rf_breakdown</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/predict_parts.html">predict_parts</a></span><span class="op">(</span>explainer <span class="op">=</span> <span class="va">explainer_rf</span>, new_observation <span class="op">=</span> <span class="va">duplex</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rf_breakdown</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/predict_parts.html">predict_parts</a></span><span class="op">(</span>explainer <span class="op">=</span> <span class="va">explainer_rf</span>, new_observation <span class="op">=</span> <span class="va">duplex</span><span class="op">)</span></span>
 <span><span class="va">rf_breakdown</span></span>
 <span><span class="co">##                                          contribution</span></span>
 <span><span class="co">## random forest: intercept                        5.221</span></span>
@@ -529,14 +532,14 @@ Figura&nbsp;18.1: Comparación de precios previstos para un modelo lineal con in
 <span><span class="co">## random forest: Longitude = -93.608903          -0.043</span></span>
 <span><span class="co">## random forest: Latitude = 42.035841            -0.028</span></span>
 <span><span class="co">## random forest: Neighborhood = North_Ames       -0.003</span></span>
-<span><span class="co">## random forest: prediction                       4.969</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## random forest: prediction                       4.969</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="rmdwarning">
 <p>Las explicaciones de desglose del modelo como estas dependen del <em>orden</em> de las características.</p>
 </div>
 <p>Si elegimos que el orden, <code>order</code>, para la explicación del modelo de bosque aleatorio sea el mismo que el predeterminado para el modelo lineal (elegido mediante una heurística), podemos cambiar la importancia relativa de las características:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/predict_parts.html">predict_parts</a></span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/predict_parts.html">predict_parts</a></span><span class="op">(</span></span>
 <span>  explainer <span class="op">=</span> <span class="va">explainer_rf</span>, </span>
 <span>  new_observation <span class="op">=</span> <span class="va">duplex</span>,</span>
 <span>  order <span class="op">=</span> <span class="va">lm_breakdown</span><span class="op">$</span><span class="va">variable_name</span></span>
@@ -549,22 +552,22 @@ Figura&nbsp;18.1: Comparación de precios previstos para un modelo lineal con in
 <span><span class="co">## random forest: Year_Built = 1949               -0.104</span></span>
 <span><span class="co">## random forest: Latitude = 42.035841            -0.028</span></span>
 <span><span class="co">## random forest: Neighborhood = North_Ames       -0.003</span></span>
-<span><span class="co">## random forest: prediction                       4.969</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## random forest: prediction                       4.969</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Podemos utilizar el hecho de que estas explicaciones desglosadas cambian según el orden para calcular las características más importantes en todos (o muchos) ordenamientos posibles. Esta es la idea detrás de Shapley Additive Explanations <span class="citation" data-cites="Lundberg2017">(<a href="references.html#ref-Lundberg2017" role="doc-biblioref">Lundberg y Lee 2017</a>)</span>, donde las contribuciones promedio de las características se calculan bajo diferentes combinaciones o “coaliciones” de ordenamiento de características. Calculemos las atribuciones SHAP para nuestro dúplex, usando ordenamientos aleatorios <code>B = 20</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1801</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1801</span><span class="op">)</span></span>
 <span><span class="va">shap_duplex</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/predict_parts.html">predict_parts</a></span><span class="op">(</span></span>
 <span>    explainer <span class="op">=</span> <span class="va">explainer_rf</span>, </span>
 <span>    new_observation <span class="op">=</span> <span class="va">duplex</span>, </span>
 <span>    type <span class="op">=</span> <span class="st">"shap"</span>,</span>
 <span>    B <span class="op">=</span> <span class="fl">20</span></span>
-<span>  <span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Podríamos usar el método de trazado predeterminado de <span class="pkg">DALEX</span> llamando a <code>plot(shap_duplex)</code>, o podemos acceder a los datos subyacentes y crear un gráfico personalizado. Los diagramas de caja en <a href="#fig-duplex-rf-shap" class="quarto-xref">Figura&nbsp;<span>18.2</span></a> muestran la distribución de las contribuciones en todos los ordenamientos que probamos, y las barras muestran la atribución promedio de cada característica:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://forcats.tidyverse.org/">forcats</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://forcats.tidyverse.org/">forcats</a></span><span class="op">)</span></span>
 <span><span class="va">shap_duplex</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">variable</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>mean_val <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">contribution</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -577,11 +580,11 @@ Figura&nbsp;18.1: Comparación de precios previstos para un modelo lineal con in
 <span>  <span class="fu">geom_boxplot</span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_fill_viridis_d</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">labs</span><span class="op">(</span>y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-duplex-rf-shap" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Explicaciones aditivas de Shapley a partir del modelo de bosque aleatorio para una propiedad dúplex. El año de construcción y la superficie habitable bruta tienen las mayores contribuciones." data-fig-align="center">
+<div id="fig-duplex-rf-shap" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Explicaciones aditivas de Shapley a partir del modelo de bosque aleatorio para una propiedad dúplex. El año de construcción y la superficie habitable bruta tienen las mayores contribuciones.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-duplex-rf-shap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-duplex-rf-shap-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Explicaciones aditivas de Shapley a partir del modelo de bosque aleatorio para una propiedad dúplex. El año de construcción y la superficie habitable bruta tienen las mayores contribuciones." width="672">
 </div>
@@ -593,28 +596,28 @@ Figura&nbsp;18.2: Explicaciones aditivas de Shapley del modelo de bosque aleator
 </div>
 <p>¿Qué pasa con una observación diferente en nuestro conjunto de datos? Veamos una casa unifamiliar más grande y nueva en el vecindario de Gilbert:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">big_house</span> <span class="op">&lt;-</span> <span class="va">vip_train</span><span class="op">[</span><span class="fl">1269</span>,<span class="op">]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">big_house</span> <span class="op">&lt;-</span> <span class="va">vip_train</span><span class="op">[</span><span class="fl">1269</span>,<span class="op">]</span></span>
 <span><span class="va">big_house</span></span>
 <span><span class="co">## # A tibble: 1 × 6</span></span>
 <span><span class="co">##   Neighborhood Gr_Liv_Area Year_Built Bldg_Type Latitude Longitude</span></span>
 <span><span class="co">##   &lt;fct&gt;              &lt;dbl&gt;      &lt;dbl&gt; &lt;fct&gt;        &lt;dbl&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 Gilbert             2267       2002 OneFam        42.1     -93.6</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 Gilbert             2267       2002 OneFam        42.1     -93.6</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Podemos calcular las atribuciones promedio SHAP para esta casa de la misma manera:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1802</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1802</span><span class="op">)</span></span>
 <span><span class="va">shap_house</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/predict_parts.html">predict_parts</a></span><span class="op">(</span></span>
 <span>    explainer <span class="op">=</span> <span class="va">explainer_rf</span>, </span>
 <span>    new_observation <span class="op">=</span> <span class="va">big_house</span>, </span>
 <span>    type <span class="op">=</span> <span class="st">"shap"</span>,</span>
 <span>    B <span class="op">=</span> <span class="fl">20</span></span>
-<span>  <span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Los resultados se muestran en <a href="#fig-gilbert-shap" class="quarto-xref">Figura&nbsp;<span>18.3</span></a>; a diferencia del dúplex, el tamaño y antigüedad de esta vivienda contribuyen a que su precio sea más elevado.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-gilbert-shap" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Explicaciones aditivas de Shapley a partir del modelo de bosque aleatorio para una vivienda unifamiliar en Gilbert. La superficie habitable bruta y el año de construcción tienen las mayores contribuciones, pero en la dirección opuesta a la explicación anterior." data-fig-align="center">
+<div id="fig-gilbert-shap" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Explicaciones aditivas de Shapley a partir del modelo de bosque aleatorio para una vivienda unifamiliar en Gilbert. La superficie habitable bruta y el año de construcción tienen las mayores contribuciones, pero en la dirección opuesta a la explicación anterior.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-gilbert-shap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-gilbert-shap-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Explicaciones aditivas de Shapley a partir del modelo de bosque aleatorio para una vivienda unifamiliar en Gilbert. La superficie habitable bruta y el año de construcción tienen las mayores contribuciones, pero en la dirección opuesta a la explicación anterior." width="672">
 </div>
@@ -633,14 +636,14 @@ Figura&nbsp;18.3: Explicaciones aditivas de Shapley a partir del modelo de bosqu
 <p>Si barajar una columna provoca una gran degradación en el rendimiento del modelo, es importante; Si mezclar los valores de una columna no supone mucha diferencia en el rendimiento del modelo, no debe ser una variable importante. Este enfoque se puede aplicar a cualquier tipo de modelo (es <em>independiente del modelo</em>) y los resultados son fáciles de entender.</p>
 <p>Usando <span class="pkg">DALEX</span>, calculamos este tipo de importancia variable mediante la función <code><a href="https://modeloriented.github.io/DALEX/reference/model_parts.html">model_parts()</a></code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1803</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1803</span><span class="op">)</span></span>
 <span><span class="va">vip_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/model_parts.html">model_parts</a></span><span class="op">(</span><span class="va">explainer_lm</span>, loss_function <span class="op">=</span> <span class="va">loss_root_mean_square</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1804</span><span class="op">)</span></span>
-<span><span class="va">vip_rf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/model_parts.html">model_parts</a></span><span class="op">(</span><span class="va">explainer_rf</span>, loss_function <span class="op">=</span> <span class="va">loss_root_mean_square</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">vip_rf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/model_parts.html">model_parts</a></span><span class="op">(</span><span class="va">explainer_rf</span>, loss_function <span class="op">=</span> <span class="va">loss_root_mean_square</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Nuevamente, podríamos usar el método de trazado predeterminado de <span class="pkg">DALEX</span> llamando a <code>plot(vip_lm, vip_rf)</code> pero los datos subyacentes están disponibles para exploración, análisis y trazado. Creemos una función para trazar:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ggplot_imp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ggplot_imp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
 <span>  <span class="va">metric_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">obj</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="st">"loss_name"</span><span class="op">)</span></span>
 <span>  <span class="va">metric_lab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">metric_name</span>, </span>
@@ -675,12 +678,12 @@ Figura&nbsp;18.3: Explicaciones aditivas de Shapley a partir del modelo de bosqu
 <span>    <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="va">metric_lab</span>, </span>
 <span>         y <span class="op">=</span> <span class="cn">NULL</span>,  fill <span class="op">=</span> <span class="cn">NULL</span>,  color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="op">}</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El uso de <code>ggplot_imp(vip_lm, vip_rf)</code> produce <a href="#fig-global-rf" class="quarto-xref">Figura&nbsp;<span>18.4</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-global-rf" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Explicador global para los modelos de bosque aleatorio y de regresión lineal. Para ambos modelos, la superficie habitable bruta y el año de construcción tienen las mayores contribuciones, pero el modelo lineal utiliza el predictor de vecindario en gran medida." data-fig-align="center">
+<div id="fig-global-rf" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Explicador global para los modelos de bosque aleatorio y de regresión lineal. Para ambos modelos, la superficie habitable bruta y el año de construcción tienen las mayores contribuciones, pero el modelo lineal utiliza el predictor de vecindario en gran medida.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-global-rf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-global-rf-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Explicador global para los modelos de bosque aleatorio y de regresión lineal. Para ambos modelos, la superficie habitable bruta y el año de construcción tienen las mayores contribuciones, pero el modelo lineal utiliza el predictor de vecindario en gran medida." width="768">
 </div>
@@ -699,12 +702,12 @@ Figura&nbsp;18.4: Explicador global para los modelos de regresión lineal y de b
 </div>
 <p>Una forma de crear dicho perfil es agregando o promediando perfiles para observaciones individuales. Un perfil que muestra cómo cambia la predicción de una observación individual en función de una característica determinada se denomina perfil ICE (expectativa condicional individual) o perfil CP (<em>ceteris paribus</em>). Podemos calcular dichos perfiles individuales (para 500 de las observaciones en nuestro conjunto de entrenamiento) y luego agregarlos usando la función <span class="pkg">DALEX</span> <code><a href="https://modeloriented.github.io/DALEX/reference/model_profile.html">model_profile()</a></code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1805</span><span class="op">)</span></span>
-<span><span class="va">pdp_age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/model_profile.html">model_profile</a></span><span class="op">(</span><span class="va">explainer_rf</span>, N <span class="op">=</span> <span class="fl">500</span>, variables <span class="op">=</span> <span class="st">"Year_Built"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1805</span><span class="op">)</span></span>
+<span><span class="va">pdp_age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/model_profile.html">model_profile</a></span><span class="op">(</span><span class="va">explainer_rf</span>, N <span class="op">=</span> <span class="fl">500</span>, variables <span class="op">=</span> <span class="st">"Year_Built"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Creemos otra función para trazar los datos subyacentes en este objeto:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ggplot_pdp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">obj</span>, <span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ggplot_pdp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">obj</span>, <span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="va">p</span> <span class="op">&lt;-</span> </span>
 <span>    <span class="fu">as_tibble</span><span class="op">(</span><span class="va">obj</span><span class="op">$</span><span class="va">agr_profiles</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -723,18 +726,18 @@ Figura&nbsp;18.4: Explicador global para los modelos de regresión lineal y de b
 <span>  <span class="op">}</span></span>
 <span>  </span>
 <span>  <span class="va">p</span></span>
-<span><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="op">}</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El uso de esta función genera <a href="#fig-year-built" class="quarto-xref">Figura&nbsp;<span>18.5</span></a>, donde podemos ver el comportamiento no lineal del modelo de bosque aleatorio.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">ggplot_pdp</span><span class="op">(</span><span class="va">pdp_age</span>, <span class="va">Year_Built</span><span class="op">)</span>  <span class="op">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">ggplot_pdp</span><span class="op">(</span><span class="va">pdp_age</span>, <span class="va">Year_Built</span><span class="op">)</span>  <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Year built"</span>, </span>
 <span>       y <span class="op">=</span> <span class="st">"Sale Price (log)"</span>, </span>
-<span>       color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>       color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-year-built" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Perfiles de dependencia parcial para el modelo de bosque aleatorio que se centran en el predictor del año de construcción. Los perfiles son en su mayoría relativamente constantes, pero luego aumentan linealmente alrededor de 1950." data-fig-align="center">
+<div id="fig-year-built" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Perfiles de dependencia parcial para el modelo de bosque aleatorio que se centran en el predictor del año de construcción. Los perfiles son en su mayoría relativamente constantes, pero luego aumentan linealmente alrededor de 1950.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-year-built-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-year-built-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Perfiles de dependencia parcial para el modelo de bosque aleatorio que se centran en el predictor del año de construcción. Los perfiles son en su mayoría relativamente constantes, pero luego aumentan linealmente alrededor de 1950." width="672">
 </div>
@@ -746,7 +749,7 @@ Figura&nbsp;18.5: Perfiles de dependencia parcial para el modelo de bosque aleat
 </div>
 <p>El precio de venta de las casas construidas en diferentes años es en su mayor parte estable, con un modesto aumento después de 1960 aproximadamente. Se pueden calcular perfiles de dependencia parcial para cualquier otra característica del modelo, y también para grupos en los datos, como <code>Bldg_Type</code>. Utilicemos 1000 observaciones para estos perfiles.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1806</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1806</span><span class="op">)</span></span>
 <span><span class="va">pdp_liv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/model_profile.html">model_profile</a></span><span class="op">(</span><span class="va">explainer_rf</span>, N <span class="op">=</span> <span class="fl">1000</span>, </span>
 <span>                         variables <span class="op">=</span> <span class="st">"Gr_Liv_Area"</span>, </span>
 <span>                         groups <span class="op">=</span> <span class="st">"Bldg_Type"</span><span class="op">)</span></span>
@@ -756,12 +759,12 @@ Figura&nbsp;18.5: Perfiles de dependencia parcial para el modelo de bosque aleat
 <span>  <span class="fu">scale_color_brewer</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Superficie habitable bruta"</span>, </span>
 <span>       y <span class="op">=</span> <span class="st">"Precio de venta (registro)"</span>, </span>
-<span>       color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>       color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Este código produce <a href="#fig-building-type-profiles" class="quarto-xref">Figura&nbsp;<span>18.6</span></a>, donde vemos que el precio de venta aumenta más entre aproximadamente 1,000 y 3,000 pies cuadrados de área habitable, y que los diferentes tipos de viviendas (como casas unifamiliares o diferentes tipos de casas adosadas) exhiben en su mayoría tendencias crecientes similares en el precio con más espacio habitable.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-building-type-profiles" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Perfiles de dependencia parcial para el modelo de bosque aleatorio que se centran en los tipos de construcción y la superficie habitable bruta. Los perfiles tipo edificio son, en su mayor parte, paralelos sobre la superficie habitable bruta." data-fig-align="center">
+<div id="fig-building-type-profiles" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Perfiles de dependencia parcial para el modelo de bosque aleatorio que se centran en los tipos de construcción y la superficie habitable bruta. Los perfiles tipo edificio son, en su mayor parte, paralelos sobre la superficie habitable bruta.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-building-type-profiles-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-building-type-profiles-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Perfiles de dependencia parcial para el modelo de bosque aleatorio que se centran en los tipos de construcción y la superficie habitable bruta. Los perfiles tipo edificio son, en su mayor parte, paralelos sobre la superficie habitable bruta." width="672">
 </div>
@@ -773,7 +776,7 @@ Figura&nbsp;18.6: Perfiles de dependencia parcial para el modelo de bosque aleat
 </div>
 <p>Tenemos la opción de usar <code>plot(pdp_liv)</code> para los gráficos predeterminados <span class="pkg">DALEX</span>, pero dado que aquí estamos haciendo gráficos con los datos subyacentes, incluso podemos facetar una de las características para visualizar si las predicciones cambian. de manera diferente y resaltando el desequilibrio en estos subgrupos (como se muestra en <a href="#fig-building-type-facets" class="quarto-xref">Figura&nbsp;<span>18.7</span></a>).</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">as_tibble</span><span class="op">(</span><span class="va">pdp_liv</span><span class="op">$</span><span class="va">agr_profiles</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">as_tibble</span><span class="op">(</span><span class="va">pdp_liv</span><span class="op">$</span><span class="va">agr_profiles</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>Bldg_Type <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">`_label_`</span>, <span class="st">"random forest_"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">`_x_`</span>, <span class="va">`_yhat_`</span>, color <span class="op">=</span> <span class="va">Bldg_Type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">pdp_liv</span><span class="op">$</span><span class="va">cp_profiles</span><span class="op">)</span>,</span>
@@ -785,11 +788,11 @@ Figura&nbsp;18.6: Perfiles de dependencia parcial para el modelo de bosque aleat
 <span>  <span class="fu">scale_color_brewer</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Superficie habitable bruta"</span>, </span>
 <span>       y <span class="op">=</span> <span class="st">"Precio de venta (registro)"</span>, </span>
-<span>       color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>       color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-building-type-facets" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Perfiles de dependencia parcial para el modelo de bosque aleatorio que se centran en los tipos de construcción y la superficie habitable bruta mediante facetas. Los perfiles tipo edificio son, en su mayor parte, paralelos sobre la superficie habitable bruta." data-fig-align="center">
+<div id="fig-building-type-facets" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Perfiles de dependencia parcial para el modelo de bosque aleatorio que se centran en los tipos de construcción y la superficie habitable bruta mediante facetas. Los perfiles tipo edificio son, en su mayor parte, paralelos sobre la superficie habitable bruta.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-building-type-facets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-building-type-facets-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Perfiles de dependencia parcial para el modelo de bosque aleatorio que se centran en los tipos de construcción y la superficie habitable bruta mediante facetas. Los perfiles tipo edificio son, en su mayor parte, paralelos sobre la superficie habitable bruta." width="672">
 </div>
@@ -804,7 +807,7 @@ Figura&nbsp;18.7: Perfiles de dependencia parcial para el modelo de bosque aleat
 <span class="header-section-number">18.5</span> ¡De Vuelta A Los Frijoles!</h2>
 <p>En el <a href="16-dimensionality-reduction.html" class="quarto-xref">Capítulo&nbsp;<span>16</span></a>, analizamos cómo utilizar la reducción de dimensionalidad como un paso de preprocesamiento o ingeniería de características al modelar datos de alta dimensión. Para nuestro conjunto de datos de ejemplo de medidas de morfología de frijoles secos que predicen el tipo de frijol, vimos excelentes resultados de la reducción de la dimensionalidad de mínimos cuadrados parciales (PLS) combinada con un modelo de análisis discriminante regularizado. ¿Cuáles de esas características morfológicas fueron <em>más</em> importantes en las predicciones del tipo de frijol? Podemos usar el mismo enfoque descrito a lo largo de este capítulo para crear un explicador independiente del modelo y calcular, por ejemplo, explicaciones del modelo global a través de <code><a href="https://modeloriented.github.io/DALEX/reference/model_parts.html">model_parts()</a></code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1807</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1807</span><span class="op">)</span></span>
 <span><span class="va">vip_beans</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu"><a href="https://ModelOriented.github.io/DALEXtra/reference/explain_tidymodels.html">explain_tidymodels</a></span><span class="op">(</span></span>
 <span>    <span class="va">rda_wflow_fit</span>, </span>
@@ -813,12 +816,12 @@ Figura&nbsp;18.7: Perfiles de dependencia parcial para el modelo de bosque aleat
 <span>    label <span class="op">=</span> <span class="st">"RDA"</span>,</span>
 <span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/model_parts.html">model_parts</a></span><span class="op">(</span><span class="op">)</span> </span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/model_parts.html">model_parts</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Usando nuestra función de trazado de importancia previamente definida, <code>ggplot_imp(vip_beans)</code> produce <a href="#fig-bean-explainer" class="quarto-xref">Figura&nbsp;<span>18.8</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-bean-explainer" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Explicador global del modelo de análisis discriminante regularizado de los datos de frijoles. Casi todos los predictores tienen una contribución significativa, siendo los factores de forma uno y cuatro los que más contribuyen. " data-fig-align="center">
+<div id="fig-bean-explainer" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Explicador global del modelo de análisis discriminante regularizado de los datos de frijoles. Casi todos los predictores tienen una contribución significativa, siendo los factores de forma uno y cuatro los que más contribuyen. ">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-bean-explainer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-bean-explainer-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Explicador global del modelo de análisis discriminante regularizado de los datos de frijoles. Casi todos los predictores tienen una contribución significativa, siendo los factores de forma uno y cuatro los que más contribuyen. " width="768">
 </div>
@@ -862,15 +865,15 @@ Molnar, Christopher. 2020. <em><span>Interpretable Machine Learning</span></em>.
   // Chapter name
   const currentChapterFile = window.location.pathname.split('/').pop().replace('.html', '');
 
-  //Deffining urls
+  //Defining urls
   const originalURL = "https://github.com/tidymodels/TMwR";
-  const translationURL = "https://github.com/davidrsch/TMwRes";
+  const translationURL = "https://github.com/davidrsch/tmwr-es";
 
-  //Deffining texts
+  //Defining texts
   const edit_text = "Editar esta página";
   const issue_text = "Informar de un problema"
 
-  //Deffining git_i
+  //Defining git_i
   const git_i = '<div><i class="bi bi-github"></i></div>';
 
   // Adding TOC if not exist
@@ -975,13 +978,14 @@ Molnar, Christopher. 2020. <em><span>Interpretable Machine Learning</span></em>.
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <title>6&nbsp; Creando Modelos Con parsnip – Modelado Ordenado con R</title>
@@ -86,14 +86,15 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87efc9f0321ca4df940afa6b8506b50b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -107,7 +108,7 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -132,7 +133,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -165,7 +166,9 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -178,7 +181,7 @@ window.Quarto = {
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/TMwRes">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/tmwr-es">
             Traducción
             </a>
           </li>
@@ -443,13 +446,13 @@ window.Quarto = {
 <li><p><em>Regresión lineal regularizada</em> añade una penalización al método de mínimos cuadrados para fomentar la simplicidad eliminando predictores y/o reduciendo sus coeficientes hacia cero. Esto se puede ejecutar utilizando técnicas bayesianas o no bayesianas.</p></li>
 </ul>
 <p>En R, el paquete <span class="pkg">stats</span> se puede utilizar para el primer caso. La sintaxis para la regresión lineal usando la función <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> es:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>donde <code>...</code> simboliza otras opciones para pasar a <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>. La función <em>not</em> tiene una interfaz <code>x</code>/<code>y</code>, donde podríamos pasar nuestro resultado como <code>y</code> y nuestros predictores como <code>x</code>.</p>
 <p>Para estimar con regularización, el segundo caso, se puede ajustar un modelo bayesiano usando el paquete <span class="pkg">rstanarm</span>:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">stan_glm</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, family <span class="op">=</span> <span class="st">"gaussian"</span>, <span class="va">...</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">stan_glm</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, family <span class="op">=</span> <span class="st">"gaussian"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>En este caso, las otras opciones pasadas a través de <code>...</code> incluirían argumentos para las distribuciones anteriores de los parámetros, así como detalles sobre los aspectos numéricos del modelo. Al igual que con <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>, solo está disponible la interfaz de fórmula.</p>
 <p>Un enfoque popular no bayesiano para la regresión regularizada es el modelo <span class="pkg">glmnet</span> <span class="citation" data-cites="glmnet">(<a href="references.html#ref-glmnet" role="doc-biblioref">Friedman, Hastie, y Tibshirani 2010</a>)</span>. Su sintaxis es:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">glmnet</span><span class="op">(</span>x <span class="op">=</span> <span class="va">matrix</span>, y <span class="op">=</span> <span class="va">vector</span>, family <span class="op">=</span> <span class="st">"gaussian"</span>, <span class="va">...</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">glmnet</span><span class="op">(</span>x <span class="op">=</span> <span class="va">matrix</span>, y <span class="op">=</span> <span class="va">vector</span>, family <span class="op">=</span> <span class="st">"gaussian"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>En este caso, los datos del predictor ya deben estar formateados en una matriz numérica; solo hay un método <code>x</code>/<code>y</code> y ningún método de fórmula.</p>
 <p>Tenga en cuenta que estas interfaces son heterogéneas en la forma en que se pasan los datos a la función del modelo o en términos de sus argumentos. El primer problema es que, para ajustar los modelos a diferentes paquetes, los datos deben formatearse de diferentes maneras. <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> y <code>stan_glm()</code> solo tienen interfaces de fórmula mientras que <code>glmnet()</code> no. Para otro tipo de modelos, las interfaces pueden ser aún más dispares. Para una persona que intenta realizar un análisis de datos, estas diferencias requieren la memorización de la sintaxis de cada paquete y pueden resultar muy frustrantes.</p>
 <p>Para tidymodels, el enfoque para especificar un modelo pretende ser más unificado:</p>
@@ -460,7 +463,7 @@ window.Quarto = {
 </ol>
 <p>Estas especificaciones se construyen sin hacer referencia a los datos. Por ejemplo, para los tres casos que describimos:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://tidymodels.tidymodels.org/reference/tidymodels_prefer.html">tidymodels_prefer</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
@@ -476,12 +479,12 @@ window.Quarto = {
 <span><span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">set_engine</span><span class="op">(</span><span class="st">"stan"</span><span class="op">)</span></span>
 <span><span class="co">## Linear Regression Model Specification (regression)</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Computational engine: stan</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## Computational engine: stan</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Una vez que se han especificado los detalles del modelo, la estimación del modelo se puede realizar con la función <code>fit()</code> (para usar una fórmula) o con la función <code>fit_xy()</code> (cuando sus datos ya están preprocesados). El paquete <span class="pkg">parsnip</span> permite al usuario ser indiferente a la interfaz del modelo subyacente; siempre puedes usar una fórmula incluso si la función del paquete de modelado solo tiene la interfaz <code>x</code>/<code>y</code>.</p>
 <p>La función <code>translate()</code> puede proporcionar detalles sobre cómo <span class="pkg">parsnip</span> convierte el código del usuario a la sintaxis del paquete:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">translate</span><span class="op">(</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">translate</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">## Linear Regression Model Specification (regression)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Computational engine: lm </span></span>
@@ -508,7 +511,7 @@ window.Quarto = {
 <span><span class="co">## </span></span>
 <span><span class="co">## Model fit template:</span></span>
 <span><span class="co">## rstanarm::stan_glm(formula = missing_arg(), data = missing_arg(), </span></span>
-<span><span class="co">##     weights = missing_arg(), family = stats::gaussian, refresh = 0)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##     weights = missing_arg(), family = stats::gaussian, refresh = 0)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Tenga en cuenta que <code>missing_arg()</code> es solo un marcador de posición para los datos que aún no se han proporcionado.</p>
 <div class="rmdnote">
@@ -516,7 +519,7 @@ window.Quarto = {
 </div>
 <p>Veamos cómo predecir el precio de venta de las casas en los datos de Ames en función únicamente de la longitud y la latitud:<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_model</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_model</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
 <span></span>
@@ -551,14 +554,14 @@ window.Quarto = {
 <span><span class="co">## </span></span>
 <span><span class="co">## Coefficients:</span></span>
 <span><span class="co">## (Intercept)    Longitude     Latitude  </span></span>
-<span><span class="co">##     -302.97        -2.07         2.71</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##     -302.97        -2.07         2.71</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><span class="pkg">parsnip</span> no solo permite una interfaz de modelo coherente para diferentes paquetes, sino que también proporciona coherencia en los argumentos del modelo. Es común que diferentes funciones que se ajustan al mismo modelo tengan diferentes nombres de argumentos. Las funciones del modelo de random forest son un buen ejemplo. Tres argumentos comúnmente utilizados son la cantidad de árboles en el conjunto, la cantidad de predictores para muestrear aleatoriamente con cada división dentro de un árbol y la cantidad de puntos de datos necesarios para realizar una división. Para tres paquetes R diferentes que implementan este algoritmo, esos argumentos se muestran en <a href="#tbl-rand-forest-args" class="quarto-xref">Tabla&nbsp;<span>6.1</span></a>.</p>
 <div id="tbl-rand-forest-args" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-layout-align="center">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-rand-forest-args-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabla&nbsp;6.1: Ejemplos de nombres de argumentos para diferentes funciones de random forest.
 </figcaption><div aria-describedby="tbl-rand-forest-args-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="table cell caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<table class="table cell caption-top table-sm table-striped small">
 <thead><tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">Tipo de argumento</th>
 <th style="text-align: left;" data-quarto-table-cell-role="th">ranger</th>
@@ -594,7 +597,7 @@ Tabla&nbsp;6.1: Ejemplos de nombres de argumentos para diferentes funciones de r
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-parsnip-args-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabla&nbsp;6.2: Nombres de argumentos de random forest utilizados por parsnip.
 </figcaption><div aria-describedby="tbl-parsnip-args-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="table cell caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<table class="table cell caption-top table-sm table-striped small">
 <thead><tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">Tipo de argumento</th>
 <th style="text-align: left;" data-quarto-table-cell-role="th">parsnip</th>
@@ -624,7 +627,7 @@ Tabla&nbsp;6.2: Nombres de argumentos de random forest utilizados por parsnip.
 </blockquote>
 <p>Para comprender cómo los nombres de los argumentos <span class="pkg">parsnip</span> se asignan a los nombres originales, use el archivo de ayuda para el modelo (disponible a través de <code>?rand_forest</code>), así como la función <code>translate()</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">rand_forest</span><span class="op">(</span>trees <span class="op">=</span> <span class="fl">1000</span>, min_n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">rand_forest</span><span class="op">(</span>trees <span class="op">=</span> <span class="fl">1000</span>, min_n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"ranger"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">translate</span><span class="op">(</span><span class="op">)</span></span>
@@ -639,7 +642,7 @@ Tabla&nbsp;6.2: Nombres de argumentos de random forest utilizados por parsnip.
 <span><span class="co">## Model fit template:</span></span>
 <span><span class="co">## ranger::ranger(x = missing_arg(), y = missing_arg(), weights = missing_arg(), </span></span>
 <span><span class="co">##     num.trees = 1000, min.node.size = min_rows(~5, x), num.threads = 1, </span></span>
-<span><span class="co">##     verbose = FALSE, seed = sample.int(10^5, 1))</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##     verbose = FALSE, seed = sample.int(10^5, 1))</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Las funciones de modelado en <span class="pkg">parsnip</span> separan los argumentos del modelo en dos categorías:</p>
 <ul>
@@ -648,7 +651,7 @@ Tabla&nbsp;6.2: Nombres de argumentos de random forest utilizados por parsnip.
 </ul>
 <p>Por ejemplo, en la traducción del código de random forest anterior, los argumentos <code>num.threads</code>, <code>verbose</code> y <code>seed</code> se agregaron de forma predeterminada. Estos argumentos son específicos de la implementación <span class="pkg">ranger</span> de modelos random forest y no tendrían sentido como argumentos principales. Los argumentos específicos del motor se pueden especificar en <code>set_engine()</code>. Por ejemplo, para que la función <code><a href="http://imbs-hl.github.io/ranger/reference/ranger.html">ranger::ranger()</a></code> imprima más información sobre el ajuste:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">rand_forest</span><span class="op">(</span>trees <span class="op">=</span> <span class="fl">1000</span>, min_n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">rand_forest</span><span class="op">(</span>trees <span class="op">=</span> <span class="fl">1000</span>, min_n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"ranger"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> </span>
 <span><span class="co">## Random Forest Model Specification (regression)</span></span>
@@ -660,35 +663,35 @@ Tabla&nbsp;6.2: Nombres de argumentos de random forest utilizados por parsnip.
 <span><span class="co">## Engine-Specific Arguments:</span></span>
 <span><span class="co">##   verbose = TRUE</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Computational engine: ranger</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## Computational engine: ranger</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="utilizar-los-resultados-del-modelo" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="utilizar-los-resultados-del-modelo">
 <span class="header-section-number">6.2</span> Utilizar Los Resultados Del Modelo</h2>
 <p>Una vez creado y ajustado el modelo, podemos utilizar los resultados de diversas formas; es posible que queramos trazar, imprimir o examinar de otro modo el resultado del modelo. Varias cantidades se almacenan en un objeto modelo <span class="pkg">parsnip</span>, incluido el modelo ajustado. Esto se puede encontrar en un elemento llamado <code>fit</code>, que se puede devolver usando la función <code>extract_fit_engine()</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_form_fit</span> <span class="op">%&gt;%</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_form_fit</span> <span class="op">%&gt;%</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Call:</span></span>
 <span><span class="co">## stats::lm(formula = Sale_Price ~ Longitude + Latitude, data = data)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Coefficients:</span></span>
 <span><span class="co">## (Intercept)    Longitude     Latitude  </span></span>
-<span><span class="co">##     -302.97        -2.07         2.71</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##     -302.97        -2.07         2.71</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Se pueden aplicar métodos normales a este objeto, como imprimir y trazar:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_form_fit</span> <span class="op">%&gt;%</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/vcov.html">vcov</a></span><span class="op">(</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_form_fit</span> <span class="op">%&gt;%</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/vcov.html">vcov</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">##             (Intercept) Longitude Latitude</span></span>
 <span><span class="co">## (Intercept)     207.311   1.57466 -1.42397</span></span>
 <span><span class="co">## Longitude         1.575   0.01655 -0.00060</span></span>
-<span><span class="co">## Latitude         -1.424  -0.00060  0.03254</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## Latitude         -1.424  -0.00060  0.03254</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="rmdwarning">
 <p>Nunca pase el elemento <code>fit</code> de un modelo <span class="pkg">parsnip</span> a una función de predicción del modelo, es decir, use <code>predict(lm_form_fit)</code> pero <em>no</em> use <code>predict(lm_form_fit$fit)</code>. Si los datos fueron preprocesados ​​de alguna manera, se generarán predicciones incorrectas (a veces, sin errores). La función de predicción del modelo subyacente no tiene idea de si se ha realizado alguna transformación en los datos antes de ejecutar el modelo. Consulte <a href="#sec-parsnip-predictions" class="quarto-xref"><span>Sección 6.3</span></a> para obtener más información sobre cómo hacer predicciones.</p>
 </div>
 <p>Un problema con algunos métodos existentes en base R es que los resultados se almacenan de una manera que puede no ser la más útil. Por ejemplo, el método <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> para objetos <code>lm</code> se puede utilizar para imprimir los resultados del ajuste del modelo, incluida una tabla con los valores de los parámetros, sus estimaciones de incertidumbre y los valores p.&nbsp;Estos resultados particulares también se pueden guardar:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model_res</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model_res</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">lm_form_fit</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -701,20 +704,20 @@ Tabla&nbsp;6.2: Nombres de argumentos de random forest utilizados por parsnip.
 <span><span class="co">##             Estimate Std. Error t value  Pr(&gt;|t|)</span></span>
 <span><span class="co">## (Intercept) -302.974    14.3983  -21.04 3.640e-90</span></span>
 <span><span class="co">## Longitude     -2.075     0.1286  -16.13 1.395e-55</span></span>
-<span><span class="co">## Latitude       2.710     0.1804   15.02 9.289e-49</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## Latitude       2.710     0.1804   15.02 9.289e-49</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Hay algunas cosas a tener en cuenta sobre este resultado. Primero, el objeto es una matriz numérica. Lo más probable es que se haya elegido esta estructura de datos, ya que todos los resultados calculados son numéricos y un objeto de matriz se almacena de manera más eficiente que un marco de datos. Esta elección probablemente se hizo a finales de la década de 1970, cuando la eficiencia computacional era extremadamente crítica. En segundo lugar, los datos no numéricos (las etiquetas de los coeficientes) están contenidos en los nombres de las filas. Mantener las etiquetas de los parámetros como nombres de filas es muy coherente con las convenciones del lenguaje S original.</p>
 <p>Un siguiente paso razonable podría ser crear una visualización de los valores de los parámetros. Para ello, sería sensato convertir la matriz de parámetros en un marco de datos. Podríamos agregar los nombres de las filas como una columna para que puedan usarse en un gráfico. Sin embargo, observe que varios de los nombres de columnas de matriz existentes no serían nombres de columnas R válidos para marcos de datos ordinarios (por ejemplo, <code>"Pr(&gt;|t|)"</code>). Otra complicación es la coherencia de los nombres de las columnas. Para objetos <code>lm</code>, la columna para el valor p es <code>"Pr(&gt;|t|)"</code>, pero para otros modelos, se podría usar una prueba diferente y, como resultado, el nombre de la columna sería diferente ( por ejemplo, <code>"Pr(&gt;|z|)"</code>) y el tipo de prueba se codificaría en el nombre de la columna.</p>
 <p>Si bien estos pasos adicionales de formato de datos no son imposibles de superar, son un obstáculo, especialmente porque pueden ser diferentes para distintos tipos de modelos. La matriz no es una estructura de datos altamente reutilizable, principalmente porque limita los datos a ser de un solo tipo (por ejemplo, numéricos). Además, mantener algunos datos en los nombres de las dimensiones también es problemático, ya que esos datos deben extraerse para que sean de uso general.</p>
 <p>Como solución, el paquete <span class="pkg">broom</span> puede convertir muchos tipos de objetos modelo en una estructura ordenada. Por ejemplo, usar el método <code>tidy()</code> en el modelo lineal produce:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">lm_form_fit</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">lm_form_fit</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 3 × 5</span></span>
 <span><span class="co">##   term        estimate std.error statistic  p.value</span></span>
 <span><span class="co">##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span></span>
 <span><span class="co">## 1 (Intercept)  -303.      14.4       -21.0 3.64e-90</span></span>
 <span><span class="co">## 2 Longitude      -2.07     0.129     -16.1 1.40e-55</span></span>
-<span><span class="co">## 3 Latitude        2.71     0.180      15.0 9.29e-49</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 3 Latitude        2.71     0.180      15.0 9.29e-49</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Los nombres de las columnas están estandarizados en todos los modelos y no contienen ningún dato adicional (como el tipo de prueba estadística). Los datos que antes estaban contenidos en los nombres de las filas ahora están en una columna llamada <code>term</code> (término). Un principio importante en el ecosistema de tidymodels es que una función debe devolver valores que sean <em>predecibles, consistentes</em> y <em>no sorprendentes</em>.</p>
 </section><section id="sec-parsnip-predictions" class="level2" data-number="6.3"><h2 data-number="6.3" class="anchored" data-anchor-id="sec-parsnip-predictions">
@@ -727,7 +730,7 @@ Tabla&nbsp;6.2: Nombres de argumentos de random forest utilizados por parsnip.
 </ol>
 <p>Por ejemplo, cuando se predicen datos numéricos:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_test_small</span> <span class="op">&lt;-</span> <span class="va">ames_test</span> <span class="op">%&gt;%</span> <span class="fu">slice</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_test_small</span> <span class="op">&lt;-</span> <span class="va">ames_test</span> <span class="op">%&gt;%</span> <span class="fu">slice</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_form_fit</span>, new_data <span class="op">=</span> <span class="va">ames_test_small</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 5 × 1</span></span>
 <span><span class="co">##   .pred</span></span>
@@ -736,7 +739,7 @@ Tabla&nbsp;6.2: Nombres de argumentos de random forest utilizados por parsnip.
 <span><span class="co">## 2  5.21</span></span>
 <span><span class="co">## 3  5.28</span></span>
 <span><span class="co">## 4  5.27</span></span>
-<span><span class="co">## 5  5.28</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 5  5.28</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El orden de las filas de las predicciones es siempre el mismo que el de los datos originales.</p>
 <div class="rmdnote">
@@ -744,7 +747,7 @@ Tabla&nbsp;6.2: Nombres de argumentos de random forest utilizados por parsnip.
 </div>
 <p>Estas tres reglas facilitan la combinación de predicciones con los datos originales:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_test_small</span> <span class="op">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ames_test_small</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">bind_cols</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_form_fit</span>, <span class="va">ames_test_small</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="co"># Agregue intervalos de predicción del 95% a los resultados:</span></span>
@@ -756,14 +759,14 @@ Tabla&nbsp;6.2: Nombres de argumentos de random forest utilizados por parsnip.
 <span><span class="co">## 2       5.39  5.21        4.90        5.53</span></span>
 <span><span class="co">## 3       5.28  5.28        4.97        5.60</span></span>
 <span><span class="co">## 4       5.28  5.27        4.96        5.59</span></span>
-<span><span class="co">## 5       5.28  5.28        4.97        5.60</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 5       5.28  5.28        4.97        5.60</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>La motivación para la primera regla proviene de algunos paquetes de R que producen tipos de datos diferentes a partir de funciones de predicción. Por ejemplo, el paquete <span class="pkg">ranger</span> es una excelente herramienta para calcular modelos forestales aleatorios. Sin embargo, en lugar de devolver un marco de datos o un vector como salida, devuelve un objeto especializado que tiene múltiples valores incrustados (incluidos los valores predichos). Este es solo un paso más que el analista de datos debe solucionar en sus scripts. Como otro ejemplo, el modelo nativo <span class="pkg">glmnet</span> puede devolver al menos cuatro tipos de salida diferentes para predicciones, dependiendo de los detalles del modelo y las características de los datos. Estos se muestran en <a href="#tbl-predict-types" class="quarto-xref">Tabla&nbsp;<span>6.3</span></a>.</p>
 <div id="tbl-predict-types" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-layout-align="center">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-predict-types-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabla&nbsp;6.3: Diferentes valores de retorno para tipos de predicción glmnet.
 </figcaption><div aria-describedby="tbl-predict-types-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="table cell caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<table class="table cell caption-top table-sm table-striped small">
 <thead><tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">Tipo de Predicción</th>
 <th style="text-align: left;" data-quarto-table-cell-role="th">Devuelve:</th>
@@ -796,7 +799,7 @@ Tabla&nbsp;6.3: Diferentes valores de retorno para tipos de predicción glmnet.
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-predictable-column-names-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabla&nbsp;6.4: El mapeo de tidymodels de tipos de predicción y nombres de columnas.
 </figcaption><div aria-describedby="tbl-predictable-column-names-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="table cell caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<table class="table cell caption-top table-sm table-striped small">
 <thead><tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">tipo de valor</th>
 <th style="text-align: left;" data-quarto-table-cell-role="th">nombre(s) de columna(s)</th>
@@ -829,7 +832,7 @@ Tabla&nbsp;6.4: El mapeo de tidymodels de tipos de predicción y nombres de colu
 </div>
 <p>La tercera regla con respecto al número de filas en la salida es crítica. Por ejemplo, si alguna fila de los datos nuevos contiene valores faltantes, la salida se completará con los resultados faltantes para esas filas. Una ventaja principal de estandarizar la interfaz del modelo y los tipos de predicción en <span class="pkg">parsnip</span> es que, cuando se utilizan diferentes modelos, la sintaxis es idéntica. Supongamos que utilizamos un árbol de decisión para modelar los datos de Ames. Fuera de la especificación del modelo, no hay diferencias significativas en la canalización del código:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tree_model</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tree_model</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">decision_tree</span><span class="op">(</span>min_n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"rpart"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span></span>
@@ -848,7 +851,7 @@ Tabla&nbsp;6.4: El mapeo de tidymodels de tipos de predicción y nombres de colu
 <span><span class="co">## 2       5.39  5.15</span></span>
 <span><span class="co">## 3       5.28  5.32</span></span>
 <span><span class="co">## 4       5.28  5.32</span></span>
-<span><span class="co">## 5       5.28  5.32</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 5       5.28  5.32</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Esto demuestra el beneficio de homogeneizar el proceso de análisis de datos y la sintaxis en diferentes modelos. Permite a los usuarios dedicar su tiempo a los resultados y la interpretación en lugar de tener que centrarse en las diferencias sintácticas entre los paquetes de R.</p>
 </section><section id="paquetes-de-extensión-de-parsnip" class="level2" data-number="6.4"><h2 data-number="6.4" class="anchored" data-anchor-id="paquetes-de-extensión-de-parsnip">
@@ -858,7 +861,7 @@ Tabla&nbsp;6.4: El mapeo de tidymodels de tipos de predicción y nombres de colu
 <span class="header-section-number">6.5</span> Crear Especificaciones De Modelo</h2>
 <p>Puede resultar tedioso escribir muchas especificaciones de modelos o recordar cómo escribir el código para generarlas. El paquete <span class="pkg">parsnip</span> incluye un complemento RStudio<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> que puede ayudar. Ya sea eligiendo este complemento en el menú de la barra de herramientas <em>Addins</em> o ejecutando el código:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">parsnip_addin</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">parsnip_addin</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>abrirá una ventana en el panel Viewer de RStudio IDE con una lista de posibles modelos para cada modo de modelo. Estos se pueden escribir en el panel de código fuente.</p>
 <p>La lista de modelos incluye modelos de los paquetes de extensión <span class="pkg">parsnip</span> y <span class="pkg">parsnip</span> que están en CRAN.</p>
@@ -867,7 +870,7 @@ Tabla&nbsp;6.4: El mapeo de tidymodels de tipos de predicción y nombres de colu
 <p>Este capítulo presentó el paquete <span class="pkg">parsnip</span>, que proporciona una interfaz común para modelos en todos los paquetes R utilizando una sintaxis estándar. La interfaz y los objetos resultantes tienen una estructura predecible.</p>
 <p>El código para modelar los datos de Ames que usaremos en el futuro es:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">ames</span><span class="op">)</span></span>
 <span><span class="va">ames</span> <span class="op">&lt;-</span> <span class="fu">mutate</span><span class="op">(</span><span class="va">ames</span>, Sale_Price <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">Sale_Price</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -876,7 +879,7 @@ Tabla&nbsp;6.4: El mapeo de tidymodels de tipos de predicción y nombres de colu
 <span><span class="va">ames_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">ames_split</span><span class="op">)</span></span>
 <span><span class="va">ames_test</span>  <span class="op">&lt;-</span>  <span class="fu">testing</span><span class="op">(</span><span class="va">ames_split</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lm_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">lm_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
@@ -895,15 +898,15 @@ Friedman, J, T Hastie, y R Tibshirani. 2010. <span>«Regularization paths for ge
   // Chapter name
   const currentChapterFile = window.location.pathname.split('/').pop().replace('.html', '');
 
-  //Deffining urls
+  //Defining urls
   const originalURL = "https://github.com/tidymodels/TMwR";
-  const translationURL = "https://github.com/davidrsch/TMwRes";
+  const translationURL = "https://github.com/davidrsch/tmwr-es";
 
-  //Deffining texts
+  //Defining texts
   const edit_text = "Editar esta página";
   const issue_text = "Informar de un problema"
 
-  //Deffining git_i
+  //Defining git_i
   const git_i = '<div><i class="bi bi-github"></i></div>';
 
   // Adding TOC if not exist
@@ -1008,13 +1011,14 @@ Friedman, J, T Hastie, y R Tibshirani. 2010. <span>«Regularization paths for ge
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

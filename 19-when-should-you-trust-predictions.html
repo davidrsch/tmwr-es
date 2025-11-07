@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <title>19&nbsp; ¿Cuándo Debería Confiar En Sus Predicciones? – Modelado Ordenado con R</title>
@@ -86,14 +86,15 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87efc9f0321ca4df940afa6b8506b50b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -107,7 +108,7 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -131,7 +132,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -164,7 +165,9 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -177,7 +180,7 @@ window.Quarto = {
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/TMwRes">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/tmwr-es">
             Traducción
             </a>
           </li>
@@ -445,7 +448,7 @@ window.Quarto = {
 \]</span></p>
 <p>Los dos predictores siguen una distribución normal bivariada con una correlación de 0,70. Crearemos un conjunto de entrenamiento de 200 muestras y un conjunto de prueba de 50:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://tidymodels.tidymodels.org/reference/tidymodels_prefer.html">tidymodels_prefer</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">simulate_two_classes</span> <span class="op">&lt;-</span> </span>
@@ -470,11 +473,11 @@ window.Quarto = {
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1901</span><span class="op">)</span></span>
 <span><span class="va">training_set</span> <span class="op">&lt;-</span> <span class="fu">simulate_two_classes</span><span class="op">(</span><span class="fl">200</span><span class="op">)</span></span>
-<span><span class="va">testing_set</span>  <span class="op">&lt;-</span> <span class="fu">simulate_two_classes</span><span class="op">(</span><span class="fl">50</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">testing_set</span>  <span class="op">&lt;-</span> <span class="fu">simulate_two_classes</span><span class="op">(</span><span class="fl">50</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Estimamos un modelo de regresión logística utilizando métodos bayesianos (utilizando las distribuciones previas gaussianas predeterminadas para los parámetros):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">two_class_mod</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">two_class_mod</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">logistic_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"stan"</span>, seed <span class="op">=</span> <span class="fl">1902</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">fit</span><span class="op">(</span><span class="va">class</span> <span class="op">~</span> <span class="va">.</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span><span class="op">(</span><span class="va">y</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">training_set</span><span class="op">)</span></span>
@@ -496,12 +499,12 @@ window.Quarto = {
 <span><span class="co">## </span></span>
 <span><span class="co">## ------</span></span>
 <span><span class="co">## * For help interpreting the printed output see ?print.stanreg</span></span>
-<span><span class="co">## * For info on the priors used see ?prior_summary.stanreg</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## * For info on the priors used see ?prior_summary.stanreg</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El límite de clase ajustado se superpone al conjunto de prueba en <a href="#fig-glm-boundaries" class="quarto-xref">Figura&nbsp;<span>19.1</span></a>. Los puntos de datos más cercanos al límite de clase son los más inciertos. Si sus valores cambiaran ligeramente, su clase prevista podría cambiar. Un método simple para descalificar algunos resultados es llamarlos “equívocos” si los valores están dentro de algún rango alrededor del 50% (o el límite de probabilidad apropiado para una situación determinada). Dependiendo del problema al que se aplique el modelo, esto podría indicar que debemos recopilar otra medición o que necesitamos más información antes de que sea posible una predicción confiable.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-glm-boundaries" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Conjunto de datos simulado de dos clases con ajuste de regresión logística y límite de decisión. El diagrama de dispersión de las dos clases muestra datos bastante correlacionados. El límite de decisión es una parábola en el eje x que hace un buen trabajo al separar las clases." data-fig-align="center">
+<div id="fig-glm-boundaries" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Conjunto de datos simulado de dos clases con ajuste de regresión logística y límite de decisión. El diagrama de dispersión de las dos clases muestra datos bastante correlacionados. El límite de decisión es una parábola en el eje x que hace un buen trabajo al separar las clases.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-glm-boundaries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-glm-boundaries-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Conjunto de datos simulado de dos clases con ajuste de regresión logística y límite de decisión. El diagrama de dispersión de las dos clases muestra datos bastante correlacionados. El límite de decisión es una parábola en el eje x que hace un buen trabajo al separar las clases.">
 </div>
@@ -514,7 +517,7 @@ Figura&nbsp;19.1: Conjunto de datos simulado de dos clases con ajuste de regresi
 <p>Podríamos basar el ancho de la banda alrededor del límite en cómo mejora el rendimiento cuando se eliminan los resultados inciertos. Sin embargo, también debemos estimar la tasa reportable (la proporción esperada de resultados utilizables). Por ejemplo, no sería útil en situaciones del mundo real tener un rendimiento perfecto pero publicar predicciones en solo el 2% de las muestras pasadas al modelo.</p>
 <p>Utilicemos el conjunto de pruebas para determinar el equilibrio entre mejorar el rendimiento y tener suficientes resultados reportables. Las predicciones se crean usando:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">test_pred</span> <span class="op">&lt;-</span> <span class="fu">augment</span><span class="op">(</span><span class="va">two_class_mod</span>, <span class="va">testing_set</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">test_pred</span> <span class="op">&lt;-</span> <span class="fu">augment</span><span class="op">(</span><span class="va">two_class_mod</span>, <span class="va">testing_set</span><span class="op">)</span></span>
 <span><span class="va">test_pred</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 6 × 6</span></span>
 <span><span class="co">##   .pred_class .pred_class_1 .pred_class_2      x      y class  </span></span>
@@ -524,11 +527,11 @@ Figura&nbsp;19.1: Conjunto de datos simulado de dos clases con ajuste de regresi
 <span><span class="co">## 3 class_2           0.00620         0.994  1.92   0.615 class_2</span></span>
 <span><span class="co">## 4 class_2           0.472           0.528 -0.400  0.252 class_2</span></span>
 <span><span class="co">## 5 class_2           0.163           0.837  1.30   1.09  class_1</span></span>
-<span><span class="co">## 6 class_2           0.0317          0.968  2.59   1.36  class_2</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 6 class_2           0.0317          0.968  2.59   1.36  class_2</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Con tidymodels, el paquete <span class="pkg">probably</span> contiene funciones para zonas equívocas. Para casos con dos clases, la función <code><a href="https://probably.tidymodels.org/reference/make_class_pred.html">make_two_class_pred()</a></code> crea una columna similar a un factor que tiene las clases predichas con una zona equívoca:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/probably">probably</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/probably">probably</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lvls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">training_set</span><span class="op">$</span><span class="va">class</span><span class="op">)</span></span>
 <span></span>
@@ -542,7 +545,7 @@ Figura&nbsp;19.1: Conjunto de datos simulado de dos clases con ajuste de regresi
 <span><span class="co">##       &lt;clss_prd&gt; &lt;int&gt;</span></span>
 <span><span class="co">## 1           [EQ]     9</span></span>
 <span><span class="co">## 2        class_1    20</span></span>
-<span><span class="co">## 3        class_2    21</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 3        class_2    21</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Rows that are within <span class="math inline">\(0.50\pm0.15\)</span> are given a value of <code>[EQ]</code>.</p>
 <div class="rmdnote">
@@ -550,7 +553,7 @@ Figura&nbsp;19.1: Conjunto de datos simulado de dos clases con ajuste de regresi
 </div>
 <p>Dado que los niveles de los factores son los mismos que los de los datos originales, las matrices de confusión y otras estadísticas se pueden calcular sin errores. Cuando se utilizan funciones estándar del paquete <span class="pkg">yardstick</span>, los resultados equívocos se convierten a <code>NA</code> y no se utilizan en los cálculos que utilizan predicciones de clases estrictas. Observe las diferencias en estas matrices de confusión:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Toda la información</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Toda la información</span></span>
 <span><span class="va">test_pred</span> <span class="op">%&gt;%</span> <span class="fu">conf_mat</span><span class="op">(</span><span class="va">class</span>, <span class="va">.pred_class</span><span class="op">)</span></span>
 <span><span class="co">##           Truth</span></span>
 <span><span class="co">## Prediction class_1 class_2</span></span>
@@ -562,12 +565,12 @@ Figura&nbsp;19.1: Conjunto de datos simulado de dos clases con ajuste de regresi
 <span><span class="co">##           Truth</span></span>
 <span><span class="co">## Prediction class_1 class_2</span></span>
 <span><span class="co">##    class_1      17       3</span></span>
-<span><span class="co">##    class_2       5      16</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##    class_2       5      16</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>También está disponible una función <code><a href="https://probably.tidymodels.org/reference/locate-equivocal.html">is_equivocal()</a></code> para filtrar estas filas de los datos.</p>
 <p>¿La zona equívoca ayuda a mejorar la precisión? Veamos diferentes tamaños de búfer, como se muestra en <a href="#fig-equivocal-zone-results" class="quarto-xref">Figura&nbsp;<span>19.2</span></a>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Una función para cambiar el búfer y luego calcular el rendimiento.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Una función para cambiar el búfer y luego calcular el rendimiento.</span></span>
 <span><span class="va">eq_zone_results</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">buffer</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">test_pred</span> <span class="op">&lt;-</span> </span>
 <span>    <span class="va">test_pred</span> <span class="op">%&gt;%</span> </span>
@@ -583,11 +586,11 @@ Figura&nbsp;19.1: Conjunto de datos simulado de dos clases con ajuste de regresi
 <span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="va">buffer</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"statistic"</span>, values_to <span class="op">=</span> <span class="st">"value"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">buffer</span>, y <span class="op">=</span> <span class="va">value</span>, lty <span class="op">=</span> <span class="va">statistic</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_step</span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.2</span>, alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">labs</span><span class="op">(</span>y <span class="op">=</span> <span class="cn">NULL</span>, lty <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">labs</span><span class="op">(</span>y <span class="op">=</span> <span class="cn">NULL</span>, lty <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-equivocal-zone-results" class="quarto-float quarto-figure quarto-figure-center anchored" alt="El efecto de las zonas equívocas en el rendimiento del modelo. Hay un ligero aumento en la precisión a expensas de una tasa de declaración decreciente." data-fig-align="center">
+<div id="fig-equivocal-zone-results" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="El efecto de las zonas equívocas en el rendimiento del modelo. Hay un ligero aumento en la precisión a expensas de una tasa de declaración decreciente.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-equivocal-zone-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-equivocal-zone-results-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="El efecto de las zonas equívocas en el rendimiento del modelo. Hay un ligero aumento en la precisión a expensas de una tasa de declaración decreciente.">
 </div>
@@ -601,16 +604,16 @@ Figura&nbsp;19.2: El efecto de las zonas equívocas en el rendimiento del modelo
 <p>Este análisis se centró en utilizar la probabilidad de clase prevista para descalificar puntos, ya que esta es una medida fundamental de incertidumbre en los modelos de clasificación. Un enfoque ligeramente mejor sería utilizar el error estándar de la probabilidad de clase. Dado que utilizamos un modelo bayesiano, las estimaciones de probabilidad que encontramos son en realidad la media de la distribución predictiva posterior. En otras palabras, el modelo bayesiano nos da una distribución para la probabilidad de clase. Medir la desviación estándar de esta distribución nos da un <em>error estándar de predicción</em> de la probabilidad. En la mayoría de los casos, este valor está directamente relacionado con la probabilidad de clase media. Quizás recuerdes que, para una variable aleatoria de Bernoulli con probabilidad <span class="math inline">\(p\)</span>, la varianza es <span class="math inline">\(p(1-p)\)</span>. Debido a esta relación, el error estándar es mayor cuando la probabilidad es del 50%. En lugar de asignar un resultado equívoco utilizando la probabilidad de clase, podríamos utilizar un límite en el error estándar de predicción.</p>
 <p>Un aspecto importante del error estándar de predicción es que tiene en cuenta algo más que la probabilidad de clase. En los casos en los que hay una extrapolación significativa o valores predictivos aberrantes, el error estándar podría aumentar. El beneficio de utilizar el error estándar de predicción es que también podría señalar predicciones que son problemáticas (en lugar de simplemente inciertas). Una razón por la que utilizamos el modelo bayesiano es que estima naturalmente el error estándar de predicción; No muchos modelos pueden calcular esto. Para nuestro conjunto de prueba, usar <code>type = "pred_int"</code> producirá límites superior e inferior y <code>std_error</code> agrega una columna para esa cantidad. Para intervalos del 80%:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">test_pred</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">test_pred</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">test_pred</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">bind_cols</span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">two_class_mod</span>, <span class="va">testing_set</span>, type <span class="op">=</span> <span class="st">"pred_int"</span>, std_error <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Para nuestro ejemplo donde el modelo y los datos se comportan bien, <a href="#fig-std-errors" class="quarto-xref">Figura&nbsp;<span>19.3</span></a> muestra el error estándar de predicción en todo el espacio:</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-std-errors" class="quarto-float quarto-figure quarto-figure-center anchored" alt="El efecto del error estándar de predicción superpuesto con los datos del conjunto de pruebas. La región de gran variación es muy similar al espacio límite de clases. Además, hay una gran variación hacia el oeste del punto de inflexión de la curva límite." data-fig-align="center">
+<div id="fig-std-errors" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="El efecto del error estándar de predicción superpuesto con los datos del conjunto de pruebas. La región de gran variación es muy similar al espacio límite de clases. Además, hay una gran variación hacia el oeste del punto de inflexión de la curva límite.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-std-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-std-errors-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="El efecto del error estándar de predicción superpuesto con los datos del conjunto de pruebas. La región de gran variación es muy similar al espacio límite de clases. Además, hay una gran variación hacia el oeste del punto de inflexión de la curva límite.">
 </div>
@@ -626,7 +629,7 @@ Figura&nbsp;19.3: El efecto del error estándar de predicción superpuesto con l
 <p>Las zonas equívocas intentan medir la confiabilidad de una predicción basada en los resultados del modelo. Puede ser que las estadísticas del modelo, como el error estándar de predicción, no puedan medir el impacto de la extrapolación, por lo que necesitamos otra forma de evaluar si debemos confiar en una predicción y responder: “¿Es nuestro modelo aplicable para predecir un punto de datos específico?” Tomemos los datos del tren de Chicago utilizados ampliamente en <a href="https://bookdown.org/max/FES/chicago-intro.html">Kuhn y Johnson (2019)</a> y mostrados por primera vez en <a href="02-tidyverse.html#sec-examples-of-tidyverse-syntax" class="quarto-xref"><span>Sección 2.2</span></a> . El objetivo es predecir la cantidad de clientes que ingresan a la estación de tren de Clark y Lake cada día.</p>
 <p>El conjunto de datos en el paquete <span class="pkg">modeldata</span> (un paquete tidymodels con conjuntos de datos de ejemplo) tiene valores diarios entre January 22, 2001 y <code>formato r(max(Chicago$fecha), "%B %d, %Y")</code>. Creemos un pequeño conjunto de pruebas utilizando las últimas dos semanas de datos:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## loads tanto el conjunto de datos de "Chicago" como las "estaciones"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## loads tanto el conjunto de datos de "Chicago" como las "estaciones"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">Chicago</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">Chicago</span> <span class="op">&lt;-</span> <span class="va">Chicago</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">ridership</span>, <span class="va">date</span>, <span class="fu">one_of</span><span class="op">(</span><span class="va">stations</span><span class="op">)</span><span class="op">)</span></span>
@@ -634,12 +637,12 @@ Figura&nbsp;19.3: El efecto del error estándar de predicción superpuesto con l
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">Chicago</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">Chicago_train</span> <span class="op">&lt;-</span> <span class="va">Chicago</span> <span class="op">%&gt;%</span> <span class="fu">slice</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">Chicago_test</span>  <span class="op">&lt;-</span> <span class="va">Chicago</span> <span class="op">%&gt;%</span> <span class="fu">slice</span><span class="op">(</span><span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="fl">13</span><span class="op">)</span><span class="op">:</span><span class="va">n</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">Chicago_test</span>  <span class="op">&lt;-</span> <span class="va">Chicago</span> <span class="op">%&gt;%</span> <span class="fu">slice</span><span class="op">(</span><span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="fl">13</span><span class="op">)</span><span class="op">:</span><span class="va">n</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Los principales predictores son los datos retrasados ​​sobre el número de pasajeros en diferentes estaciones de tren, incluidas Clark y Lake, así como la fecha. Los predictores de número de pasajeros están altamente correlacionados entre sí. En la siguiente receta, la columna de fecha se amplía con varias características nuevas y los predictores de número de pasajeros se representan mediante componentes de mínimos cuadrados parciales (PLS). PLS <span class="citation" data-cites="Geladi:1986">(<a href="references.html#ref-Geladi:1986" role="doc-biblioref">Geladi y Kowalski 1986</a>)</span>, como comentamos en <a href="16-dimensionality-reduction.html#sec-partial-least-squares" class="quarto-xref"><span>Sección 16.5.2</span></a>, es una versión supervisada del análisis de componentes principales donde las nuevas características han sido descorrelacionadas pero predicen los datos de resultado.</p>
 <p>Utilizando los datos preprocesados, ajustamos un modelo lineal estándar:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">base_recipe</span> <span class="op">&lt;-</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">base_recipe</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu">recipe</span><span class="op">(</span><span class="va">ridership</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Chicago_train</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># Crear funciones de fecha</span></span>
 <span>  <span class="fu">step_date</span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
@@ -661,11 +664,11 @@ Figura&nbsp;19.3: El efecto del error estándar de predicción superpuesto con l
 <span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1902</span><span class="op">)</span></span>
-<span><span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span><span class="va">lm_wflow</span>, data <span class="op">=</span> <span class="va">Chicago_train</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span><span class="va">lm_wflow</span>, data <span class="op">=</span> <span class="va">Chicago_train</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>¿Qué tan bien encajan los datos en el conjunto de prueba? Podemos <code>predecit()</code> para que el conjunto de pruebas encuentre tanto predicciones como intervalos de predicción:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res_test</span> <span class="op">&lt;-</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res_test</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, <span class="va">Chicago_test</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">bind_cols</span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, <span class="va">Chicago_test</span>, type <span class="op">=</span> <span class="st">"pred_int"</span><span class="op">)</span>,</span>
@@ -687,12 +690,12 @@ Figura&nbsp;19.3: El efecto del error estándar de predicción superpuesto con l
 <span><span class="co">## # A tibble: 1 × 3</span></span>
 <span><span class="co">##   .metric .estimator .estimate</span></span>
 <span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 rmse    standard       0.865</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 rmse    standard       0.865</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Estos son resultados bastante buenos. <a href="#fig-chicago-2016" class="quarto-xref">Figura&nbsp;<span>19.4</span></a> visualiza las predicciones junto con intervalos de predicción del 95%.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-chicago-2016" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Dos semanas de predicciones de 2016 para los datos de Chicago junto con intervalos de predicción del 95%. El modelo se ajusta bastante bien a los datos con estimaciones de error razonables." data-fig-align="center">
+<div id="fig-chicago-2016" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Dos semanas de predicciones de 2016 para los datos de Chicago junto con intervalos de predicción del 95%. El modelo se ajusta bastante bien a los datos con estimaciones de error razonables.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-chicago-2016-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-chicago-2016-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="Dos semanas de predicciones de 2016 para los datos de Chicago junto con intervalos de predicción del 95%. El modelo se ajusta bastante bien a los datos con estimaciones de error razonables.">
 </div>
@@ -704,7 +707,7 @@ Figura&nbsp;19.4: Dos semanas de predicciones de 2016 para los datos de Chicago 
 </div>
 <p>Dada la escala del número de usuarios, estos resultados parecen particularmente buenos para un modelo tan simple. Si se hubiera implementado este modelo, ¿qué tan bien habría funcionado unos años más tarde, en junio de 2020? El modelo realiza con éxito una predicción, como casi siempre lo hace un modelo predictivo cuando se le dan datos de entrada:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res_2020</span> <span class="op">&lt;-</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res_2020</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, <span class="va">Chicago_2020</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">bind_cols</span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, <span class="va">Chicago_2020</span>, type <span class="op">=</span> <span class="st">"pred_int"</span><span class="op">)</span>,</span>
@@ -721,11 +724,11 @@ Figura&nbsp;19.4: Dos semanas de predicciones de 2016 para los datos de Chicago 
 <span><span class="co">## 4 2020-06-04 21.3        17.1         25.4</span></span>
 <span><span class="co">## 5 2020-06-05 20.7        16.6         24.9</span></span>
 <span><span class="co">## 6 2020-06-06  9.04        4.88        13.2</span></span>
-<span><span class="co">## # ℹ 8 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 8 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Los intervalos de predicción tienen aproximadamente el mismo ancho, aunque estos datos están mucho más allá del período de tiempo del conjunto de entrenamiento original. Sin embargo, dada la pandemia mundial en 2020, el desempeño según estos datos es pésimo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res_2020</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">date</span>, <span class="va">ridership</span>, <span class="fu">starts_with</span><span class="op">(</span><span class="st">".pred"</span><span class="op">)</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res_2020</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">date</span>, <span class="va">ridership</span>, <span class="fu">starts_with</span><span class="op">(</span><span class="st">".pred"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 14 × 5</span></span>
 <span><span class="co">##   date       ridership .pred .pred_lower .pred_upper</span></span>
 <span><span class="co">##   &lt;date&gt;         &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;</span></span>
@@ -740,12 +743,12 @@ Figura&nbsp;19.4: Dos semanas de predicciones de 2016 para los datos de Chicago 
 <span><span class="co">## # A tibble: 1 × 3</span></span>
 <span><span class="co">##   .metric .estimator .estimate</span></span>
 <span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 rmse    standard        17.2</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 rmse    standard        17.2</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Puedes ver visualmente el terrible rendimiento de este modelo en <a href="#fig-chicago-2020" class="quarto-xref">Figura&nbsp;<span>19.5</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-chicago-2020" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Dos semanas de predicciones de 2016 para los datos de Chicago junto con intervalos de predicción del 95%. El modelo se ajusta bastante bien a los datos con estimaciones de error razonables." data-fig-align="center">
+<div id="fig-chicago-2020" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Dos semanas de predicciones de 2016 para los datos de Chicago junto con intervalos de predicción del 95%. El modelo se ajusta bastante bien a los datos con estimaciones de error razonables.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-chicago-2020-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-chicago-2020-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="Dos semanas de predicciones de 2016 para los datos de Chicago junto con intervalos de predicción del 95%. El modelo se ajusta bastante bien a los datos con estimaciones de error razonables.">
 </div>
@@ -767,7 +770,7 @@ Figura&nbsp;19.5: Dos semanas de predicciones de 2020 para los datos de Chicago 
 <p>El primer paso es realizar PCA con los datos de entrenamiento. Las puntuaciones de PCA para el conjunto de entrenamiento se muestran en el panel (b) en <a href="#fig-pca-reference-dist" class="quarto-xref">Figura&nbsp;<span>19.6</span></a>. A continuación, utilizando estos resultados, medimos la distancia de cada punto de ajuste de entrenamiento al centro de los datos de PCA (panel (c) de <a href="#fig-pca-reference-dist" class="quarto-xref">Figura&nbsp;<span>19.6</span></a>). Luego podemos usar esta <em>distribución de referencia</em> (panel (d) de <a href="#fig-pca-reference-dist" class="quarto-xref">Figura&nbsp;<span>19.6</span></a>) para estimar qué tan lejos está un punto de datos de la corriente principal de los datos de entrenamiento.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-pca-reference-dist" class="quarto-float quarto-figure quarto-figure-center anchored" alt="La distribución de referencia de PCA basada en el conjunto de entrenamiento. La mayoría de las distancias al centro de la distribución PCA están por debajo de un valor de tres." data-fig-align="center">
+<div id="fig-pca-reference-dist" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="La distribución de referencia de PCA basada en el conjunto de entrenamiento. La mayoría de las distancias al centro de la distribución PCA están por debajo de un valor de tres.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-pca-reference-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-pca-reference-dist-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%" alt="La distribución de referencia de PCA basada en el conjunto de entrenamiento. La mayoría de las distancias al centro de la distribución PCA están por debajo de un valor de tres.">
 </div>
@@ -786,7 +789,7 @@ Figura&nbsp;19.6: La distribución de referencia de PCA basada en el conjunto de
 <p>El gráfico en <a href="#fig-two-new-points" class="quarto-xref">Figura&nbsp;<span>19.7</span></a> superpone una muestra del conjunto de prueba (triángulo y línea discontinua) y una muestra de 2020 (círculo y línea continua) con las distancias PCA del conjunto de entrenamiento.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-two-new-points" class="quarto-float quarto-figure quarto-figure-center anchored" alt="La distribución de referencia con dos nuevos puntos: uno usando el conjunto de prueba y otro a partir de los datos de 2020. El punto de ajuste de la prueba se encuentra perfectamente dentro de la corriente principal de datos, mientras que el punto de 2020 está fuera de la distribución de referencia." data-fig-align="center">
+<div id="fig-two-new-points" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="La distribución de referencia con dos nuevos puntos: uno usando el conjunto de prueba y otro a partir de los datos de 2020. El punto de ajuste de la prueba se encuentra perfectamente dentro de la corriente principal de datos, mientras que el punto de 2020 está fuera de la distribución de referencia.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-two-new-points-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-two-new-points-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%" alt="La distribución de referencia con dos nuevos puntos: uno usando el conjunto de prueba y otro a partir de los datos de 2020. El punto de ajuste de la prueba se encuentra perfectamente dentro de la corriente principal de datos, mientras que el punto de 2020 está fuera de la distribución de referencia.">
 </div>
@@ -800,7 +803,7 @@ Figura&nbsp;19.7: La distribución de referencia con dos nuevos puntos: uno usan
 <p>La muestra de 2020 está más alejada del centro que cualquiera de las muestras del conjunto de entrenamiento (con un percentil de 100%). Esto indica que la muestra es muy extrema y que su predicción correspondiente sería una extrapolación severa (y probablemente no debería informarse).</p>
 <p>El paquete <span class="pkg">applicable</span> puede desarrollar un modelo de dominio de aplicabilidad utilizando PCA. Usaremos los predictores de número de pasajeros de 20 estaciones retrasadas como datos de entrada para el análisis de PCA. Hay un argumento adicional llamado umbral, <code>threshold</code>, que determina cuántos componentes se utilizan en el cálculo de la distancia. Para nuestro ejemplo, usaremos un valor grande que indica que debemos usar suficientes componentes para representar el 99 % de la variación en los predictores de número de pasajeros:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/applicable">applicable</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/applicable">applicable</a></span><span class="op">)</span></span>
 <span><span class="va">pca_stat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://applicable.tidymodels.org/reference/apd_pca.html">apd_pca</a></span><span class="op">(</span><span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Chicago_train</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="fu">one_of</span><span class="op">(</span><span class="va">stations</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>                    threshold <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span></span>
 <span><span class="va">pca_stat</span></span>
@@ -809,15 +812,15 @@ Figura&nbsp;19.7: La distribución de referencia con dos nuevos puntos: uno usan
 <span><span class="co">## # Principal Components:</span></span>
 <span><span class="co">##    9 components were needed</span></span>
 <span><span class="co">##    to capture at least 99% of the</span></span>
-<span><span class="co">##    total variation in the predictors.</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##    total variation in the predictors.</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El método <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> traza la distribución de referencia. Tiene un argumento opcional para qué datos trazar. Agregaremos un valor de distancia, <code>distance</code> para trazar solo la distribución de distancia del conjunto de entrenamiento. Este código genera la trama en <a href="#fig-ap-autoplot" class="quarto-xref">Figura&nbsp;<span>19.8</span></a>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">pca_stat</span>, <span class="va">distance</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"distance"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">pca_stat</span>, <span class="va">distance</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"distance"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-ap-autoplot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Los resultados de usar el método `autoplot()` en un objeto aplicable" data-fig-align="center">
+<div id="fig-ap-autoplot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Los resultados de usar el método `autoplot()` en un objeto aplicable">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ap-autoplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-ap-autoplot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Los resultados de usar el método `autoplot()` en un objeto aplicable">
 </div>
@@ -830,7 +833,7 @@ Figura&nbsp;19.8: Los resultados de usar el método <code><a href="https://ggplo
 <p>El eje x muestra los valores de la distancia y el eje y muestra los percentiles de la distribución. Por ejemplo, la mitad de las muestras del conjunto de entrenamiento tenían distancias menores que 3.7.</p>
 <p>Para calcular los percentiles de datos nuevos, la función <code><a href="https://applicable.tidymodels.org/reference/score.html">score()</a></code> funciona de la misma manera que <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://applicable.tidymodels.org/reference/score.html">score</a></span><span class="op">(</span><span class="va">pca_stat</span>, <span class="va">Chicago_test</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"distance"</span><span class="op">)</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://applicable.tidymodels.org/reference/score.html">score</a></span><span class="op">(</span><span class="va">pca_stat</span>, <span class="va">Chicago_test</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"distance"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 14 × 2</span></span>
 <span><span class="co">##   distance distance_pctl</span></span>
 <span><span class="co">##      &lt;dbl&gt;         &lt;dbl&gt;</span></span>
@@ -840,11 +843,11 @@ Figura&nbsp;19.8: Los resultados de usar el método <code><a href="https://ggplo
 <span><span class="co">## 4     5.00          68.5</span></span>
 <span><span class="co">## 5     4.36          59.3</span></span>
 <span><span class="co">## 6     4.10          55.2</span></span>
-<span><span class="co">## # ℹ 8 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 8 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Estos parecen bastante razonables. Para los datos de 2020:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://applicable.tidymodels.org/reference/score.html">score</a></span><span class="op">(</span><span class="va">pca_stat</span>, <span class="va">Chicago_2020</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"distance"</span><span class="op">)</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://applicable.tidymodels.org/reference/score.html">score</a></span><span class="op">(</span><span class="va">pca_stat</span>, <span class="va">Chicago_2020</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"distance"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 14 × 2</span></span>
 <span><span class="co">##   distance distance_pctl</span></span>
 <span><span class="co">##      &lt;dbl&gt;         &lt;dbl&gt;</span></span>
@@ -854,7 +857,7 @@ Figura&nbsp;19.8: Los resultados de usar el método <code><a href="https://ggplo
 <span><span class="co">## 4     9.30          99.7</span></span>
 <span><span class="co">## 5     9.29          99.7</span></span>
 <span><span class="co">## 6    10.1            1  </span></span>
-<span><span class="co">## # ℹ 8 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 8 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Los valores de distancia de 2020 indican que estos valores predictivos están fuera de la gran mayoría de los datos vistos por el modelo en el momento del entrenamiento. Estos deben señalarse para que las predicciones no se informen en absoluto o se vean con escepticismo.</p>
 <div class="rmdnote">
@@ -894,15 +897,15 @@ Netzeva, T, A Worth, T Aldenberg, R Benigni, M Cronin, P Gramatica, J Jaworska, 
   // Chapter name
   const currentChapterFile = window.location.pathname.split('/').pop().replace('.html', '');
 
-  //Deffining urls
+  //Defining urls
   const originalURL = "https://github.com/tidymodels/TMwR";
-  const translationURL = "https://github.com/davidrsch/TMwRes";
+  const translationURL = "https://github.com/davidrsch/tmwr-es";
 
-  //Deffining texts
+  //Defining texts
   const edit_text = "Editar esta página";
   const issue_text = "Informar de un problema"
 
-  //Deffining git_i
+  //Defining git_i
   const git_i = '<div><i class="bi bi-github"></i></div>';
 
   // Adding TOC if not exist
@@ -1007,13 +1010,14 @@ Netzeva, T, A Worth, T Aldenberg, R Benigni, M Cronin, P Gramatica, J Jaworska, 
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <title>21&nbsp; Análisis Inferencial – Modelado Ordenado con R</title>
@@ -86,14 +86,15 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87efc9f0321ca4df940afa6b8506b50b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -107,7 +108,7 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -131,7 +132,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -164,7 +165,9 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -177,7 +180,7 @@ window.Quarto = {
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/TMwRes">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/tmwr-es">
             Traducción
             </a>
           </li>
@@ -447,18 +450,18 @@ window.Quarto = {
 </div>
 <p>Un gráfico de los datos mostrados en <a href="#fig-counts" class="quarto-xref">Figura&nbsp;<span>21.1</span></a> indica que muchos graduados no publicaron ningún artículo durante este tiempo y que el resultado sigue una distribución sesgada a la derecha:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://tidymodels.tidymodels.org/reference/tidymodels_prefer.html">tidymodels_prefer</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"bioChemists"</span>, package <span class="op">=</span> <span class="st">"pscl"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">bioChemists</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">art</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_histogram</span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Número de artículos dentro de los 3 años posteriores a la graduación"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Número de artículos dentro de los 3 años posteriores a la graduación"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-counts" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="La distribución del número de artículos escritos dentro de los 3 años posteriores a la graduación. La distribución está sesgada a la derecha y la mayoría de los datos tienen recuentos de cero o uno.">
+<div id="fig-counts" class="quarto-float quarto-figure quarto-figure-center anchored" alt="La distribución del número de artículos escritos dentro de los 3 años posteriores a la graduación. La distribución está sesgada a la derecha y la mayoría de los datos tienen recuentos de cero o uno." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-counts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-counts-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="La distribución del número de artículos escritos dentro de los 3 años posteriores a la graduación. La distribución está sesgada a la derecha y la mayoría de los datos tienen recuentos de cero o uno.">
 </div>
@@ -473,14 +476,14 @@ Figura&nbsp;21.1: Distribución del número de artículos escritos dentro de los
 <span class="header-section-number">21.2</span> Comparaciones Con Pruebas De Dos Muestras</h2>
 <p>Podemos comenzar con la prueba de hipótesis. El objetivo del autor original con este conjunto de datos sobre publicaciones de bioquímica era determinar si existe una diferencia en las publicaciones entre hombres y mujeres <span class="citation" data-cites="Long1992">(<a href="references.html#ref-Long1992" role="doc-biblioref">Long 1992</a>)</span>. Los datos del estudio muestran:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bioChemists</span> <span class="op">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bioChemists</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">fem</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">summarize</span><span class="op">(</span>counts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">art</span><span class="op">)</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">art</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 2 × 3</span></span>
 <span><span class="co">##   fem   counts     n</span></span>
 <span><span class="co">##   &lt;fct&gt;  &lt;int&gt; &lt;int&gt;</span></span>
 <span><span class="co">## 1 Men      930   494</span></span>
-<span><span class="co">## 2 Women    619   421</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 2 Women    619   421</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Había muchas más publicaciones de hombres, aunque también había más hombres en los datos. El enfoque más simple para analizar estos datos sería hacer una comparación de dos muestras usando la función <code><a href="https://rdrr.io/r/stats/poisson.test.html">poisson.test()</a></code> en el paquete <span class="pkg">stats</span>. Requiere los conteos para uno o dos grupos.</p>
 <p>Para nuestra aplicación, las hipótesis para comparar los dos sexos son:</p>
@@ -491,7 +494,7 @@ H_a&amp;: \lambda_m \ne \lambda_f \notag
 <p>donde los valores <span class="math inline">\(\lambda\)</span> son las tasas de publicaciones (durante el mismo período de tiempo).</p>
 <p>Una aplicación básica de la prueba es:Una aplicación básica de la prueba es:<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/poisson.test.html">poisson.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">930</span>, <span class="fl">619</span><span class="op">)</span>, T <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/poisson.test.html">poisson.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">930</span>, <span class="fl">619</span><span class="op">)</span>, T <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##  Comparison of Poisson rates</span></span>
 <span><span class="co">## </span></span>
@@ -502,17 +505,17 @@ H_a&amp;: \lambda_m \ne \lambda_f \notag
 <span><span class="co">##  1.356 1.666</span></span>
 <span><span class="co">## sample estimates:</span></span>
 <span><span class="co">## rate ratio </span></span>
-<span><span class="co">##      1.502</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##      1.502</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>La función informa un valor p así como un intervalo de confianza para la relación de las tasas de publicación. Los resultados indican que la diferencia observada es mayor que el ruido experiencial y favorece a <span class="math inline">\(H_a\)</span>.</p>
 <p>Un problema con el uso de esta función es que los resultados regresan como un objeto “htest”. Si bien este tipo de objeto tiene una estructura bien definida, puede resultar difícil consumirlo para operaciones posteriores, como informes o visualizaciones. La herramienta más impactante que ofrece tidymodels para modelos inferenciales son las funciones <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> en el paquete <span class="pkg">broom</span>. Como se vio anteriormente, esta función crea un tibble bien formado y con un nombre predecible a partir del objeto. Podemos <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> los resultados de nuestra prueba de comparación de dos muestras:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/poisson.test.html">poisson.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">930</span>, <span class="fl">619</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/poisson.test.html">poisson.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">930</span>, <span class="fl">619</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 1 × 8</span></span>
 <span><span class="co">##   estimate statistic  p.value parameter conf.low conf.high method        alternative</span></span>
 <span><span class="co">##      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;      </span></span>
-<span><span class="co">## 1     1.50       930 2.73e-15      774.     1.36      1.67 Comparison o… two.sided</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1     1.50       930 2.73e-15      774.     1.36      1.67 Comparison o… two.sided</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="rmdnote">
 <p>Entre <a href="https://broom.tidymodels.org/"><span class="pkg">broom</span></a> y <a href="https://CRAN.R-project.org/package=%20broom.mixed"><span class="pkg">broom.mixed</span></a>, existen métodos <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> para más de 150 modelos.</p>
@@ -522,7 +525,7 @@ H_a&amp;: \lambda_m \ne \lambda_f \notag
 <p>Primero, <code><a href="https://infer.tidymodels.org/reference/specify.html">specify()</a></code> que usaremos la diferencia en el número medio de artículos entre los sexos y luego <code><a href="https://infer.tidymodels.org/reference/calculate.html">calculate()</a></code> la estadística a partir de los datos. Recuerde que el estimador de máxima verosimilitud para la media de Poisson es la media muestral. Las hipótesis probadas aquí son las mismas que las de la prueba anterior (pero se llevan a cabo mediante un procedimiento de prueba diferente).</p>
 <p>Con <span class="pkg">infer</span>, especificamos el resultado y la covariable, luego indicamos la estadística de interés:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/infer">infer</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/infer">infer</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">observed</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">bioChemists</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -534,11 +537,11 @@ H_a&amp;: \lambda_m \ne \lambda_f \notag
 <span><span class="co">## # A tibble: 1 × 1</span></span>
 <span><span class="co">##    stat</span></span>
 <span><span class="co">##   &lt;dbl&gt;</span></span>
-<span><span class="co">## 1 0.412</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1 0.412</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A partir de aquí, calculamos un intervalo de confianza para esta media creando la distribución de arranque mediante <code><a href="https://infer.tidymodels.org/reference/generate.html">generate()</a></code>; se calcula la misma estadística para cada versión remuestreada de los datos:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2101</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2101</span><span class="op">)</span></span>
 <span><span class="va">bootstrapped</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">bioChemists</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://infer.tidymodels.org/reference/specify.html">specify</a></span><span class="op">(</span><span class="va">art</span> <span class="op">~</span> <span class="va">fem</span><span class="op">)</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -556,25 +559,25 @@ H_a&amp;: \lambda_m \ne \lambda_f \notag
 <span><span class="co">## 4         4 0.308</span></span>
 <span><span class="co">## 5         5 0.369</span></span>
 <span><span class="co">## 6         6 0.428</span></span>
-<span><span class="co">## # ℹ 1,994 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 1,994 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Un intervalo percentil se calcula usando:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">percentile_ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://infer.tidymodels.org/reference/get_confidence_interval.html">get_ci</a></span><span class="op">(</span><span class="va">bootstrapped</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">percentile_ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://infer.tidymodels.org/reference/get_confidence_interval.html">get_ci</a></span><span class="op">(</span><span class="va">bootstrapped</span><span class="op">)</span></span>
 <span><span class="va">percentile_ci</span></span>
 <span><span class="co">## # A tibble: 1 × 2</span></span>
 <span><span class="co">##   lower_ci upper_ci</span></span>
 <span><span class="co">##      &lt;dbl&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">## 1    0.158    0.653</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1    0.158    0.653</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El paquete <span class="pkg">infer</span> tiene una API de alto nivel para mostrar los resultados del análisis, como se muestra en <a href="#fig-bootstrapped-mean" class="quarto-xref">Figura&nbsp;<span>21.2</span></a>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://infer.tidymodels.org/reference/visualize.html">visualize</a></span><span class="op">(</span><span class="va">bootstrapped</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://infer.tidymodels.org/reference/shade_confidence_interval.html">shade_confidence_interval</a></span><span class="op">(</span>endpoints <span class="op">=</span> <span class="va">percentile_ci</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://infer.tidymodels.org/reference/visualize.html">visualize</a></span><span class="op">(</span><span class="va">bootstrapped</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://infer.tidymodels.org/reference/shade_confidence_interval.html">shade_confidence_interval</a></span><span class="op">(</span>endpoints <span class="op">=</span> <span class="va">percentile_ci</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-bootstrapped-mean" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="La distribución bootstrap de la diferencia de medias. La región resaltada es el intervalo de confianza, que no incluye un valor de cero.">
+<div id="fig-bootstrapped-mean" class="quarto-float quarto-figure quarto-figure-center anchored" alt="La distribución bootstrap de la diferencia de medias. La región resaltada es el intervalo de confianza, que no incluye un valor de cero." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-bootstrapped-mean-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-bootstrapped-mean-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="La distribución bootstrap de la diferencia de medias. La región resaltada es el intervalo de confianza, que no incluye un valor de cero.">
 </div>
@@ -587,7 +590,7 @@ Figura&nbsp;21.2: La distribución bootstrap de la diferencia de medias. La regi
 <p>Dado que el intervalo visualizado en <a href="#fig-bootstrapped-mean" class="quarto-xref">Figura&nbsp;<span>21.2</span></a> no incluye cero, estos resultados indican que los hombres han publicado más artículos que las mujeres.</p>
 <p>Si requerimos un valor p, el paquete <span class="pkg">infer</span> puede calcular el valor mediante una prueba de permutación, que se muestra en el siguiente código. La sintaxis es muy similar al código de arranque que usamos anteriormente. Agregamos un verbo <code><a href="https://infer.tidymodels.org/reference/hypothesize.html">hypothesize()</a></code> para indicar el tipo de suposición a probar y la llamada <code><a href="https://infer.tidymodels.org/reference/generate.html">generate()</a></code> contiene una opción para mezclar los datos.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2102</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2102</span><span class="op">)</span></span>
 <span><span class="va">permuted</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">bioChemists</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://infer.tidymodels.org/reference/specify.html">specify</a></span><span class="op">(</span><span class="va">art</span> <span class="op">~</span> <span class="va">fem</span><span class="op">)</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -607,16 +610,16 @@ Figura&nbsp;21.2: La distribución bootstrap de la diferencia de medias. La regi
 <span><span class="co">## 4         4 -0.195  </span></span>
 <span><span class="co">## 5         5 -0.00128</span></span>
 <span><span class="co">## 6         6 -0.102  </span></span>
-<span><span class="co">## # ℹ 1,994 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 1,994 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El siguiente código de visualización también es muy similar al enfoque de arranque. Este código genera <a href="#fig-permutation-dist" class="quarto-xref">Figura&nbsp;<span>21.3</span></a> donde la línea vertical indica el valor observado:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://infer.tidymodels.org/reference/visualize.html">visualize</a></span><span class="op">(</span><span class="va">permuted</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://infer.tidymodels.org/reference/shade_p_value.html">shade_p_value</a></span><span class="op">(</span>obs_stat <span class="op">=</span> <span class="va">observed</span>, direction <span class="op">=</span> <span class="st">"two-sided"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://infer.tidymodels.org/reference/visualize.html">visualize</a></span><span class="op">(</span><span class="va">permuted</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://infer.tidymodels.org/reference/shade_p_value.html">shade_p_value</a></span><span class="op">(</span>obs_stat <span class="op">=</span> <span class="va">observed</span>, direction <span class="op">=</span> <span class="st">"two-sided"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-permutation-dist" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="La distribución empírica del estadístico de prueba bajo la hipótesis nula. La línea vertical indica la estadística de prueba observada y está muy alejada de la corriente principal de la distribución.">
+<div id="fig-permutation-dist" class="quarto-float quarto-figure quarto-figure-center anchored" alt="La distribución empírica del estadístico de prueba bajo la hipótesis nula. La línea vertical indica la estadística de prueba observada y está muy alejada de la corriente principal de la distribución." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-permutation-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-permutation-dist-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="La distribución empírica del estadístico de prueba bajo la hipótesis nula. La línea vertical indica la estadística de prueba observada y está muy alejada de la corriente principal de la distribución.">
 </div>
@@ -628,12 +631,12 @@ Figura&nbsp;21.3: Distribución empírica del estadístico de prueba bajo la hip
 </div>
 <p>The actual p-value is:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">permuted</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">permuted</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://infer.tidymodels.org/reference/get_p_value.html">get_p_value</a></span><span class="op">(</span>obs_stat <span class="op">=</span> <span class="va">observed</span>, direction <span class="op">=</span> <span class="st">"two-sided"</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 1 × 1</span></span>
 <span><span class="co">##   p_value</span></span>
 <span><span class="co">##     &lt;dbl&gt;</span></span>
-<span><span class="co">## 1   0.002</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1   0.002</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>La línea vertical que representa la hipótesis nula en <a href="#fig-permutation-dist" class="quarto-xref">Figura&nbsp;<span>21.3</span></a> está muy lejos de la distribución de permutación. Esto significa que, si de hecho la hipótesis nula fuera cierta, la probabilidad de observar datos al menos tan extremos como los que tenemos a mano es extremadamente pequeña.</p>
 <p>Las pruebas de dos muestras que se muestran en esta sección probablemente no sean óptimas porque no tienen en cuenta otros factores que podrían explicar la relación observada entre la tasa de publicación y el sexo. Pasemos a un modelo más complejo que pueda considerar covariables adicionales.</p>
@@ -646,7 +649,7 @@ Figura&nbsp;21.3: Distribución empírica del estadístico de prueba bajo la hip
 <p>donde <span class="math inline">\(\lambda\)</span> es el valor esperado de los recuentos.</p>
 <p>Ajustemos un modelo simple que contenga todas las columnas predictoras. El paquete <span class="pkg">poissonreg</span>, un paquete de extensión <span class="pkg">parsnip</span> en tidymodels, se ajustará a esta especificación de modelo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/poissonreg">poissonreg</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/poissonreg">poissonreg</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># El motor predeterminado es 'glm'</span></span>
 <span><span class="va">log_lin_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/poisson_reg.html">poisson_reg</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -666,11 +669,11 @@ Figura&nbsp;21.3: Distribución empírica del estadístico de prueba bajo la hip
 <span><span class="co">## </span></span>
 <span><span class="co">## Degrees of Freedom: 914 Total (i.e. Null);  909 Residual</span></span>
 <span><span class="co">## Null Deviance:       1820 </span></span>
-<span><span class="co">## Residual Deviance: 1630  AIC: 3310</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## Residual Deviance: 1630  AIC: 3310</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El método <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> resume sucintamente los coeficientes del modelo (junto con intervalos de confianza del 90%):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">log_lin_fit</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span>, conf.level <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">log_lin_fit</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span>, conf.level <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 6 × 7</span></span>
 <span><span class="co">##   term        estimate std.error statistic  p.value conf.low conf.high</span></span>
 <span><span class="co">##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span></span>
@@ -679,7 +682,7 @@ Figura&nbsp;21.3: Distribución empírica del estadístico de prueba bajo la hip
 <span><span class="co">## 3 marMarried    0.155    0.0614      2.53  1.14e- 2   0.0545    0.256 </span></span>
 <span><span class="co">## 4 kid5         -0.185    0.0401     -4.61  4.08e- 6  -0.251    -0.119 </span></span>
 <span><span class="co">## 5 phd           0.0128   0.0264      0.486 6.27e- 1  -0.0305    0.0563</span></span>
-<span><span class="co">## 6 ment          0.0255   0.00201    12.7   3.89e-37   0.0222    0.0288</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 6 ment          0.0255   0.00201    12.7   3.89e-37   0.0222    0.0288</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>En este resultado, los valores p corresponden a pruebas de hipótesis separadas para cada parámetro:</p>
 <span class="math display">\[\begin{align}
@@ -689,7 +692,7 @@ H_a&amp;: \beta_j \ne 0 \notag
 <p>para cada uno de los parámetros del modelo. Al observar estos resultados, es posible que el <code>phd</code> (el prestigio de su departamento) no tenga ninguna relación con el resultado.</p>
 <p>Si bien la distribución de Poisson es el supuesto habitual para datos como estos, puede resultar beneficioso realizar una verificación aproximada de los supuestos del modelo ajustando los modelos sin utilizar la probabilidad de Poisson para calcular los intervalos de confianza. El paquete <span class="pkg">rsample</span> tiene una función conveniente para calcular intervalos de confianza de arranque para los modelos <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> y <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code>. Podemos usar esta función, mientras declaramos explícitamente <code>family = poisson</code>, para calcular una gran cantidad de ajustes del modelo. De forma predeterminada, calculamos un intervalo bootstrap-t de confianza del 90% (los intervalos percentiles también están disponibles):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2103</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2103</span><span class="op">)</span></span>
 <span><span class="va">glm_boot</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">reg_intervals</span><span class="op">(</span><span class="va">art</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">bioChemists</span>, model_fn <span class="op">=</span> <span class="st">"glm"</span>, family <span class="op">=</span> <span class="va">poisson</span><span class="op">)</span></span>
 <span><span class="va">glm_boot</span></span>
@@ -700,14 +703,14 @@ H_a&amp;: \beta_j \ne 0 \notag
 <span><span class="co">## 2 kid5       -0.298      -0.184  -0.0789   0.05 student-t</span></span>
 <span><span class="co">## 3 marMarried  0.000264    0.155   0.317    0.05 student-t</span></span>
 <span><span class="co">## 4 ment        0.0182      0.0256  0.0322   0.05 student-t</span></span>
-<span><span class="co">## 5 phd        -0.0707      0.0130  0.102    0.05 student-t</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 5 phd        -0.0707      0.0130  0.102    0.05 student-t</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="rmdwarning">
 <p>Cuando comparamos estos resultados (en <a href="#fig-glm-intervals" class="quarto-xref">Figura&nbsp;<span>21.4</span></a>) con los resultados puramente paramétricos de <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code>, los intervalos de arranque son algo más amplios. Si los datos fueran verdaderamente de Poisson, estos intervalos tendrían anchos más similares.</p>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-glm-intervals" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Dos tipos de intervalos de confianza para el modelo de regresión de Poisson. el intervalo para el modelo PhD es el único intervalo que se superpone a cero. Los intervalos paramétricos tienden a ser más amplios que los intervalos de arranque.">
+<div id="fig-glm-intervals" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Dos tipos de intervalos de confianza para el modelo de regresión de Poisson. el intervalo para el modelo PhD es el único intervalo que se superpone a cero. Los intervalos paramétricos tienden a ser más amplios que los intervalos de arranque." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-glm-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-glm-intervals-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Dos tipos de intervalos de confianza para el modelo de regresión de Poisson. el intervalo para el modelo PhD es el único intervalo que se superpone a cero. Los intervalos paramétricos tienden a ser más amplios que los intervalos de arranque." width="672">
 </div>
@@ -724,7 +727,7 @@ H_a&amp;: \beta_{phd} \ne 0 \notag
 \end{align}\]</span>
 <p>Esta hipótesis se probó previamente cuando mostramos los resultados ordenados de <code>log_lin_fit</code>. Ese enfoque particular utilizó resultados de un ajuste de modelo único mediante una estadística de Wald (es decir, el parámetro dividido por su error estándar). Para ese enfoque, el valor p era 0.63. Podemos ordenar los resultados del LRT para obtener el valor p:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">log_lin_reduced</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">log_lin_reduced</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">log_lin_spec</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span><span class="va">art</span> <span class="op">~</span> <span class="va">ment</span> <span class="op">+</span> <span class="va">kid5</span> <span class="op">+</span> <span class="va">fem</span> <span class="op">+</span> <span class="va">mar</span>, data <span class="op">=</span> <span class="va">bioChemists</span><span class="op">)</span></span>
 <span></span>
@@ -738,7 +741,7 @@ H_a&amp;: \beta_{phd} \ne 0 \notag
 <span><span class="co">##   term                          df.residual residual.deviance    df deviance p.value</span></span>
 <span><span class="co">##   &lt;chr&gt;                               &lt;dbl&gt;             &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;</span></span>
 <span><span class="co">## 1 art ~ ment + kid5 + fem + mar         910             1635.    NA   NA      NA    </span></span>
-<span><span class="co">## 2 art ~ fem + mar + kid5 + phd…         909             1634.     1    0.236   0.627</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 2 art ~ fem + mar + kid5 + phd…         909             1634.     1    0.236   0.627</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Los resultados son los mismos y, en base a estos y al intervalo de confianza para este parámetro, excluiremos <code>phd</code> de análisis adicionales ya que no parece estar asociado con el resultado.</p>
 </section><section id="un-modelo-más-complejo" class="level2" data-number="21.4"><h2 data-number="21.4" class="anchored" data-anchor-id="un-modelo-más-complejo">
@@ -753,7 +756,7 @@ H_a&amp;: \beta_{phd} \ne 0 \notag
 <p>y las covariables <span class="math inline">\(x\)</span> afectan los valores de recuento, mientras que las covariables <span class="math inline">\(z\)</span> influyen en la probabilidad de un cero. No es necesario que los dos conjuntos de predictores sean mutuamente excluyentes.</p>
 <p>Ajustaremos un modelo con un conjunto completo de covariables <span class="math inline">\(z\)</span>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">zero_inflated_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/poisson_reg.html">poisson_reg</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_engine.html">set_engine</a></span><span class="op">(</span><span class="st">"zeroinfl"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">zero_inflated_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/poisson_reg.html">poisson_reg</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_engine.html">set_engine</a></span><span class="op">(</span><span class="st">"zeroinfl"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">zero_inflated_fit</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">zero_inflated_spec</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -774,7 +777,7 @@ H_a&amp;: \beta_{phd} \ne 0 \notag
 <span><span class="co">## </span></span>
 <span><span class="co">## Zero-inflation model coefficients (binomial with logit link):</span></span>
 <span><span class="co">## (Intercept)     femWomen   marMarried         kid5          phd         ment  </span></span>
-<span><span class="co">##     -0.6086       0.1093      -0.3529       0.2195       0.0124      -0.1351</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##     -0.6086       0.1093      -0.3529       0.2195       0.0124      -0.1351</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Dado que los coeficientes de este modelo también se estiman utilizando la máxima verosimilitud, intentemos utilizar otra prueba de razón de verosimilitud para comprender si los términos del nuevo modelo son útiles. <em>Simultáneamente</em> probaremos que:</p>
 <span class="math display">\[\begin{align}
@@ -783,28 +786,28 @@ H_a&amp;: \text{at least one } \gamma \ne 0  \notag
 \end{align}\]</span>
 <p>Probemos ANOVA nuevamente:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="va">zero_inflated_fit</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="va">log_lin_reduced</span><span class="op">)</span>,</span>
 <span>  test <span class="op">=</span> <span class="st">"LRT"</span></span>
 <span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## Error in UseMethod("anova"): no applicable method for 'anova' applied to an object of class "zeroinfl"</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## Error in UseMethod("anova"): no applicable method for 'anova' applied to an object of class "zeroinfl"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>¡No se implementa un método <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code> para objetos <code>zeroinfl</code>!</p>
 <p>Una alternativa es utilizar una <em>estadística de criterio de información</em>, como el criterio de información de Akaike (AIC) <span class="citation" data-cites="claeskens2016statistical">(<a href="references.html#ref-claeskens2016statistical" role="doc-biblioref">Claeskens 2016</a>)</span>. Esto calcula la probabilidad logarítmica (del conjunto de entrenamiento) y penaliza ese valor según el tamaño del conjunto de entrenamiento y la cantidad de parámetros del modelo. En la parametrización de R, los valores AIC más pequeños son mejores. En este caso, no estamos realizando una prueba estadística formal sino <em>estimando</em> la capacidad de los datos para ajustarse a los datos.</p>
 <p>Los resultados indican que el modelo ZIP es preferible:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">zero_inflated_fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span><span class="op">(</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">zero_inflated_fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">## [1] 3232</span></span>
 <span><span class="va">log_lin_reduced</span>   <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## [1] 3312</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## [1] 3312</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Sin embargo, es difícil contextualizar este par de valores individuales y evaluar <em>cuán</em> diferentes son en realidad. Para resolver este problema, volveremos a muestrear una gran cantidad de cada uno de estos dos modelos. A partir de estos, podemos calcular los valores AIC para cada uno y determinar con qué frecuencia los resultados favorecen el modelo ZIP. Básicamente, caracterizaremos la incertidumbre de las estadísticas del AIC para medir su diferencia en relación con el ruido en los datos.</p>
 <p>También calcularemos más intervalos de confianza de arranque para los parámetros en un momento, por lo que especificamos la opción <code>apparent = TRUE</code> al crear las muestras de arranque. Esto es necesario para algunos tipos de intervalos.</p>
 <p>Primero, creamos los 4000 ajustes del modelo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">zip_form</span> <span class="op">&lt;-</span> <span class="va">art</span> <span class="op">~</span> <span class="va">fem</span> <span class="op">+</span> <span class="va">mar</span> <span class="op">+</span> <span class="va">kid5</span> <span class="op">+</span> <span class="va">ment</span> <span class="op">|</span> <span class="va">fem</span> <span class="op">+</span> <span class="va">mar</span> <span class="op">+</span> <span class="va">kid5</span> <span class="op">+</span> <span class="va">phd</span> <span class="op">+</span> <span class="va">ment</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">zip_form</span> <span class="op">&lt;-</span> <span class="va">art</span> <span class="op">~</span> <span class="va">fem</span> <span class="op">+</span> <span class="va">mar</span> <span class="op">+</span> <span class="va">kid5</span> <span class="op">+</span> <span class="va">ment</span> <span class="op">|</span> <span class="va">fem</span> <span class="op">+</span> <span class="va">mar</span> <span class="op">+</span> <span class="va">kid5</span> <span class="op">+</span> <span class="va">phd</span> <span class="op">+</span> <span class="va">ment</span></span>
 <span><span class="va">glm_form</span> <span class="op">&lt;-</span> <span class="va">art</span> <span class="op">~</span> <span class="va">fem</span> <span class="op">+</span> <span class="va">mar</span> <span class="op">+</span> <span class="va">kid5</span> <span class="op">+</span> <span class="va">ment</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2104</span><span class="op">)</span></span>
@@ -825,18 +828,18 @@ H_a&amp;: \text{at least one } \gamma \ne 0  \notag
 <span><span class="co">## 4 &lt;split [915/344]&gt; Bootstrap0004 &lt;fit[+]&gt; &lt;fit[+]&gt;</span></span>
 <span><span class="co">## 5 &lt;split [915/351]&gt; Bootstrap0005 &lt;fit[+]&gt; &lt;fit[+]&gt;</span></span>
 <span><span class="co">## 6 &lt;split [915/354]&gt; Bootstrap0006 &lt;fit[+]&gt; &lt;fit[+]&gt;</span></span>
-<span><span class="co">## # ℹ 1,995 more rows</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## # ℹ 1,995 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Ahora podemos extraer los ajustes del modelo y sus correspondientes valores AIC:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bootstrap_models</span> <span class="op">&lt;-</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bootstrap_models</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">bootstrap_models</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    glm_aic <span class="op">=</span> <span class="fu">map_dbl</span><span class="op">(</span><span class="va">glm</span>, <span class="op">~</span> <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    zip_aic <span class="op">=</span> <span class="fu">map_dbl</span><span class="op">(</span><span class="va">zip</span>, <span class="op">~</span> <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">bootstrap_models</span><span class="op">$</span><span class="va">zip_aic</span> <span class="op">&lt;</span> <span class="va">bootstrap_models</span><span class="op">$</span><span class="va">glm_aic</span><span class="op">)</span></span>
-<span><span class="co">## [1] 1</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## [1] 1</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A partir de estos resultados, parece definitivo que tener en cuenta el número excesivo de conteos de cero es una buena idea.</p>
 <div class="rmdnote">
@@ -844,7 +847,7 @@ H_a&amp;: \text{at least one } \gamma \ne 0  \notag
 </div>
 <p>Dado que hemos calculado los ajustes del modelo remuestreado, creemos intervalos de arranque para los coeficientes del modelo de probabilidad cero (es decir, <span class="math inline">\(\gamma_j\)</span>). Podemos extraerlos con el método <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> y usar la opción <code>type = "zero"</code> para obtener estas estimaciones:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bootstrap_models</span> <span class="op">&lt;-</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bootstrap_models</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">bootstrap_models</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>zero_coefs  <span class="op">=</span> <span class="fu">map</span><span class="op">(</span><span class="va">zip</span>, <span class="op">~</span> <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">.x</span>, type <span class="op">=</span> <span class="st">"zero"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -858,20 +861,20 @@ H_a&amp;: \text{at least one } \gamma \ne 0  \notag
 <span><span class="co">## 3 marMarried  zero   -0.112     0.365     -0.307 0.759    </span></span>
 <span><span class="co">## 4 kid5        zero    0.270     0.186      1.45  0.147    </span></span>
 <span><span class="co">## 5 phd         zero   -0.178     0.132     -1.35  0.177    </span></span>
-<span><span class="co">## 6 ment        zero   -0.123     0.0315    -3.91  0.0000936</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 6 ment        zero   -0.123     0.0315    -3.91  0.0000936</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Es una buena idea visualizar las distribuciones de arranque de los coeficientes, como en <a href="#fig-zip-bootstrap" class="quarto-xref">Figura&nbsp;<span>21.5</span></a>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bootstrap_models</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bootstrap_models</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">unnest</span><span class="op">(</span><span class="va">zero_coefs</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_histogram</span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">25</span>, color <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">term</span>, scales <span class="op">=</span> <span class="st">"free_x"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">geom_vline</span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="fl">2</span>, color <span class="op">=</span> <span class="st">"gray70"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">geom_vline</span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="fl">2</span>, color <span class="op">=</span> <span class="st">"gray70"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-zip-bootstrap" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Distribuciones bootstrap de los coeficientes del modelo ZIP. Las líneas verticales indican las estimaciones observadas. El predictor de mención que parece ser importante para el modelo.">
+<div id="fig-zip-bootstrap" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Distribuciones bootstrap de los coeficientes del modelo ZIP. Las líneas verticales indican las estimaciones observadas. El predictor de mención que parece ser importante para el modelo." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-zip-bootstrap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-zip-bootstrap-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Distribuciones bootstrap de los coeficientes del modelo ZIP. Las líneas verticales indican las estimaciones observadas. El predictor de mención que parece ser importante para el modelo." width="672">
 </div>
@@ -884,7 +887,7 @@ Figura&nbsp;21.5: Distribuciones bootstrap de los coeficientes del modelo ZIP. L
 <p>Una de las covariables (<code>ment</code>) que parece ser importante tiene una distribución muy sesgada. El espacio extra en algunas de las facetas indica que hay algunos valores atípicos en las estimaciones. Esto <em>podría</em> ocurrir cuando los modelos no convergieran; esos resultados probablemente deberían excluirse de las nuevas muestras. Para los resultados visualizados en <a href="#fig-zip-bootstrap" class="quarto-xref">Figura&nbsp;<span>21.5</span></a>, los valores atípicos se deben únicamente a estimaciones extremas de parámetros; todos los modelos convergieron.</p>
 <p>El paquete <span class="pkg">rsample</span> contiene un conjunto de funciones denominadas <code>int_*()</code> que calculan diferentes tipos de intervalos de arranque. Dado que el método <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> contiene estimaciones de error estándar, se pueden calcular los intervalos bootstrap-t. También calcularemos los intervalos percentiles estándar. De forma predeterminada, se calculan intervalos de confianza del 90%.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bootstrap_models</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">int_pctl</span><span class="op">(</span><span class="va">zero_coefs</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bootstrap_models</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">int_pctl</span><span class="op">(</span><span class="va">zero_coefs</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 6 × 6</span></span>
 <span><span class="co">##   term        .lower .estimate  .upper .alpha .method   </span></span>
 <span><span class="co">##   &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;     </span></span>
@@ -903,7 +906,7 @@ Figura&nbsp;21.5: Distribuciones bootstrap de los coeficientes del modelo ZIP. L
 <span><span class="co">## 3 kid5        -0.211    0.217   0.599    0.05 student-t</span></span>
 <span><span class="co">## 4 marMarried  -0.988   -0.381   0.293    0.05 student-t</span></span>
 <span><span class="co">## 5 ment        -0.322   -0.162  -0.0275   0.05 student-t</span></span>
-<span><span class="co">## 6 phd         -0.276    0.0229  0.291    0.05 student-t</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 6 phd         -0.276    0.0229  0.291    0.05 student-t</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A partir de estos resultados, podemos tener una buena idea de qué predictores incluir en el modelo de probabilidad de conteo cero. Puede ser sensato reajustar un modelo más pequeño para evaluar si la distribución de arranque para “ment” todavía está sesgada.</p>
 </section><section id="sec-inference-options" class="level2" data-number="21.5"><h2 data-number="21.5" class="anchored" data-anchor-id="sec-inference-options">
@@ -954,15 +957,15 @@ Zeileis, A, C Kleiber, y S Jackman. 2008. <span>«Regression models for count da
   // Chapter name
   const currentChapterFile = window.location.pathname.split('/').pop().replace('.html', '');
 
-  //Deffining urls
+  //Defining urls
   const originalURL = "https://github.com/tidymodels/TMwR";
-  const translationURL = "https://github.com/davidrsch/TMwRes";
+  const translationURL = "https://github.com/davidrsch/tmwr-es";
 
-  //Deffining texts
+  //Defining texts
   const edit_text = "Editar esta página";
   const issue_text = "Informar de un problema"
 
-  //Deffining git_i
+  //Defining git_i
   const git_i = '<div><i class="bi bi-github"></i></div>';
 
   // Adding TOC if not exist
@@ -1067,13 +1070,14 @@ Zeileis, A, C Kleiber, y S Jackman. 2008. <span>«Regression models for count da
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

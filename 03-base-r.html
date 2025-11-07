@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <title>3&nbsp; Una Revisión De Los Fundamentos Del Modelado Con R – Modelado Ordenado con R</title>
@@ -86,14 +86,15 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87efc9f0321ca4df940afa6b8506b50b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -107,7 +108,7 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -140,7 +141,9 @@ div.csl-indent {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -153,7 +156,7 @@ div.csl-indent {
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/TMwRes">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/tmwr-es">
             Traducción
             </a>
           </li>
@@ -411,7 +414,7 @@ div.csl-indent {
 <span class="header-section-number">3.1</span> Un Ejemplo</h2>
 <p>Para demostrar algunos fundamentos del modelado en base R, usemos datos experimentales de <span class="citation" data-cites="mcdonald2009">McDonald (<a href="references.html#ref-mcdonald2009" role="doc-biblioref">2009</a>)</span>, a través de <span class="citation" data-cites="mangiafico2015">Mangiafico (<a href="references.html#ref-mangiafico2015" role="doc-biblioref">2015</a>)</span>, sobre la relación entre la temperatura ambiente y la tasa de chirridos de los grillos por minuto. Se recolectaron datos para dos especies: <em>O. exclamationis</em> y <em>O. niveus</em>. Los datos están contenidos en un marco de datos llamado “crickets” (grillos en español) con un total de puntos de datos “r nrow(crickets)”. Estos datos se muestran en <a href="#fig-cricket-plot" class="quarto-xref">Figura&nbsp;<span>3.1</span></a> usando el siguiente código <span class="pkg">ggplot2</span>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">crickets</span>, package <span class="op">=</span> <span class="st">"modeldata"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">crickets</span><span class="op">)</span></span>
@@ -425,12 +428,12 @@ div.csl-indent {
 <span>  <span class="co"># Muestra un ajuste de modelo lineal simple creado por separado para cada especie:</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="va">lm</span>, se <span class="op">=</span> <span class="cn">FALSE</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Paired"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Temperatura (C)"</span>, y <span class="op">=</span> <span class="st">"Tasa de chirrido (por minuto)"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Temperatura (C)"</span>, y <span class="op">=</span> <span class="st">"Tasa de chirrido (por minuto)"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <pre><code>## [1] "species" "temp"    "rate"</code></pre>
 <div class="cell-output-display">
-<div id="fig-cricket-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un diagrama de dispersión de la tasa de chirrido y la temperatura de dos especies diferentes de grillos con líneas de tendencia lineales por especie. Las tendencias aumentan linealmente con una separación entre las dos especies." data-fig-align="center">
+<div id="fig-cricket-plot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un diagrama de dispersión de la tasa de chirrido y la temperatura de dos especies diferentes de grillos con líneas de tendencia lineales por especie. Las tendencias aumentan linealmente con una separación entre las dos especies.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-cricket-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-cricket-plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Un diagrama de dispersión de la tasa de chirrido y la temperatura de dos especies diferentes de grillos con líneas de tendencia lineales por especie. Las tendencias aumentan linealmente con una separación entre las dos especies.">
 </div>
@@ -447,18 +450,18 @@ Figura&nbsp;3.1: Relación entre la tasa de chirrido y la temperatura de dos esp
 </ul>
 <p>Puede haber algún valor científico o práctico en predecir la tasa de chirrido, pero en este ejemplo nos centraremos en la inferencia.</p>
 <p>Para ajustar un modelo lineal ordinario en R, se usa comúnmente la función <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>. Los argumentos importantes de esta función son una fórmula modelo y un marco de datos que contiene los datos. La fórmula es <em>simbólica</em>. Por ejemplo, la fórmula simple:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rate</span> <span class="op">~</span> <span class="va">temp</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rate</span> <span class="op">~</span> <span class="va">temp</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>especifica que la tasa de chirrido es el resultado (ya que está en el lado izquierdo de la tilde <code>~</code>) y que el valor de la temperatura es el predictor.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Supongamos que los datos contienen la hora del día en el que se obtuvieron las medidas en una columna llamada <code>hora</code>. La formula:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rate</span> <span class="op">~</span> <span class="va">temp</span> <span class="op">+</span> <span class="va">time</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rate</span> <span class="op">~</span> <span class="va">temp</span> <span class="op">+</span> <span class="va">time</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>no sumaría los valores de tiempo y temperatura. Esta fórmula representaría simbólicamente que la temperatura y el tiempo deben agregarse como <em>efectos principales</em> separados al modelo. Un efecto principal es un término del modelo que contiene una única variable predictiva.</p>
 <p>No hay mediciones de tiempo en estos datos pero las especies se pueden agregar al modelo de la misma manera:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rate</span> <span class="op">~</span> <span class="va">temp</span> <span class="op">+</span> <span class="va">species</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rate</span> <span class="op">~</span> <span class="va">temp</span> <span class="op">+</span> <span class="va">species</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>La especie no es una variable cuantitativa; en el marco de datos, se representa como una columna de factor con niveles <code>"O. exclamationis"</code> y <code>"O. niveus"</code>. La gran mayoría de las funciones del modelo no pueden operar con datos no numéricos. Para las especies, el modelo necesita codificar los datos de las especies en un formato numérico. El enfoque más común es utilizar variables indicadoras (también conocidas como variables ficticias) en lugar de los valores cualitativos originales. En este caso, dado que la especie tiene dos valores posibles, la fórmula del modelo codificará automáticamente esta columna como numérica agregando una nueva columna que tiene un valor de cero cuando la especie es <code>"O. exclamationis"</code> y un valor de uno cuando la especie es <code>"O. niveus"</code>. La maquinaria de fórmulas subyacente convierte automáticamente estos valores para el conjunto de datos utilizado para crear el modelo, así como para cualquier punto de datos nuevo (por ejemplo, cuando el modelo se utiliza para predicción).</p>
 <div class="rmdnote">
 <p>Supongamos que hubiera cinco especies en lugar de dos. La fórmula del modelo, en este caso, crearía cuatro columnas binarias que son indicadores binarios para cuatro de las especies. El <em>nivel de referencia</em> del factor (es decir, el primer nivel) siempre se deja fuera del conjunto de predictores. La idea es que, si se conocen los valores de las cuatro variables indicadoras, se pueda determinar el valor de la especie. Analizamos las variables de los indicadores binarios con más detalle en la <a href="08-feature-engineering.html#sec-dummies" class="quarto-xref">Sección&nbsp;<span>8.4.1</span></a>.</p>
 </div>
 <p>La fórmula del modelo <code>rate ~ temp + species</code> crea un modelo con diferentes intersecciones en el eje y para cada especie; las pendientes de las líneas de regresión también podrían ser diferentes para cada especie. Para adaptarse a esta estructura, se puede agregar un término de interacción al modelo. Esto se puede especificar de varias maneras diferentes, y la más básica utiliza los dos puntos:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rate</span> <span class="op">~</span> <span class="va">temp</span> <span class="op">+</span> <span class="va">species</span> <span class="op">+</span> <span class="va">temp</span><span class="op">:</span><span class="va">species</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rate</span> <span class="op">~</span> <span class="va">temp</span> <span class="op">+</span> <span class="va">species</span> <span class="op">+</span> <span class="va">temp</span><span class="op">:</span><span class="va">species</span></span>
 <span></span>
 <span><span class="co"># Se puede utilizar un atajo para expandir todas las interacciones que contienen</span></span>
 <span><span class="co"># dos variables:</span></span>
@@ -466,7 +469,7 @@ Figura&nbsp;3.1: Relación entre la tasa de chirrido y la temperatura de dos esp
 <span></span>
 <span><span class="co"># Otro atajo para ampliar los factores para incluir todos las posibles</span></span>
 <span><span class="co"># interacciones (equivalentes para este ejemplo):</span></span>
-<span><span class="va">rate</span> <span class="op">~</span> <span class="va">temp</span> <span class="op">*</span> <span class="va">species</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">rate</span> <span class="op">~</span> <span class="va">temp</span> <span class="op">*</span> <span class="va">species</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Además de la conveniencia de crear variables indicadoras automáticamente, la fórmula ofrece algunas otras sutilezas:</p>
 <ul>
 <li><p>Las funciones <em>en línea</em> se pueden utilizar en la fórmula. Por ejemplo, para utilizar el registro natural de la temperatura, podemos crear la fórmula <code>rate ~ log(temp)</code>. Dado que la fórmula es simbólica por defecto, la matemática literal también se puede aplicar a los predictores usando la función de identidad <code><a href="https://rdrr.io/r/base/AsIs.html">I()</a></code>. Para usar unidades Fahrenheit, la fórmula podría ser <code>rate ~ I( (temp * 9/5) + 32 )</code> para convertir de Celsius.</p></li>
@@ -475,7 +478,7 @@ Figura&nbsp;3.1: Relación entre la tasa de chirrido y la temperatura de dos esp
 </ul>
 <p>Volviendo a nuestros grillos cantando, usemos un modelo de interacción bidireccional. En este libro, utilizamos el sufijo <code>_fit</code> para objetos R que son modelos ajustados.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">interaction_fit</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">rate</span> <span class="op">~</span> <span class="op">(</span><span class="va">temp</span> <span class="op">+</span> <span class="va">species</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>, data <span class="op">=</span> <span class="va">crickets</span><span class="op">)</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">interaction_fit</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">rate</span> <span class="op">~</span> <span class="op">(</span><span class="va">temp</span> <span class="op">+</span> <span class="va">species</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>, data <span class="op">=</span> <span class="va">crickets</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="co"># Para imprimir un breve resumen del modelo:</span></span>
 <span><span class="va">interaction_fit</span></span>
@@ -487,23 +490,23 @@ Figura&nbsp;3.1: Relación entre la tasa de chirrido y la temperatura de dos esp
 <span><span class="co">##           (Intercept)                   temp       speciesO. niveus  </span></span>
 <span><span class="co">##               -11.041                  3.751                 -4.348  </span></span>
 <span><span class="co">## temp:speciesO. niveus  </span></span>
-<span><span class="co">##                -0.234</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##                -0.234</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Este resultado es un poco difícil de leer. Para las variables indicadoras de especies, R combina el nombre de la variable (<code>species</code>) con el nivel del factor (<code>O. niveus</code>) sin delimitador.</p>
 <p>Antes de entrar en resultados inferenciales para este modelo, se debe evaluar el ajuste mediante gráficos de diagnóstico. Podemos usar el método <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> para objetos <code>lm</code>. Este método produce un conjunto de cuatro gráficos para el objeto, cada uno de los cuales muestra diferentes aspectos del ajuste, como se muestra en <a href="#fig-interaction-plots" class="quarto-xref">Figura&nbsp;<span>3.2</span></a>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Coloca dos gráficas una juunto a la otra:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Coloca dos gráficas una juunto a la otra:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Muestra residuos frente a valores previstos:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">interaction_fit</span>, which <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Una gráfica de cuantiles normales sobre los residuos:</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">interaction_fit</span>, which <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">interaction_fit</span>, which <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-interaction-plots" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A la izquierda hay un diagrama de dispersión de los residuos del modelo versus los valores predichos. No hay tendencias fuertes en los datos. El panel de la derecha muestra un gráfico cuantil-cuantil normal donde los puntos indican que la normalidad probablemente sea una buena suposición." data-fig-align="center">
+<div id="fig-interaction-plots" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="A la izquierda hay un diagrama de dispersión de los residuos del modelo versus los valores predichos. No hay tendencias fuertes en los datos. El panel de la derecha muestra un gráfico cuantil-cuantil normal donde los puntos indican que la normalidad probablemente sea una buena suposición.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-interaction-plots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-interaction-plots-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%" alt="A la izquierda hay un diagrama de dispersión de los residuos del modelo versus los valores predichos. No hay tendencias fuertes en los datos. El panel de la derecha muestra un gráfico cuantil-cuantil normal donde los puntos indican que la normalidad probablemente sea una buena suposición.">
 </div>
@@ -518,7 +521,7 @@ Figura&nbsp;3.2: Gráficos de diagnóstico residuales para el modelo lineal con 
 </div>
 <p>Nuestra siguiente tarea con los grillos es evaluar si es necesaria la inclusión del término de interacción. El enfoque más apropiado para este modelo es recalcular el modelo sin el término de interacción y utilizar el método <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Montar un modelo reducido:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Montar un modelo reducido:</span></span>
 <span><span class="va">main_effect_fit</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">rate</span> <span class="op">~</span> <span class="va">temp</span> <span class="op">+</span> <span class="va">species</span>, data <span class="op">=</span> <span class="va">crickets</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="co"># Comparar los modelos</span></span>
@@ -529,13 +532,13 @@ Figura&nbsp;3.2: Gráficos de diagnóstico residuales para el modelo lineal con 
 <span><span class="co">## Model 2: rate ~ (temp + species)^2</span></span>
 <span><span class="co">##   Res.Df  RSS Df Sum of Sq    F Pr(&gt;F)</span></span>
 <span><span class="co">## 1     28 89.3                         </span></span>
-<span><span class="co">## 2     27 85.1  1      4.28 1.36   0.25</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 2     27 85.1  1      4.28 1.36   0.25</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Esta prueba estadística genera un valor p de 0.25. Esto implica que falta evidencia contra la hipótesis nula de que el modelo no necesita el término de interacción. Por esta razón, realizaremos más análisis del modelo sin la interacción.</p>
 <p>Los gráficos residuales deben reevaluarse para asegurarnos de que nuestros supuestos teóricos sean lo suficientemente válidos como para confiar en los valores p producidos por el modelo (los gráficos no se muestran aquí, pero alerta de spoiler: lo son).</p>
 <p>Podemos usar el método <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> para inspeccionar los coeficientes, errores estándar y valores p de cada término del modelo:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">main_effect_fit</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">main_effect_fit</span><span class="op">)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Call:</span></span>
 <span><span class="co">## lm(formula = rate ~ temp + species, data = crickets)</span></span>
@@ -554,16 +557,16 @@ Figura&nbsp;3.2: Gráficos de diagnóstico residuales para el modelo lineal con 
 <span><span class="co">## </span></span>
 <span><span class="co">## Residual standard error: 1.79 on 28 degrees of freedom</span></span>
 <span><span class="co">## Multiple R-squared:  0.99,   Adjusted R-squared:  0.989 </span></span>
-<span><span class="co">## F-statistic: 1.33e+03 on 2 and 28 DF,  p-value: &lt;2e-16</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## F-statistic: 1.33e+03 on 2 and 28 DF,  p-value: &lt;2e-16</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>La tasa de chirrido para cada especie aumenta en 3.6 chirridos a medida que la temperatura aumenta en un solo grado. Este término muestra una fuerte significación estadística como lo demuestra el valor p.&nbsp;El término de especie tiene un valor de -10.07. Esto indica que, en todos los valores de temperatura, <em>O. niveus</em> tiene una frecuencia de chirrido que es aproximadamente 10 menos chirridos por minuto que <em>O. exclamationis</em>. De manera similar al término de temperatura, el efecto de especie se asocia con un valor p muy pequeño.</p>
 <p>El único problema en este análisis es el valor de la intersección. Indica que a 0° C, hay chirridos negativos por minuto para ambas especies. Si bien esto no tiene sentido, los datos solo llegan a 17.2° C e interpretar el modelo a 0° C sería una extrapolación. Esta sería una mala idea. Dicho esto, el ajuste del modelo es bueno dentro del <em>rango aplicable</em> de los valores de temperatura; las conclusiones deben limitarse al rango de temperatura observado.</p>
 <p>Si necesitáramos estimar la tasa de chirrido a una temperatura que no se observó en el experimento, podríamos usar el método <code>predecit()</code>. Toma el objeto modelo y un marco de datos de nuevos valores para la predicción. Por ejemplo, el modelo estima la tasa de chirrido para <em>O. exclamationis</em> para temperaturas entre 15° C y 20° C se puede calcular mediante:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">new_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"O. exclamationis"</span>, temp <span class="op">=</span> <span class="fl">15</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">new_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"O. exclamationis"</span>, temp <span class="op">=</span> <span class="fl">15</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">main_effect_fit</span>, <span class="va">new_values</span><span class="op">)</span></span>
 <span><span class="co">##     1     2     3     4     5     6 </span></span>
-<span><span class="co">## 46.83 50.43 54.04 57.64 61.24 64.84</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 46.83 50.43 54.04 57.64 61.24 64.84</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="rmdwarning">
 <p>Tenga en cuenta que el valor no numérico de <code>species</code> se pasa al método de predicción, a diferencia de la variable indicadora binaria numérica.</p>
@@ -584,7 +587,7 @@ Figura&nbsp;3.2: Gráficos de diagnóstico residuales para el modelo lineal con 
 <li><p>Los roles de las columnas están definidos por la fórmula.</p></li>
 </ul>
 <p>En su mayor parte, la comprensión de los profesionales sobre lo que hace la fórmula está dominada por el último propósito. Nuestro enfoque al escribir una fórmula suele ser declarar cómo se deben usar las columnas. Por ejemplo, la especificación anterior que analizamos configura predictores que se utilizarán de una manera específica:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="op">(</span><span class="va">temp</span> <span class="op">+</span> <span class="va">species</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="op">(</span><span class="va">temp</span> <span class="op">+</span> <span class="va">species</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Nuestro enfoque, al ver esto, es que hay dos predictores y el modelo debe contener sus efectos principales y las interacciones bidireccionales. Sin embargo, esta fórmula también implica que, dado que <code>species</code> es un factor, también se deben crear columnas de variables indicadoras para este predictor (ver <a href="08-feature-engineering.html#sec-dummies" class="quarto-xref">Sección&nbsp;<span>8.4.1</span></a>) y multiplicar esas columnas por la columna <code>temp</code> para crear el interacciones. Esta transformación representa nuestro segundo punto sobre codificación; la fórmula también define cómo se codifica cada columna y puede crear columnas adicionales que no están en los datos originales.</p>
 <div class="rmdwarning">
 <p>Este es un punto importante que surgirá varias veces en este texto, especialmente cuando analicemos la ingeniería de funciones más compleja en el <a href="08-feature-engineering.html" class="quarto-xref">Capítulo&nbsp;<span>8</span></a> y más allá. La fórmula en R tiene algunas limitaciones y nuestros enfoques para superarlas se enfrentan a los tres aspectos.</p>
@@ -593,13 +596,13 @@ Figura&nbsp;3.2: Gráficos de diagnóstico residuales para el modelo lineal con 
 <span class="header-section-number">3.3</span> ¿Por Qué El Orden Es Importante Para Modelar?</h2>
 <p>Uno de los puntos fuertes de R es que anima a los desarrolladores a crear una interfaz de usuario que se ajuste a sus necesidades. A modo de ejemplo, aquí se muestran tres métodos comunes para crear un diagrama de dispersión de dos variables numéricas en un marco de datos llamado <code>plot_data</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">plot_data</span><span class="op">$</span><span class="va">x</span>, <span class="va">plot_data</span><span class="op">$</span><span class="va">y</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">plot_data</span><span class="op">$</span><span class="va">x</span>, <span class="va">plot_data</span><span class="op">$</span><span class="va">y</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lattice.r-forge.r-project.org/">lattice</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/lattice/man/xyplot.html">xyplot</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">plot_data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">plot_data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">plot_data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>En estos tres casos, grupos separados de desarrolladores idearon tres interfaces distintas para la misma tarea. Cada uno tiene ventajas y desventajas.</p>
 <p>En comparación, la <em>Guía del desarrollador de Python</em> defiende la noción de que, al abordar un problema:</p>
@@ -613,7 +616,7 @@ Figura&nbsp;3.2: Gráficos de diagnóstico residuales para el modelo lineal con 
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-probability-args-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabla&nbsp;3.1: Nombres de argumentos heterogéneos para diferentes funciones de modelado.
 </figcaption><div aria-describedby="tbl-probability-args-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="table cell caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<table class="table cell caption-top table-sm table-striped small">
 <thead><tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">Función</th>
 <th style="text-align: left;" data-quarto-table-cell-role="th">Paquete</th>
@@ -668,7 +671,7 @@ Tabla&nbsp;3.1: Nombres de argumentos heterogéneos para diferentes funciones de
 <p>Tenga en cuenta que el último ejemplo tiene una función personalizada para hacer predicciones en lugar de utilizar la interfaz <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> más común (el método genérico <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>). Esta falta de coherencia es una barrera para el uso diario de R para modelado.</p>
 <p>Como otro ejemplo de imprevisibilidad, el lenguaje R tiene convenciones para datos faltantes que se manejan de manera inconsistente. La regla general es que los datos faltantes propagan más datos faltantes; el promedio de un conjunto de valores al que le falta un punto de datos también falta, y así sucesivamente. Cuando los modelos hacen predicciones, la gran mayoría requiere que todos los predictores tengan valores completos. Hay varias opciones integradas en R en este punto con la función genérica <code><a href="https://rdrr.io/r/stats/na.action.html">na.action()</a></code>. Esto establece la política sobre cómo debe comportarse una función si faltan valores. Las dos políticas más comunes son <code><a href="https://rdrr.io/r/stats/na.fail.html">na.fail()</a></code> y <code><a href="https://rdrr.io/r/stats/na.fail.html">na.omit()</a></code>. El primero produce un error si hay datos faltantes, mientras que el segundo elimina los datos faltantes antes de los cálculos mediante eliminación entre mayúsculas y minúsculas. De nuestro ejemplo anterior:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Añade un valor faltante al conjunto de predicción</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Añade un valor faltante al conjunto de predicción</span></span>
 <span><span class="va">new_values</span><span class="op">$</span><span class="va">temp</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
 <span></span>
 <span><span class="co"># El método de predicción para `lm` por defecto es `na.pass`:</span></span>
@@ -682,7 +685,7 @@ Tabla&nbsp;3.1: Nombres de argumentos heterogéneos para diferentes funciones de
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">main_effect_fit</span>, <span class="va">new_values</span>, na.action <span class="op">=</span> <span class="va">na.omit</span><span class="op">)</span></span>
 <span><span class="co">##     2     3     4     5     6 </span></span>
-<span><span class="co">## 50.43 54.04 57.64 61.24 64.84</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 50.43 54.04 57.64 61.24 64.84</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Desde el punto de vista del usuario, <code><a href="https://rdrr.io/r/stats/na.fail.html">na.omit()</a></code> puede ser problemático. En nuestro ejemplo, <code>new_values</code> tiene filas 6 pero solo 5 se devolvería con <code><a href="https://rdrr.io/r/stats/na.fail.html">na.omit()</a></code>. Para ajustar esto, el usuario tendría que determinar qué fila tenía el valor faltante e intercalar un valor faltante en el lugar apropiado si las predicciones se fusionaran en <code>new_values</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Si bien es poco común que una función de predicción utiliza <code><a href="https://rdrr.io/r/stats/na.fail.html">na.omit()</a></code> como política de datos faltantes, esto ocurre. Los usuarios que han determinado esto como la causa de un error en su código lo encuentran bastante memorable.</p>
 <p>Para resolver los problemas de uso descritos aquí, los paquetes tidymodels tienen un conjunto de objetivos de diseño. La mayoría de los objetivos de diseño de tidymodels se incluyen en la rúbrica existente de “Diseño para humanos” de tidyverse <span class="citation" data-cites="tidyverse">(<a href="references.html#ref-tidyverse" role="doc-biblioref">Wickham et&nbsp;al. 2019</a>)</span>, pero con aplicaciones específicas para código de modelado. Hay algunos objetivos de diseño de tidymodels adicionales que complementan los del tidyverse. Algunos ejemplos:</p>
@@ -698,7 +701,7 @@ Tabla&nbsp;3.1: Nombres de argumentos heterogéneos para diferentes funciones de
 </div>
 <p>La función <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code>, que utilizamos a lo largo de este libro, es otra herramienta para estandarizar la estructura de los objetos R. Puede devolver muchos tipos de objetos R en un formato más utilizable. Por ejemplo, supongamos que los predictores se seleccionan en función de su correlación con la columna de resultados. Usando <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>, los resultados de <code><a href="https://rdrr.io/r/stats/cor.test.html">cor.test()</a></code> se pueden devolver en una lista para cada predictor:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">corr_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">mpg</span><span class="op">)</span>, <span class="va">cor.test</span>, y <span class="op">=</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">corr_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">mpg</span><span class="op">)</span>, <span class="va">cor.test</span>, y <span class="op">=</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># El primero de diez resultados en el vector:</span></span>
 <span><span class="va">corr_res</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
@@ -712,31 +715,31 @@ Tabla&nbsp;3.1: Nombres de argumentos heterogéneos para diferentes funciones de
 <span><span class="co">##  -0.9258 -0.7163</span></span>
 <span><span class="co">## sample estimates:</span></span>
 <span><span class="co">##     cor </span></span>
-<span><span class="co">## -0.8522</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## -0.8522</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Si queremos utilizar estos resultados en una gráfica, el formato estándar de los resultados de las pruebas de hipótesis no es muy útil. El método <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> puede devolver esto como un tibble con nombres estandarizados:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://broom.tidymodels.org/">broom</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://broom.tidymodels.org/">broom</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">corr_res</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">## # A tibble: 1 × 8</span></span>
 <span><span class="co">##   estimate statistic  p.value parameter conf.low conf.high method        alternative</span></span>
 <span><span class="co">##      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;      </span></span>
-<span><span class="co">## 1   -0.852     -8.92 6.11e-10        30   -0.926    -0.716 Pearson's pr… two.sided</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 1   -0.852     -8.92 6.11e-10        30   -0.926    -0.716 Pearson's pr… two.sided</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Estos resultados se pueden “apilar” y agregar a un <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code>, como se muestra en <a href="#fig-corr-plot" class="quarto-xref">Figura&nbsp;<span>3.3</span></a>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">corr_res</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">corr_res</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="co"># Convierte cada uno a un formato ordenado; `map_dfr()` apila los marcos de datos </span></span>
 <span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html">map_dfr</a></span><span class="op">(</span><span class="va">tidy</span>, .id <span class="op">=</span> <span class="st">"predictor"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder</a></span><span class="op">(</span><span class="va">predictor</span>, <span class="va">estimate</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_errorbar</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">conf.low</span>, ymax <span class="op">=</span> <span class="va">conf.high</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Correlación con mpg"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Correlación con mpg"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-corr-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un gráfico de las correlaciones (e intervalos de confianza del 95%) entre los predictores y el resultado en el conjunto de datos `mtcars`. Ninguno de los intervalos se superpone con cero. El peso del automóvil tuvo la mayor correlación negativa y la relación del eje trasero tiene la mayor correlación positiva." data-fig-align="center">
+<div id="fig-corr-plot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un gráfico de las correlaciones (e intervalos de confianza del 95%) entre los predictores y el resultado en el conjunto de datos `mtcars`. Ninguno de los intervalos se superpone con cero. El peso del automóvil tuvo la mayor correlación negativa y la relación del eje trasero tiene la mayor correlación positiva.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-corr-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-corr-plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Un gráfico de las correlaciones (e intervalos de confianza del 95%) entre los predictores y el resultado en el conjunto de datos `mtcars`. Ninguno de los intervalos se superpone con cero. El peso del automóvil tuvo la mayor correlación negativa y la relación del eje trasero tiene la mayor correlación positiva." width="672">
 </div>
@@ -751,7 +754,7 @@ Figura&nbsp;3.3: Correlaciones (e intervalos de confianza del 95%) entre los pre
 <span class="header-section-number">3.4</span> Combinando Modelos Base R Y Tidyverse</h2>
 <p>Las funciones de modelado de R del lenguaje central u otros paquetes de R se pueden usar junto con tidyverse, especialmente con los paquetes <span class="pkg">dplyr</span>, <span class="pkg">purrr</span> y <span class="pkg">tidyr</span>. Por ejemplo, si quisiéramos ajustar modelos separados para cada especie de grillo, primero podemos desglosar los datos del grillo en esta columna usando <code><a href="https://dplyr.tidyverse.org/reference/group_nest.html">dplyr::group_nest()</a></code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">split_by_species</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">split_by_species</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">crickets</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_nest.html">group_nest</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span> </span>
 <span><span class="va">split_by_species</span></span>
@@ -759,11 +762,11 @@ Figura&nbsp;3.3: Correlaciones (e intervalos de confianza del 95%) entre los pre
 <span><span class="co">##   species                        data</span></span>
 <span><span class="co">##   &lt;fct&gt;            &lt;list&lt;tibble[,2]&gt;&gt;</span></span>
 <span><span class="co">## 1 O. exclamationis           [14 × 2]</span></span>
-<span><span class="co">## 2 O. niveus                  [17 × 2]</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 2 O. niveus                  [17 × 2]</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>La columna <code>data</code> contiene las columnas <code>rate</code> y <code>temp</code> de <code>crickets</code> en una <em>columna de lista</em>. A partir de esto, la función <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code> puede crear modelos individuales para cada especie:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model_by_species</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model_by_species</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">split_by_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">data</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">rate</span> <span class="op">~</span> <span class="va">temp</span>, data <span class="op">=</span> <span class="va">.x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">model_by_species</span></span>
@@ -771,11 +774,11 @@ Figura&nbsp;3.3: Correlaciones (e intervalos de confianza del 95%) entre los pre
 <span><span class="co">##   species                        data model </span></span>
 <span><span class="co">##   &lt;fct&gt;            &lt;list&lt;tibble[,2]&gt;&gt; &lt;list&gt;</span></span>
 <span><span class="co">## 1 O. exclamationis           [14 × 2] &lt;lm&gt;  </span></span>
-<span><span class="co">## 2 O. niveus                  [17 × 2] &lt;lm&gt;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 2 O. niveus                  [17 × 2] &lt;lm&gt;</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Para recopilar los coeficientes de cada uno de estos modelos, use <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code> para convertirlos a un formato de marco de datos consistente para que se puedan desanidar:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model_by_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">model_by_species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>coef <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">tidy</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">species</span>, <span class="va">coef</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html">unnest</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">coef</span><span class="op">)</span><span class="op">)</span></span>
@@ -785,7 +788,7 @@ Figura&nbsp;3.3: Correlaciones (e intervalos de confianza del 95%) entre los pre
 <span><span class="co">## 1 O. exclamationis (Intercept)   -11.0      4.77      -2.32 3.90e- 2</span></span>
 <span><span class="co">## 2 O. exclamationis temp            3.75     0.184     20.4  1.10e-10</span></span>
 <span><span class="co">## 3 O. niveus        (Intercept)   -15.4      2.35      -6.56 9.07e- 6</span></span>
-<span><span class="co">## 4 O. niveus        temp            3.52     0.105     33.6  1.57e-15</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 4 O. niveus        temp            3.52     0.105     33.6  1.57e-15</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="rmdnote">
 <p>Las columnas de lista pueden ser muy poderosas en proyectos de modelado. Las columnas de lista proporcionan contenedores para cualquier tipo de objetos R, desde un modelo ajustado hasta la importante estructura del marco de datos.</p>
@@ -795,7 +798,7 @@ Figura&nbsp;3.3: Correlaciones (e intervalos de confianza del 95%) entre los pre
 <p>El tidyverse (<a href="02-tidyverse.html" class="quarto-xref">Capítulo&nbsp;<span>2</span></a>) está diseñado como un conjunto de paquetes R modulares, cada uno con un alcance bastante limitado. El marco tidymodels sigue un diseño similar. Por ejemplo, el paquete <span class="pkg">rsample</span> se centra en la división y el remuestreo de datos. Aunque los métodos de remuestreo son críticos para otras actividades de modelado (por ejemplo, medir el desempeño), residen en un solo paquete y las métricas de desempeño están contenidas en un paquete diferente e independiente, <span class="pkg">yardstick</span>. Hay muchos beneficios al adoptar esta filosofía de paquetes modulares, desde una implementación de modelos menos inflada hasta un mantenimiento de paquetes más fluido.</p>
 <p>La desventaja de esta filosofía es que hay muchos paquetes en el marco de tidymodels. Para compensar esto, el <em>paquete</em> tidymodels (que puedes considerar como un metapaquete como el paquete tidyverse) carga un conjunto central de paquetes tidymodels y tidyverse. Al cargar el paquete se muestran qué paquetes están adjuntos:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="co">## ── Attaching packages ─────────────────────────────────────────── tidymodels 1.2.0 ──</span></span>
 <span><span class="co">## ✔ dials        1.3.0     ✔ rsample      1.2.1</span></span>
 <span><span class="co">## ✔ infer        1.0.7     ✔ tune         1.2.1</span></span>
@@ -810,19 +813,19 @@ Figura&nbsp;3.3: Correlaciones (e intervalos de confianza del 95%) entre los pre
 <span><span class="co">## ✖ dplyr::lag()             masks stats::lag()</span></span>
 <span><span class="co">## ✖ yardstick::spec()        masks readr::spec()</span></span>
 <span><span class="co">## ✖ recipes::step()          masks stats::step()</span></span>
-<span><span class="co">## • Dig deeper into tidy modeling with R at https://www.tmwr.org</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## • Use suppressPackageStartupMessages() to eliminate package startup messages</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Si ha utilizado tidyverse, notará algunos nombres familiares ya que algunos paquetes de tidyverse, como <span class="pkg">dplyr</span> y <span class="pkg">ggplot2</span>, se cargan junto con los paquetes tidymodels. Ya hemos dicho que el marco tidymodels aplica los principios de tidyverse al modelado, pero el marco tidymodels también se basa literalmente en algunos de los paquetes tidyverse más fundamentales, como estos.</p>
 <p>La carga del metapaquete también muestra si hay conflictos de nombres de funciones con paquetes cargados previamente. Como ejemplo de un conflicto de nombres, antes de cargar <span class="pkg">tidymodels</span>, al invocar la función <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> se ejecutará la función en el paquete <span class="pkg">stats</span>. Después de cargar tidymodels, ejecutará la función <span class="pkg">dplyr</span> del mismo nombre.</p>
 <p>Hay algunas formas de manejar los conflictos de nombres. La función se puede llamar con su espacio de nombres (por ejemplo, <code><a href="https://rdrr.io/r/stats/filter.html">stats::filter()</a></code>). Esta no es una mala práctica, pero hace que el código sea menos legible.</p>
 <p>Otra opción es utilizar el paquete <span class="pkg">conflicted</span>. Podemos establecer una regla que permanezca vigente hasta el final de la sesión de R para garantizar que siempre se ejecute una función específica si no se proporciona ningún espacio de nombres en el código. Como ejemplo, si preferimos la versión <span class="pkg">dplyr</span> de la función anterior:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://conflicted.r-lib.org/">conflicted</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://conflicted.r-lib.org/reference/conflict_prefer.html">conflict_prefer</a></span><span class="op">(</span><span class="st">"filter"</span>, winner <span class="op">=</span> <span class="st">"dplyr"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://conflicted.r-lib.org/">conflicted</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://conflicted.r-lib.org/reference/conflict_prefer.html">conflict_prefer</a></span><span class="op">(</span><span class="st">"filter"</span>, winner <span class="op">=</span> <span class="st">"dplyr"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Por conveniencia, <span class="pkg">tidymodels</span> contiene una función que captura la mayoría de los conflictos de nombres comunes que podemos encontrar:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://tidymodels.tidymodels.org/reference/tidymodels_prefer.html">tidymodels_prefer</a></span><span class="op">(</span>quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://tidymodels.tidymodels.org/reference/tidymodels_prefer.html">tidymodels_prefer</a></span><span class="op">(</span>quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">## [conflicted] Will prefer agua::refit over any other package.</span></span>
 <span><span class="co">## [conflicted] Will prefer dials::Laplace over any other package.</span></span>
 <span><span class="co">## [conflicted] Will prefer dials::max_rules over any other package.</span></span>
@@ -861,7 +864,7 @@ Figura&nbsp;3.3: Correlaciones (e intervalos de confianza del 95%) entre los pre
 <span><span class="co">## [conflicted] Will prefer yardstick::recall over any other package.</span></span>
 <span><span class="co">## [conflicted] Will prefer yardstick::spec over any other package.</span></span>
 <span><span class="co">## [conflicted] Will prefer recipes::update over Matrix::update.</span></span>
-<span><span class="co">## ── Conflicts ───────────────────────────────────────────────── tidymodels_prefer() ──</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## ── Conflicts ───────────────────────────────────────────────── tidymodels_prefer() ──</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="rmdwarning">
 <p>Tenga en cuenta que el uso de esta función le permite optar por utilizar <code><a href="https://conflicted.r-lib.org/reference/conflict_prefer.html">conflicted::conflict_prefer()</a></code> para todos los conflictos de espacios de nombres, lo que convierte cada conflicto en un error y le obliga a elegir qué función utilizar. La función <code><a href="https://tidymodels.tidymodels.org/reference/tidymodels_prefer.html">tidymodels::tidymodels_prefer()</a></code> maneja los conflictos más comunes de las funciones de tidymodels, pero necesitarás manejar otros conflictos en tu sesión de R tú mismo.</p>
@@ -895,15 +898,15 @@ Wickham, H, M Averick, J Bryan, W Chang, L McGowan, R François, G Grolemund, et
   // Chapter name
   const currentChapterFile = window.location.pathname.split('/').pop().replace('.html', '');
 
-  //Deffining urls
+  //Defining urls
   const originalURL = "https://github.com/tidymodels/TMwR";
-  const translationURL = "https://github.com/davidrsch/TMwRes";
+  const translationURL = "https://github.com/davidrsch/tmwr-es";
 
-  //Deffining texts
+  //Defining texts
   const edit_text = "Editar esta página";
   const issue_text = "Informar de un problema"
 
-  //Deffining git_i
+  //Defining git_i
   const git_i = '<div><i class="bi bi-github"></i></div>';
 
   // Adding TOC if not exist
@@ -1008,13 +1011,14 @@ Wickham, H, M Averick, J Bryan, W Chang, L McGowan, R François, G Grolemund, et
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

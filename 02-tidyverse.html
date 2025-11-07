@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.25">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <title>2&nbsp; Una Introducción Tidyverse – Modelado Ordenado con R</title>
@@ -86,14 +86,15 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87efc9f0321ca4df940afa6b8506b50b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -107,7 +108,7 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -139,7 +140,9 @@ div.csl-indent {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -152,7 +155,7 @@ div.csl-indent {
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/TMwRes">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/davidrsch/tmwr-es">
             Traducción
             </a>
           </li>
@@ -422,12 +425,12 @@ div.csl-indent {
 <p>Por esta razón, es fundamental que sea fácil trabajar con el código R para lograr sus objetivos. La documentación, la formación, la accesibilidad y otros factores juegan un papel importante para lograrlo. Sin embargo, si la sintaxis en sí es difícil de comprender para las personas, la documentación es una mala solución. El software en sí debe ser intuitivo.</p>
 <p>Para contrastar el enfoque tidyverse con la semántica R más tradicional, considere ordenar un marco de datos. Los marcos de datos pueden representar diferentes tipos de datos en cada columna y varios valores en cada fila. Usando solo el lenguaje central, podemos ordenar un marco de datos usando una o más columnas reordenando las filas mediante las reglas de subíndice de R junto con <code><a href="https://rdrr.io/r/base/order.html">order()</a></code>; no puedes utilizar con éxito una función que podrías sentirte tentado a probar en tal situación debido a su nombre, <code><a href="https://rdrr.io/r/base/sort.html">sort()</a></code>. Para ordenar los datos de <code>mtcars</code> por dos de sus columnas, la llamada podría verse así:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mtcars</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span>, <span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span>, <span class="op">]</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mtcars</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span>, <span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span>, <span class="op">]</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Si bien es muy eficiente desde el punto de vista computacional, sería difícil argumentar que se trata de una interfaz de usuario intuitiva. En <span class="pkg">dplyr</span>, por el contrario, la función tidyverse <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code> toma un conjunto de nombres de variables como argumentos de entrada directamente:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span>.data <span class="op">=</span> <span class="va">mtcars</span>, <span class="va">gear</span>, <span class="va">mpg</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span>.data <span class="op">=</span> <span class="va">mtcars</span>, <span class="va">gear</span>, <span class="va">mpg</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="rmdnote">
 <p>Los nombres de variables utilizados aquí están “sin comillas”; muchas funciones tradicionales de R requieren una cadena de caracteres para especificar variables, pero las funciones tidyverse toman nombres sin comillas o <em>funciones de selección</em>. Los selectores permiten una o más reglas legibles que se aplican a los nombres de las columnas. Por ejemplo, <code>ends_with("t")</code> seleccionaría las columnas <code>drat</code> y <code>wt</code> del marco de datos <code>mtcars</code>.</p>
@@ -441,17 +444,17 @@ div.csl-indent {
 <p>El marco de datos es la estructura de datos preferida en los paquetes tidyverse y tidymodels, porque su estructura se adapta bien a una gama tan amplia de tareas de ciencia de datos. Específicamente, los modelos tidyverse y tidy favorecen el tibble, una reinvención moderna del marco de datos de R que describimos en la siguiente sección sobre el ejemplo de sintaxis de tidyverse.</p>
 <p>Como ejemplo, el paquete <span class="pkg">rsample</span> se puede utilizar para crear <em>resamples</em> de un conjunto de datos, como la validación cruzada o el bootstrap (descrito en el <a href="10-resampling.html" class="quarto-xref">Capítulo&nbsp;<span>10</span></a>). Las funciones de remuestreo devuelven un tibble con una columna llamada “divisiones” de objetos que definen los conjuntos de datos remuestreados. Tres muestras de arranque de un conjunto de datos podrían verse así:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">boot_samp</span> <span class="op">&lt;-</span> <span class="fu">rsample</span><span class="fu">::</span><span class="fu"><a href="https://rsample.tidymodels.org/reference/bootstraps.html">bootstraps</a></span><span class="op">(</span><span class="va">mtcars</span>, times <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">boot_samp</span> <span class="op">&lt;-</span> <span class="fu">rsample</span><span class="fu">::</span><span class="fu"><a href="https://rsample.tidymodels.org/reference/bootstraps.html">bootstraps</a></span><span class="op">(</span><span class="va">mtcars</span>, times <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">boot_samp</span></span>
 <span><span class="co">## # Bootstrap sampling </span></span>
 <span><span class="co">## # A tibble: 3 × 2</span></span>
 <span><span class="co">##   splits          id        </span></span>
 <span><span class="co">##   &lt;list&gt;          &lt;chr&gt;     </span></span>
-<span><span class="co">## 1 &lt;split [32/14]&gt; Bootstrap1</span></span>
+<span><span class="co">## 1 &lt;split [32/10]&gt; Bootstrap1</span></span>
 <span><span class="co">## 2 &lt;split [32/11]&gt; Bootstrap2</span></span>
-<span><span class="co">## 3 &lt;split [32/11]&gt; Bootstrap3</span></span>
+<span><span class="co">## 3 &lt;split [32/13]&gt; Bootstrap3</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">boot_samp</span><span class="op">)</span></span>
-<span><span class="co">## [1] "bootstraps" "rset"       "tbl_df"     "tbl"        "data.frame"</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## [1] "bootstraps" "rset"       "tbl_df"     "tbl"        "data.frame"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Con este enfoque, se pueden usar funciones basadas en vectores con estas columnas, como <code><a href="https://rdrr.io/r/base/lapply.html">vapply()</a></code> o <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Este objeto <code>boot_samp</code> tiene múltiples clases pero hereda métodos para marcos de datos (<code>"data.frame"</code>) y tibbles (<code>"tbl_df"</code>). Además, se pueden agregar nuevas columnas a los resultados sin afectar la clase de los datos. Es mucho más fácil y versátil para los usuarios trabajar con esto que un tipo de objeto completamente nuevo que no hace que su estructura de datos sea obvia.</p>
 <p>Una desventaja de depender de estructuras de datos comunes es la posible pérdida de rendimiento computacional. En algunas situaciones, los datos se pueden codificar en formatos especializados que son representaciones más eficientes de los datos. Por ejemplo:</p>
@@ -468,62 +471,62 @@ div.csl-indent {
 <span class="header-section-number">2.1.3</span> Diseño para la tubería y programación funcional.</h3>
 <p>El operador de canalización <span class="pkg">magrittr</span> (<code>%&gt;%</code>) es una herramienta para encadenar una secuencia de funciones R.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Para demostrarlo, considere los siguientes comandos que ordenan un marco de datos y luego conserve las primeras 10 filas:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">small_mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">small_mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span><span class="op">)</span></span>
 <span><span class="va">small_mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="va">small_mtcars</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># or more compactly: </span></span>
-<span><span class="va">small_mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span><span class="op">)</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">small_mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span><span class="op">)</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El operador de tubería sustituye el valor del lado izquierdo del operador como primer argumento del lado derecho, por lo que podemos implementar el mismo resultado que antes con:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">small_mtcars</span> <span class="op">&lt;-</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">small_mtcars</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>La versión canalizada de esta secuencia es más legible; esta legibilidad aumenta a medida que se agregan más operaciones a una secuencia. Este enfoque de programación funciona en este ejemplo porque todas las funciones que utilizamos devuelven la misma estructura de datos (un marco de datos) que luego es el primer argumento de la siguiente función. Esto es por diseño. Cuando sea posible, cree funciones que puedan incorporarse a un conjunto de operaciones.</p>
 <p>Si ha utilizado <span class="pkg">ggplot2</span>, esto no es diferente a la superposición de componentes de la trama en un objeto <code>ggplot</code> con el operador <code>+</code>. Para hacer un diagrama de dispersión con una línea de regresión, la llamada inicial a <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> se aumenta con dos operaciones adicionales:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="va">lm</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="va">lm</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Si bien es similar a la canalización <span class="pkg">dplyr</span>, tenga en cuenta que el primer argumento de esta canalización es un conjunto de datos (<code>mtcars</code>) y que cada llamada de función devuelve un objeto <code>ggplot</code>. No todas las canalizaciones necesitan mantener los valores devueltos (objetos de trazado) iguales que el valor inicial (un marco de datos). El uso del operador de canalización con operaciones <span class="pkg">dplyr</span> ha hecho que muchos usuarios de R esperen devolver un marco de datos cuando se utilizan canalizaciones; como se muestra con <span class="pkg">ggplot2</span>, no tiene por qué ser así. Las canalizaciones son increíblemente útiles para modelar flujos de trabajo, pero el modelado de canalizaciones puede devolver, en lugar de un marco de datos, objetos como componentes del modelo.</p>
 <p>R tiene excelentes herramientas para crear, cambiar y operar funciones, lo que lo convierte en un excelente lenguaje para la programación funcional. Este enfoque puede reemplazar los bucles iterativos en muchas situaciones, como cuando una función devuelve un valor sin otros efectos secundarios.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <p>Veamos un ejemplo. Suponga que está interesado en el logaritmo de la relación entre la eficiencia del combustible y el peso del automóvil. Para aquellos nuevos en R y/o que vienen de otros lenguajes de programación, un bucle puede parecer una buena opción:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="va">ratios</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="cn">NA_real_</span>, <span class="va">n</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">car</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">ratios</span><span class="op">[</span><span class="va">car</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span><span class="op">[</span><span class="va">car</span><span class="op">]</span><span class="op">/</span><span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span><span class="op">[</span><span class="va">car</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ratios</span><span class="op">)</span></span>
-<span><span class="co">## [1] 2.081 1.988 2.285 1.896 1.693 1.655</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## [1] 2.081 1.988 2.285 1.896 1.693 1.655</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Aquellos con más experiencia en R sabrán que existe una versión vectorizada mucho más simple y rápida que se puede calcular mediante:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ratios</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span><span class="op">/</span><span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ratios</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span><span class="op">/</span><span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Sin embargo, en muchos casos del mundo real, la operación de interés por elementos es demasiado compleja para una solución vectorizada. En tal caso, un buen enfoque es escribir una función para realizar los cálculos. Cuando diseñamos para programación funcional, es importante que la salida dependa sólo de las entradas y que la función no tenga efectos secundarios. Las violaciones de estas ideas en la siguiente función se muestran con comentarios:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">compute_log_ratio</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">mpg</span>, <span class="va">wt</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">compute_log_ratio</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">mpg</span>, <span class="va">wt</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">log_base</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span><span class="op">(</span><span class="st">"log_base"</span>, default <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="co"># obtiene datos externos</span></span>
 <span>  <span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">/</span><span class="va">wt</span>, base <span class="op">=</span> <span class="va">log_base</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span><span class="op">)</span>                                <span class="co"># imprime en la consola</span></span>
 <span>  <span class="va">done</span> <span class="op">&lt;&lt;-</span> <span class="cn">TRUE</span>                                       <span class="co"># establece datos externos</span></span>
 <span>  <span class="va">results</span></span>
-<span><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="op">}</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Una mejor versión sería:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">compute_log_ratio</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">mpg</span>, <span class="va">wt</span>, <span class="va">log_base</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">compute_log_ratio</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">mpg</span>, <span class="va">wt</span>, <span class="va">log_base</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">/</span><span class="va">wt</span>, base <span class="op">=</span> <span class="va">log_base</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="op">}</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The <span class="pkg">purrr</span> package contains tools for functional programming. Let’s focus on the <code><a href="https://purrr.tidyverse.org/reference/map.html">map()</a></code> family of functions, which operates on vectors and always returns the same type of output. The most basic function, <code><a href="https://purrr.tidyverse.org/reference/map.html">map()</a></code>, always returns a list and uses the basic syntax of <code>map(vector, function)</code>. For example, to take the square root of our data, we could:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">map</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="fl">3</span><span class="op">)</span>, <span class="va">sqrt</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">map</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="fl">3</span><span class="op">)</span>, <span class="va">sqrt</span><span class="op">)</span></span>
 <span><span class="co">## [[1]]</span></span>
 <span><span class="co">## [1] 4.583</span></span>
 <span><span class="co">## </span></span>
@@ -531,24 +534,24 @@ div.csl-indent {
 <span><span class="co">## [1] 4.583</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[3]]</span></span>
-<span><span class="co">## [1] 4.775</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## [1] 4.775</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Existen variantes especializadas de <code><a href="https://purrr.tidyverse.org/reference/map.html">map()</a></code> que devuelven valores cuando sabemos o esperamos que la función genere uno de los tipos de vectores básicos. Por ejemplo, dado que la raíz cuadrada devuelve un número de doble precisión:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">map_dbl</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="fl">3</span><span class="op">)</span>, <span class="va">sqrt</span><span class="op">)</span></span>
-<span><span class="co">## [1] 4.583 4.583 4.775</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">map_dbl</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="fl">3</span><span class="op">)</span>, <span class="va">sqrt</span><span class="op">)</span></span>
+<span><span class="co">## [1] 4.583 4.583 4.775</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>También hay funciones de mapeo que operan en múltiples vectores:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">log_ratios</span> <span class="op">&lt;-</span> <span class="fu">map2_dbl</span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span>, <span class="va">compute_log_ratio</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">log_ratios</span> <span class="op">&lt;-</span> <span class="fu">map2_dbl</span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span>, <span class="va">compute_log_ratio</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">log_ratios</span><span class="op">)</span></span>
-<span><span class="co">## [1] 2.081 1.988 2.285 1.896 1.693 1.655</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## [1] 2.081 1.988 2.285 1.896 1.693 1.655</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Las funciones <code><a href="https://purrr.tidyverse.org/reference/map.html">map()</a></code> también permiten funciones temporales y anónimas definidas usando el carácter de tilde. Los valores de los argumentos son <code>.x</code> y <code>.y</code> para <code><a href="https://purrr.tidyverse.org/reference/map2.html">map2()</a></code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">map2_dbl</span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">.x</span><span class="op">/</span><span class="va">.y</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">map2_dbl</span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">.x</span><span class="op">/</span><span class="va">.y</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## [1] 2.081 1.988 2.285 1.896 1.693 1.655</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## [1] 2.081 1.988 2.285 1.896 1.693 1.655</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Estos ejemplos han sido triviales pero, en secciones posteriores, se aplicarán a problemas más complejos.</p>
 <div class="rmdnote">
@@ -558,7 +561,7 @@ div.csl-indent {
 <span class="header-section-number">2.2</span> Ejemplos De Sintaxis De Tidyverse</h2>
 <p>Comencemos nuestra discusión sobre la sintaxis de tidyverse explorando más profundamente qué es un tibble y cómo funcionan. Los tibbles tienen reglas ligeramente diferentes a los marcos de datos básicos en R. Por ejemplo, los tibbles funcionan naturalmente con nombres de columnas que no son nombres de variables sintácticamente válidos:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Quiere nombres válidos:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Quiere nombres válidos:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>`variable 1` <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, two <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">##   variable.1 two</span></span>
 <span><span class="co">## 1          1   3</span></span>
@@ -577,20 +580,20 @@ div.csl-indent {
 <span><span class="co">##   `variable 1`   two</span></span>
 <span><span class="co">##          &lt;int&gt; &lt;int&gt;</span></span>
 <span><span class="co">## 1            1     3</span></span>
-<span><span class="co">## 2            2     4</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 2            2     4</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Los marcos de datos estándar permiten <em>coincidencia parcial</em> de argumentos para que el código que utiliza solo una parte de los nombres de las columnas siga funcionando. Tibbles evita que esto suceda, ya que puede provocar errores accidentales.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df</span><span class="op">$</span><span class="va">tw</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df</span><span class="op">$</span><span class="va">tw</span></span>
 <span><span class="co">## [1] 3 4</span></span>
 <span></span>
 <span><span class="va">tbbl</span><span class="op">$</span><span class="va">tw</span></span>
 <span><span class="co">## Warning: Unknown or uninitialised column: `tw`.</span></span>
-<span><span class="co">## NULL</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## NULL</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Tibbles también previene uno de los errores de R más comunes: eliminar dimensiones. Si un marco de datos estándar subconjunto de columnas en una sola columna, el objeto se convierte en un vector. Tibbles nunca hace esto:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df</span><span class="op">[</span>, <span class="st">"two"</span><span class="op">]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df</span><span class="op">[</span>, <span class="st">"two"</span><span class="op">]</span></span>
 <span><span class="co">## [1] 3 4</span></span>
 <span></span>
 <span><span class="va">tbbl</span><span class="op">[</span>, <span class="st">"two"</span><span class="op">]</span></span>
@@ -598,7 +601,7 @@ div.csl-indent {
 <span><span class="co">##     two</span></span>
 <span><span class="co">##   &lt;int&gt;</span></span>
 <span><span class="co">## 1     3</span></span>
-<span><span class="co">## 2     4</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">## 2     4</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Hay otras ventajas al usar tibbles en lugar de marcos de datos, como una mejor impresión y más.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
 <p>Para demostrar algo de sintaxis, usemos funciones tidyverse para leer datos que podrían usarse en el modelado. El conjunto de datos proviene del portal de datos de la ciudad de Chicago y contiene datos diarios sobre el número de pasajeros de las estaciones de trenes elevados de la ciudad. El conjunto de datos tiene columnas para:</p>
@@ -618,7 +621,7 @@ div.csl-indent {
 </ol>
 <p>El código tidyverse para estos pasos es:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org">lubridate</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://data.cityofchicago.org/api/views/5neh-572f/rows.csv?accessType=DOWNLOAD&amp;bom=true&amp;format=true"</span></span>
@@ -633,7 +636,7 @@ div.csl-indent {
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>date <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">mdy</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span>, rides <span class="op">=</span> <span class="va">rides</span> <span class="op">/</span> <span class="fl">1000</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="co"># Paso 4: resuma los múltiples registros utilizando el máximo.</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">station</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>rides <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">rides</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>rides <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">rides</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Esta canalización de operaciones ilustra por qué tidyverse es popular. Se utiliza una serie de manipulaciones de datos que tienen funciones simples y fáciles de entender para cada transformación; La serie se presenta de forma simplificada y legible. La atención se centra en cómo el usuario interactúa con el software. Este enfoque permite que más personas aprendan R y alcancen sus objetivos de análisis, y adoptar estos mismos principios para modelar en R tiene los mismos beneficios.</p>
 </section><section id="resumen-del-capítulo" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="resumen-del-capítulo">
@@ -661,15 +664,15 @@ Wickham, H, y G Grolemund. 2016. <em><span class="sans-serif">R</span> for Data 
   // Chapter name
   const currentChapterFile = window.location.pathname.split('/').pop().replace('.html', '');
 
-  //Deffining urls
+  //Defining urls
   const originalURL = "https://github.com/tidymodels/TMwR";
-  const translationURL = "https://github.com/davidrsch/TMwRes";
+  const translationURL = "https://github.com/davidrsch/tmwr-es";
 
-  //Deffining texts
+  //Defining texts
   const edit_text = "Editar esta página";
   const issue_text = "Informar de un problema"
 
-  //Deffining git_i
+  //Defining git_i
   const git_i = '<div><i class="bi bi-github"></i></div>';
 
   // Adding TOC if not exist
@@ -774,13 +777,14 @@ Wickham, H, y G Grolemund. 2016. <em><span class="sans-serif">R</span> for Data 
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
