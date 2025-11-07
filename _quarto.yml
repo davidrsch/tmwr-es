@@ -30,7 +30,7 @@ book:
           - text: Original
             url: https://github.com/tidymodels/TMwR
           - text: Traducción
-            url: https://github.com/davidrsch/TMwRes
+            url: https://github.com/davidrsch/tmwr-es
   page-navigation: true
   chapters:
     - index.qmd
