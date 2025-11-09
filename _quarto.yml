@@ -8,6 +8,7 @@ execute:
 book:
   title: "Modelado Ordenado con R"
   reader-mode: true
+  site-url: https://davidrsch.github.io/tmwr-es/
 
   page-footer:
     left: |
