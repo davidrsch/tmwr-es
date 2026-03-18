@@ -8,6 +8,12 @@ execute:
 book:
   title: "Modelado Ordenado con R"
   reader-mode: true
+  site-url: https://davidrsch.github.io/tmwr-es/
+  description: |
+    Traducción al español de "Tidy Modeling with R" de Max Kuhn y Julia Silge.
+    Aprende a construir modelos con el ecosistema tidymodels siguiendo
+    principios ordenados y reproducibles.
+  open-graph: true
 
   page-footer:
     left: |
