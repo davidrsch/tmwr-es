@@ -2,98 +2,98 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/index.html</loc>
-    <lastmod>2026-03-19T09:49:45.667Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.841Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/01-software-modeling.html</loc>
-    <lastmod>2026-03-19T09:49:45.586Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.759Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/02-tidyverse.html</loc>
-    <lastmod>2026-03-19T09:49:45.586Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.759Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/03-base-r.html</loc>
-    <lastmod>2026-03-19T09:49:45.586Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.759Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/04-ames.html</loc>
-    <lastmod>2026-03-19T09:49:45.586Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.759Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/05-data-spending.html</loc>
-    <lastmod>2026-03-19T09:49:45.586Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.760Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/06-fitting-models.html</loc>
-    <lastmod>2026-03-19T09:49:45.586Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.760Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/07-the-model-workflow.html</loc>
-    <lastmod>2026-03-19T09:49:45.587Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.760Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/08-feature-engineering.html</loc>
-    <lastmod>2026-03-19T09:49:45.587Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.760Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/09-judging-model-effectiveness.html</loc>
-    <lastmod>2026-03-19T09:49:45.587Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.760Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/10-resampling.html</loc>
-    <lastmod>2026-03-19T09:49:45.587Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.760Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/11-comparing-models.html</loc>
-    <lastmod>2026-03-19T09:49:45.587Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.761Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/12-tuning-parameters.html</loc>
-    <lastmod>2026-03-19T09:49:45.588Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.761Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/13-grid-search.html</loc>
-    <lastmod>2026-03-19T09:49:45.588Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.761Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/14-iterative-search.html</loc>
-    <lastmod>2026-03-19T09:49:45.588Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.761Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/15-workflow-sets.html</loc>
-    <lastmod>2026-03-19T09:49:45.588Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.762Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/16-dimensionality-reduction.html</loc>
-    <lastmod>2026-03-19T09:49:45.588Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.762Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/17-encoding-categorical-data.html</loc>
-    <lastmod>2026-03-19T09:49:45.589Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.762Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/18-explaining-models-and-predictions.html</loc>
-    <lastmod>2026-03-19T09:49:45.589Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.762Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/19-when-should-you-trust-predictions.html</loc>
-    <lastmod>2026-03-19T09:49:45.589Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.762Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/20-ensemble-models.html</loc>
-    <lastmod>2026-03-19T09:49:45.589Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.762Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/21-inferential-analysis.html</loc>
-    <lastmod>2026-03-19T09:49:45.589Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.762Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/pre-proc-table.html</loc>
-    <lastmod>2026-03-19T09:49:45.668Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.842Z</lastmod>
   </url>
   <url>
     <loc>https://davidrsch.github.io/tmwr-es/references.html</loc>
-    <lastmod>2026-03-19T09:49:45.726Z</lastmod>
+    <lastmod>2026-03-19T12:02:57.901Z</lastmod>
   </url>
 </urlset>
