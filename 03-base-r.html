@@ -2,9 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.8.27">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
+<meta name="description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
 <title>3&nbsp; Una Revisión De Los Fundamentos Del Modelado Con R – Modelado Ordenado con R</title>
 <style>
 code{white-space: pre-wrap;}
@@ -91,10 +92,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a73e7facfaf3f326b6370add29585988.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -124,6 +125,13 @@ div.csl-indent {
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script><link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="TMwR.css">
+<meta property="og:title" content="3&nbsp; Una Revisión De Los Fundamentos Del Modelado Con R – Modelado Ordenado con R">
+<meta property="og:description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
+<meta property="og:image" content="https://davidrsch.github.io/tmwr-es/figures/fig-cricket-plot-1.png">
+<meta property="og:site_name" content="Modelado Ordenado con R">
+<meta property="og:image:alt" content="Un diagrama de dispersión de la tasa de chirrido y la temperatura de dos especies diferentes de grillos con líneas de tendencia lineales por especie. Las tendencias aumentan linealmente con una separación entre las dos especies.">
+<meta property="og:image:height" content="768">
+<meta property="og:image:width" content="1152">
 </head>
 <body class="nav-sidebar floating quarto-light">
 
@@ -141,9 +149,7 @@ div.csl-indent {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -433,7 +439,7 @@ div.csl-indent {
 <div class="cell" data-layout-align="center">
 <pre><code>## [1] "species" "temp"    "rate"</code></pre>
 <div class="cell-output-display">
-<div id="fig-cricket-plot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un diagrama de dispersión de la tasa de chirrido y la temperatura de dos especies diferentes de grillos con líneas de tendencia lineales por especie. Las tendencias aumentan linealmente con una separación entre las dos especies.">
+<div id="fig-cricket-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un diagrama de dispersión de la tasa de chirrido y la temperatura de dos especies diferentes de grillos con líneas de tendencia lineales por especie. Las tendencias aumentan linealmente con una separación entre las dos especies." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-cricket-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-cricket-plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Un diagrama de dispersión de la tasa de chirrido y la temperatura de dos especies diferentes de grillos con líneas de tendencia lineales por especie. Las tendencias aumentan linealmente con una separación entre las dos especies.">
 </div>
@@ -506,7 +512,7 @@ Figura&nbsp;3.1: Relación entre la tasa de chirrido y la temperatura de dos esp
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-interaction-plots" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="A la izquierda hay un diagrama de dispersión de los residuos del modelo versus los valores predichos. No hay tendencias fuertes en los datos. El panel de la derecha muestra un gráfico cuantil-cuantil normal donde los puntos indican que la normalidad probablemente sea una buena suposición.">
+<div id="fig-interaction-plots" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A la izquierda hay un diagrama de dispersión de los residuos del modelo versus los valores predichos. No hay tendencias fuertes en los datos. El panel de la derecha muestra un gráfico cuantil-cuantil normal donde los puntos indican que la normalidad probablemente sea una buena suposición." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-interaction-plots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-interaction-plots-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%" alt="A la izquierda hay un diagrama de dispersión de los residuos del modelo versus los valores predichos. No hay tendencias fuertes en los datos. El panel de la derecha muestra un gráfico cuantil-cuantil normal donde los puntos indican que la normalidad probablemente sea una buena suposición.">
 </div>
@@ -739,7 +745,7 @@ Tabla&nbsp;3.1: Nombres de argumentos heterogéneos para diferentes funciones de
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-corr-plot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un gráfico de las correlaciones (e intervalos de confianza del 95%) entre los predictores y el resultado en el conjunto de datos `mtcars`. Ninguno de los intervalos se superpone con cero. El peso del automóvil tuvo la mayor correlación negativa y la relación del eje trasero tiene la mayor correlación positiva.">
+<div id="fig-corr-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un gráfico de las correlaciones (e intervalos de confianza del 95%) entre los predictores y el resultado en el conjunto de datos `mtcars`. Ninguno de los intervalos se superpone con cero. El peso del automóvil tuvo la mayor correlación negativa y la relación del eje trasero tiene la mayor correlación positiva." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-corr-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-corr-plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Un gráfico de las correlaciones (e intervalos de confianza del 95%) entre los predictores y el resultado en el conjunto de datos `mtcars`. Ninguno de los intervalos se superpone con cero. El peso del automóvil tuvo la mayor correlación negativa y la relación del eje trasero tiene la mayor correlación positiva." width="672">
 </div>
@@ -813,7 +819,7 @@ Figura&nbsp;3.3: Correlaciones (e intervalos de confianza del 95%) entre los pre
 <span><span class="co">## ✖ dplyr::lag()             masks stats::lag()</span></span>
 <span><span class="co">## ✖ yardstick::spec()        masks readr::spec()</span></span>
 <span><span class="co">## ✖ recipes::step()          masks stats::step()</span></span>
-<span><span class="co">## • Use suppressPackageStartupMessages() to eliminate package startup messages</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="co">## • Dig deeper into tidy modeling with R at https://www.tmwr.org</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Si ha utilizado tidyverse, notará algunos nombres familiares ya que algunos paquetes de tidyverse, como <span class="pkg">dplyr</span> y <span class="pkg">ggplot2</span>, se cargan junto con los paquetes tidymodels. Ya hemos dicho que el marco tidymodels aplica los principios de tidyverse al modelado, pero el marco tidymodels también se basa literalmente en algunos de los paquetes tidyverse más fundamentales, como estos.</p>
 <p>La carga del metapaquete también muestra si hay conflictos de nombres de funciones con paquetes cargados previamente. Como ejemplo de un conflicto de nombres, antes de cargar <span class="pkg">tidymodels</span>, al invocar la función <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> se ejecutará la función en el paquete <span class="pkg">stats</span>. Después de cargar tidymodels, ejecutará la función <span class="pkg">dplyr</span> del mismo nombre.</p>

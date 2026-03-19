@@ -2,9 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.8.27">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
+<meta name="description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
 <title>14&nbsp; Búsqueda Iterativa – Modelado Ordenado con R</title>
 <style>
 code{white-space: pre-wrap;}
@@ -91,10 +92,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a73e7facfaf3f326b6370add29585988.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -149,6 +150,13 @@ window.Quarto = {
 };
 </script><link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="TMwR.css">
+<meta property="og:title" content="14&nbsp; Búsqueda Iterativa – Modelado Ordenado con R">
+<meta property="og:description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
+<meta property="og:image" content="https://davidrsch.github.io/tmwr-es/premade/roc_surface.png">
+<meta property="og:site_name" content="Modelado Ordenado con R">
+<meta property="og:image:alt" content="Un mapa de calor del área media bajo la curva ROC para una cuadrícula de alta densidad de valores de parámetros de ajuste. El mejor punto es un punto sólido en la esquina superior derecha. La superficie tiene una cresta de alto rendimiento que se desplaza hacia la parte inferior derecha. ">
+<meta property="og:image:height" content="1920">
+<meta property="og:image:width" content="1920">
 </head>
 <body class="nav-sidebar floating quarto-light">
 
@@ -166,9 +174,7 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -496,7 +502,7 @@ window.Quarto = {
 <p><a href="#fig-roc-surface" class="quarto-xref">Figura&nbsp;<span>14.1</span></a> muestra los resultados de la evaluación de esta cuadrícula, donde el color más claro corresponde a un mayor (mejor) rendimiento del modelo. Hay una gran franja en la diagonal inferior del espacio de parámetros que es relativamente plana con un rendimiento deficiente. En la parte superior derecha del espacio se produce una cresta de mejor rendimiento. El punto negro indica la mejor configuración. La transición desde la meseta de los malos resultados a la cima del mejor desempeño es muy pronunciada. También hay una fuerte caída en el área bajo la curva ROC justo a la derecha de la cresta.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-roc-surface" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un mapa de calor del área media bajo la curva ROC para una cuadrícula de alta densidad de valores de parámetros de ajuste. El mejor punto es un punto sólido en la esquina superior derecha. La superficie tiene una cresta de alto rendimiento que se desplaza hacia la parte inferior derecha. " data-fig-align="center">
+<div id="fig-roc-surface" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un mapa de calor del área media bajo la curva ROC para una cuadrícula de alta densidad de valores de parámetros de ajuste. El mejor punto es un punto sólido en la esquina superior derecha. La superficie tiene una cresta de alto rendimiento que se desplaza hacia la parte inferior derecha. ">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-roc-surface-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="premade/roc_surface.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="Un mapa de calor del área media bajo la curva ROC para una cuadrícula de alta densidad de valores de parámetros de ajuste. El mejor punto es un punto sólido en la esquina superior derecha. La superficie tiene una cresta de alto rendimiento que se desplaza hacia la parte inferior derecha. ">
 </div>
@@ -605,7 +611,7 @@ predictors
 <p>Una virtud importante de este modelo es que, dado que se especifica un modelo de probabilidad total, las predicciones de nuevos insumos pueden reflejar la distribución completa del resultado. En otras palabras, se pueden predecir nuevas estadísticas de desempeño tanto en términos de media como de varianza.</p>
 <p>Supongamos que se estuvieran considerando dos nuevos parámetros de ajuste. En <a href="#tbl-tuning-candidates" class="quarto-xref">Tabla&nbsp;<span>14.2</span></a>, el candidato <em>A</em> tiene un valor ROC medio ligeramente mejor que el candidato <em>B</em> (el mejor actual es 0.8659). Sin embargo, su varianza es cuatro veces mayor que <em>B</em>. ¿Esto es bueno o malo? Elegir la opción <em>A</em> es más riesgoso pero tiene un rendimiento potencialmente mayor. El aumento en la varianza también refleja que este nuevo valor está más alejado de los datos existentes que <em>B</em>. La siguiente sección considera con más detalle estos aspectos de las predicciones de GP para la optimización bayesiana.</p>
 <div class="cell" data-layout-align="center" data-result="asis">
-<div id="tbl-tuning-candidates" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-result="asis" data-layout-align="center">
+<div id="tbl-tuning-candidates" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-layout-align="center" data-result="asis">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-tuning-candidates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabla&nbsp;14.2: Dos ejemplos de parámetros de ajuste considerados para un muestreo posterior.
 </figcaption><div aria-describedby="tbl-tuning-candidates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -662,7 +668,7 @@ Predicción GP de ROC AUC
 <p>Para demostrarlo, veamos un ejemplo de juguete con un único parámetro que tiene valores entre [0, 1] y la métrica de rendimiento es <span class="math inline">\(R^2\)</span>. La función verdadera se muestra en <a href="#fig-performance-profile" class="quarto-xref">Figura&nbsp;<span>14.2</span></a>, junto con los valores candidatos five que tienen resultados existentes como puntos.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-performance-profile" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un perfil de rendimiento real hipotético sobre un parámetro de ajuste arbitrario. También se muestran cinco puntos estimados. El perfil es altamente no lineal con un pico entre dos de los puntos observados." data-fig-align="center">
+<div id="fig-performance-profile" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un perfil de rendimiento real hipotético sobre un parámetro de ajuste arbitrario. También se muestran cinco puntos estimados. El perfil es altamente no lineal con un pico entre dos de los puntos observados.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-performance-profile-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-performance-profile-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Un perfil de rendimiento real hipotético sobre un parámetro de ajuste arbitrario. También se muestran cinco puntos estimados. El perfil es altamente no lineal con un pico entre dos de los puntos observados." width="672">
 </div>
@@ -676,7 +682,7 @@ Figura&nbsp;14.2: Perfil de rendimiento real hipotético sobre un parámetro de 
 <p>La región de confianza sombreada demuestra la función de varianza exponencial al cuadrado; se vuelve muy grande entre puntos y converge a cero en los puntos de datos existentes.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-estimated-profile" class="quarto-float quarto-figure quarto-figure-center anchored" alt="El perfil de rendimiento estimado generado por el modelo de proceso gaussiano. La región sombreada muestra límites de error estándar. Dos líneas verticales muestran puntos potenciales que se muestrearán en la siguiente iteración." data-fig-align="center">
+<div id="fig-estimated-profile" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="El perfil de rendimiento estimado generado por el modelo de proceso gaussiano. La región sombreada muestra límites de error estándar. Dos líneas verticales muestran puntos potenciales que se muestrearán en la siguiente iteración.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-estimated-profile-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-estimated-profile-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="El perfil de rendimiento estimado generado por el modelo de proceso gaussiano. La región sombreada muestra límites de error estándar. Dos líneas verticales muestran puntos potenciales que se muestrearán en la siguiente iteración." width="672">
 </div>
@@ -693,7 +699,7 @@ Figura&nbsp;14.3: Perfil de rendimiento estimado generado por el modelo de proce
 <p>Por ejemplo, considere dos valores de parámetros candidatos de 0,10 y 0,25 (indicados por las líneas verticales en <a href="#fig-estimated-profile" class="quarto-xref">Figura&nbsp;<span>14.3</span></a>). Utilizando el modelo GP ajustado, sus distribuciones <span class="math inline">\(R^2\)</span> previstas se muestran en <a href="#fig-two-candidates" class="quarto-xref">Figura&nbsp;<span>14.4</span></a> junto con una línea de referencia para los mejores resultados actuales.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-two-candidates" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Distribuciones de rendimiento previstas para dos valores de parámetros de ajuste muestreados. Por un lado, la distribución es ligeramente mejor que el valor actual con un pequeño diferencial. El otro valor del parámetro es ligeramente peor pero tiene una distribución muy amplia." data-fig-align="center">
+<div id="fig-two-candidates" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Distribuciones de rendimiento previstas para dos valores de parámetros de ajuste muestreados. Por un lado, la distribución es ligeramente mejor que el valor actual con un pequeño diferencial. El otro valor del parámetro es ligeramente peor pero tiene una distribución muy amplia.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-two-candidates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-two-candidates-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="Distribuciones de rendimiento previstas para dos valores de parámetros de ajuste muestreados. Por un lado, la distribución es ligeramente mejor que el valor actual con un pequeño diferencial. El otro valor del parámetro es ligeramente peor pero tiene una distribución muy amplia.">
 </div>
@@ -750,7 +756,7 @@ Predicciones
 <p>Cuando la mejora esperada se calcula en todo el rango del parámetro de ajuste, el punto de muestreo recomendado está mucho más cerca de 0,25 que de 0,10, como se muestra en <a href="#fig-expected-improvement" class="quarto-xref">Figura&nbsp;<span>14.5</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-expected-improvement" class="quarto-float quarto-figure quarto-figure-center anchored" alt="El perfil de rendimiento estimado generado por el modelo de proceso gaussiano (panel superior) y la mejora esperada (panel inferior). La línea vertical indica el punto de máxima mejora donde el rendimiento estimado es alto y la variación prevista también es grande." data-fig-align="center">
+<div id="fig-expected-improvement" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="El perfil de rendimiento estimado generado por el modelo de proceso gaussiano (panel superior) y la mejora esperada (panel inferior). La línea vertical indica el punto de máxima mejora donde el rendimiento estimado es alto y la variación prevista también es grande.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-expected-improvement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-expected-improvement-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="El perfil de rendimiento estimado generado por el modelo de proceso gaussiano (panel superior) y la mejora esperada (panel inferior). La línea vertical indica el punto de máxima mejora donde el rendimiento estimado es alto y la variación prevista también es grande." width="672">
 </div>
@@ -814,7 +820,7 @@ Figura&nbsp;14.5: El perfil de rendimiento estimado generado por el modelo de pr
 <p>La función <code>autoplot()</code> tiene varias opciones para métodos de búsqueda iterativos. <a href="#fig-progress-plot" class="quarto-xref">Figura&nbsp;<span>14.6</span></a> muestra cómo cambió el resultado durante la búsqueda usando <code>autoplot(svm_bo, type = "performance")</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-progress-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="El progreso de la optimización bayesiana se produce cuando se utiliza el método `autoplot()` con `type = 'performance'`. El gráfico muestra el rendimiento estimado en el eje y frente al número de iteraciones en el eje x. Se muestran intervalos de confianza para los puntos." data-fig-align="center">
+<div id="fig-progress-plot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="El progreso de la optimización bayesiana se produce cuando se utiliza el método `autoplot()` con `type = 'performance'`. El gráfico muestra el rendimiento estimado en el eje y frente al número de iteraciones en el eje x. Se muestran intervalos de confianza para los puntos.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-progress-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-progress-plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="El progreso de la optimización bayesiana se produce cuando se utiliza el método `autoplot()` con `type = 'performance'`. El gráfico muestra el rendimiento estimado en el eje y frente al número de iteraciones en el eje x. Se muestran intervalos de confianza para los puntos." width="672">
 </div>
@@ -847,7 +853,7 @@ Figura&nbsp;14.6: El progreso de la optimización bayesiana producido cuando se 
 <p>¿Cómo se ven influenciadas las probabilidades de aceptación? El mapa de calor en <a href="#fig-acceptance-prob" class="quarto-xref">Figura&nbsp;<span>14.7</span></a> muestra cómo la probabilidad de aceptación puede cambiar a lo largo de las iteraciones, el rendimiento y el coeficiente especificado por el usuario.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-acceptance-prob" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un mapa de calor de las probabilidades de aceptación de recocido simuladas para diferentes valores de coeficientes. Las probabilidades se ven afectadas tanto por el número de iteraciones como por la distancia entre el rendimiento y el mejor nivel actual." data-fig-align="center">
+<div id="fig-acceptance-prob" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un mapa de calor de las probabilidades de aceptación de recocido simuladas para diferentes valores de coeficientes. Las probabilidades se ven afectadas tanto por el número de iteraciones como por la distancia entre el rendimiento y el mejor nivel actual.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-acceptance-prob-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-acceptance-prob-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="Un mapa de calor de las probabilidades de aceptación de recocido simuladas para diferentes valores de coeficientes. Las probabilidades se ven afectadas tanto por el número de iteraciones como por la distancia entre el rendimiento y el mejor nivel actual.">
 </div>
@@ -869,7 +875,7 @@ Figura&nbsp;14.7: Mapa de calor de las probabilidades de aceptación del recocid
 <p>El proceso comienza con valores iniciales de <code>penalty = 0,025</code> y <code>mixture = 0,050</code>. Utilizando un radio que fluctúa aleatoriamente entre 0,050 y 0,015, los datos se escalan adecuadamente, se generan valores aleatorios en los radios alrededor del punto inicial y luego se elige uno al azar como candidato. A modo de ilustración, asumiremos que todos los valores candidatos son mejoras. Utilizando el nuevo valor, se genera un conjunto de nuevos vecinos aleatorios, se elige uno, y así sucesivamente. <a href="#fig-iterative-neighborhood" class="quarto-xref">Figura&nbsp;<span>14.8</span></a> muestra six iteraciones a medida que la búsqueda avanza hacia la esquina superior izquierda.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-iterative-neighborhood" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Una ilustración de cómo el recocido simulado determina cuál es la vecindad local para dos parámetros de ajuste numéricos. Las nubes de puntos muestran posibles siguientes valores donde se seleccionaría uno al azar. Los puntos candidatos son pequeñas nubes circulares que rodean el mejor punto actual." data-fig-align="center">
+<div id="fig-iterative-neighborhood" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Una ilustración de cómo el recocido simulado determina cuál es la vecindad local para dos parámetros de ajuste numéricos. Las nubes de puntos muestran posibles siguientes valores donde se seleccionaría uno al azar. Los puntos candidatos son pequeñas nubes circulares que rodean el mejor punto actual.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-iterative-neighborhood-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-iterative-neighborhood-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="Una ilustración de cómo el recocido simulado determina cuál es la vecindad local para dos parámetros de ajuste numéricos. Las nubes de puntos muestran posibles siguientes valores donde se seleccionaría uno al azar. Los puntos candidatos son pequeñas nubes circulares que rodean el mejor punto actual.">
 </div>
@@ -937,7 +943,7 @@ Figura&nbsp;14.8: Una ilustración de cómo el recocido simulado determina cuál
 <p>Al igual que con las otras funciones <code>tune_*()</code>, la función <code>autoplot()</code> correspondiente produce evaluaciones visuales de los resultados. El uso de <code>autoplot(svm_sa, type = "performance")</code> muestra el rendimiento en iteraciones (<a href="#fig-sa-iterations" class="quarto-xref">Figura&nbsp;<span>14.9</span></a>) mientras que <code>autoplot(svm_sa, type = "parameters")</code> traza el rendimiento versus valores de parámetros de ajuste específicos (<a href="#fig-sa-parameters" class="quarto-xref">Figura&nbsp;<span>14.10</span></a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-sa-iterations" class="quarto-float quarto-figure quarto-figure-center anchored" alt="El progreso del proceso de recocido simulado se muestra cuando se usa el método `autoplot()` con `type = 'performance'`. El gráfico muestra el rendimiento estimado en el eje y frente al número de iteraciones en el eje x. Se muestran intervalos de confianza para los puntos." data-fig-align="center">
+<div id="fig-sa-iterations" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="El progreso del proceso de recocido simulado se muestra cuando se usa el método `autoplot()` con `type = 'performance'`. El gráfico muestra el rendimiento estimado en el eje y frente al número de iteraciones en el eje x. Se muestran intervalos de confianza para los puntos.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-sa-iterations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-sa-iterations-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="El progreso del proceso de recocido simulado se muestra cuando se usa el método `autoplot()` con `type = 'performance'`. El gráfico muestra el rendimiento estimado en el eje y frente al número de iteraciones en el eje x. Se muestran intervalos de confianza para los puntos." width="672">
 </div>
@@ -949,7 +955,7 @@ Figura&nbsp;14.9: El progreso del proceso de recocido simulado se muestra cuando
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-sa-parameters" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Una visualización del rendimiento frente a los valores de los parámetros de ajuste cuando se utiliza el método `autoplot()` con `type = 'parameters'`. El gráfico muestra diferentes paneles para cada parámetro de sintonización en sus unidades transformadas." data-fig-align="center">
+<div id="fig-sa-parameters" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Una visualización del rendimiento frente a los valores de los parámetros de ajuste cuando se utiliza el método `autoplot()` con `type = 'parameters'`. El gráfico muestra diferentes paneles para cada parámetro de sintonización en sus unidades transformadas.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-sa-parameters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-sa-parameters-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Una visualización del rendimiento frente a los valores de los parámetros de ajuste cuando se utiliza el método `autoplot()` con `type = 'parameters'`. El gráfico muestra diferentes paneles para cada parámetro de sintonización en sus unidades transformadas." width="672">
 </div>

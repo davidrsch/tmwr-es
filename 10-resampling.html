@@ -2,9 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.8.27">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
+<meta name="description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
 <title>10&nbsp; Remuestrear Para Evaluar El Rendimiento – Modelado Ordenado con R</title>
 <style>
 code{white-space: pre-wrap;}
@@ -91,10 +92,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a73e7facfaf3f326b6370add29585988.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -149,6 +150,11 @@ window.Quarto = {
 };
 </script><link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="TMwR.css">
+<meta property="og:title" content="10&nbsp; Remuestrear Para Evaluar El Rendimiento – Modelado Ordenado con R">
+<meta property="og:description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
+<meta property="og:image" content="https://davidrsch.github.io/tmwr-es/premade/resampling.svg">
+<meta property="og:site_name" content="Modelado Ordenado con R">
+<meta property="og:image:alt" content="Un diagrama del esquema de división de datos desde la división de datos inicial hasta el remuestreo. El primer nivel es la partición del conjunto de entrenamiento/prueba. El segundo nivel de división toma el conjunto de entrenamiento y lo divide en múltiples conjuntos de `análisis` y `evaluación` (que son análogos al entrenamiento y la prueba).">
 </head>
 <body class="nav-sidebar floating quarto-light">
 
@@ -166,9 +172,7 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -571,7 +575,7 @@ Estimaciones de RMSE
 <p>Los métodos de remuestreo son sistemas de simulación empíricos que emulan el proceso de utilizar algunos datos para modelar y diferentes datos para evaluación. La mayoría de los métodos de remuestreo son iterativos, lo que significa que este proceso se repite varias veces. El diagrama en <a href="#fig-resampling-scheme" class="quarto-xref">Figura&nbsp;<span>10.1</span></a> ilustra cómo funcionan generalmente los métodos de remuestreo.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-resampling-scheme" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un diagrama del esquema de división de datos desde la división de datos inicial hasta el remuestreo. El primer nivel es la partición del conjunto de entrenamiento/prueba. El segundo nivel de división toma el conjunto de entrenamiento y lo divide en múltiples conjuntos de `análisis` y `evaluación` (que son análogos al entrenamiento y la prueba).">
+<div id="fig-resampling-scheme" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un diagrama del esquema de división de datos desde la división de datos inicial hasta el remuestreo. El primer nivel es la partición del conjunto de entrenamiento/prueba. El segundo nivel de división toma el conjunto de entrenamiento y lo divide en múltiples conjuntos de `análisis` y `evaluación` (que son análogos al entrenamiento y la prueba)." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-resampling-scheme-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="premade/resampling.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%" alt="Un diagrama del esquema de división de datos desde la división de datos inicial hasta el remuestreo. El primer nivel es la partición del conjunto de entrenamiento/prueba. El segundo nivel de división toma el conjunto de entrenamiento y lo divide en múltiples conjuntos de `análisis` y `evaluación` (que son análogos al entrenamiento y la prueba).">
 </div>
@@ -594,7 +598,7 @@ Figura&nbsp;10.1: Esquema de división de datos desde la división de datos inic
 <p>La validación cruzada es un método de remuestreo bien establecido. Si bien existen varias variaciones, el método de validación cruzada más común es la validación cruzada <em>V</em>. Los datos se dividen aleatoriamente en <em>V</em> conjuntos de tamaño aproximadamente igual (llamados pliegues). A modo de ilustración, <em>V</em> = 3 se muestra en <a href="#fig-cross-validation-allocation" class="quarto-xref">Figura&nbsp;<span>10.2</span></a> para un conjunto de datos de 30 puntos de configuración de entrenamiento con asignaciones de pliegues aleatorios. El número dentro de los símbolos es el número de muestra.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-cross-validation-allocation" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un diagrama de cómo la validación cruzada de pliegues en V asigna aleatoriamente datos a los pliegues (donde V es igual a tres). Se asigna un conjunto de treinta puntos de datos a tres grupos de aproximadamente el mismo tamaño.">
+<div id="fig-cross-validation-allocation" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un diagrama de cómo la validación cruzada de pliegues en V asigna aleatoriamente datos a los pliegues (donde V es igual a tres). Se asigna un conjunto de treinta puntos de datos a tres grupos de aproximadamente el mismo tamaño." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-cross-validation-allocation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="premade/three-CV.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%" alt="Un diagrama de cómo la validación cruzada de pliegues en V asigna aleatoriamente datos a los pliegues (donde V es igual a tres). Se asigna un conjunto de treinta puntos de datos a tres grupos de aproximadamente el mismo tamaño.">
 </div>
@@ -608,7 +612,7 @@ Figura&nbsp;10.2: La validación cruzada de pliegues en V asigna aleatoriamente 
 <p>Para una validación cruzada triple, las tres iteraciones de remuestreo se ilustran en <a href="#fig-cross-validation" class="quarto-xref">Figura&nbsp;<span>10.3</span></a>. Para cada iteración, se reserva un pliegue para las estadísticas de evaluación y los pliegues restantes son sustrato para el modelo. Este proceso continúa en cada pliegue, de modo que tres modelos producen tres conjuntos de estadísticas de rendimiento.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-cross-validation" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un diagrama del uso de datos de validación cruzada multiplicado por V (donde V es igual a tres). Para cada uno de los tres grupos, los datos del pliegue se reservan para el rendimiento, mientras que los otros dos se utilizan para modelar.">
+<div id="fig-cross-validation" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un diagrama del uso de datos de validación cruzada multiplicado por V (donde V es igual a tres). Para cada uno de los tres grupos, los datos del pliegue se reservan para el rendimiento, mientras que los otros dos se utilizan para modelar." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-cross-validation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="premade/three-CV-iter.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Un diagrama del uso de datos de validación cruzada multiplicado por V (donde V es igual a tres). Para cada uno de los tres grupos, los datos del pliegue se reservan para el rendimiento, mientras que los otros dos se utilizan para modelar.">
 </div>
@@ -656,7 +660,7 @@ Figura&nbsp;10.3: Uso de datos de validación cruzada V-fold
 <p>Consideremos los datos de Ames. En promedio, la validación cruzada 10 veces utiliza conjuntos de evaluación que contienen aproximadamente propiedades 234. Si RMSE es la estadística elegida, podemos denotar la desviación estándar de esa estimación como <span class="math inline">\(\sigma\)</span>. Con una validación cruzada simple de 10 veces, el error estándar del RMSE medio es <span class="math inline">\(\sigma/\sqrt{10}\)</span>. Si esto es demasiado ruidoso, las repeticiones reducen el error estándar a <span class="math inline">\(\sigma/\sqrt{10R}\)</span>. Para una validación cruzada de 10 veces con réplicas de <span class="math inline">\(R\)</span>, el gráfico en <a href="#fig-variance-reduction" class="quarto-xref">Figura&nbsp;<span>10.4</span></a> muestra qué tan rápido disminuye el error estándar<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> con las réplicas.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-variance-reduction" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="La relación entre la varianza relativa en las estimaciones de rendimiento versus el número de repeticiones de validación cruzada. A medida que aumentan las repeticiones, la varianza se reduce en un patrón armónicamente decreciente con rendimientos decrecientes para un gran número de repeticiones.">
+<div id="fig-variance-reduction" class="quarto-float quarto-figure quarto-figure-center anchored" alt="La relación entre la varianza relativa en las estimaciones de rendimiento versus el número de repeticiones de validación cruzada. A medida que aumentan las repeticiones, la varianza se reduce en un patrón armónicamente decreciente con rendimientos decrecientes para un gran número de repeticiones." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-variance-reduction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-variance-reduction-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="La relación entre la varianza relativa en las estimaciones de rendimiento versus el número de repeticiones de validación cruzada. A medida que aumentan las repeticiones, la varianza se reduce en un patrón armónicamente decreciente con rendimientos decrecientes para un gran número de repeticiones." width="672">
 </div>
@@ -706,7 +710,7 @@ Figura&nbsp;10.4: Relación entre la varianza relativa en las estimaciones de de
 <p>En <a href="05-data-spending.html#sec-what-about-a-validation-set" class="quarto-xref"><span>Sección 5.2</span></a>, analizamos brevemente el uso de un conjunto de validación, una única partición que se reserva para estimar el rendimiento separada del conjunto de prueba. Cuando se utiliza un conjunto de validación, el conjunto de datos inicial disponible se divide en un conjunto de entrenamiento, un conjunto de validación y un conjunto de prueba (consulte <a href="#fig-three-way-split" class="quarto-xref">Figura&nbsp;<span>10.5</span></a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-three-way-split" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Una división inicial de tres vías en conjuntos de entrenamiento, pruebas y validación.">
+<div id="fig-three-way-split" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Una división inicial de tres vías en conjuntos de entrenamiento, pruebas y validación." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-three-way-split-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="premade/validation.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%" alt="Una división inicial de tres vías en conjuntos de entrenamiento, pruebas y validación.">
 </div>
@@ -720,7 +724,7 @@ Figura&nbsp;10.5: Una división inicial de tres vías en conjuntos de entrenamie
 <p>Con el paquete <span class="pkg">rsample</span>, un conjunto de validación es como cualquier otro objeto de remuestreo; este tipo se diferencia únicamente en que tiene una única iteración.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> <a href="#fig-validation-split" class="quarto-xref">Figura&nbsp;<span>10.6</span></a> muestra este esquema.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-validation-split" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Una división inicial bidireccional en entrenamiento y prueba con un conjunto de validación adicional dividido en el conjunto de entrenamiento.">
+<div id="fig-validation-split" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Una división inicial bidireccional en entrenamiento y prueba con un conjunto de validación adicional dividido en el conjunto de entrenamiento." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-validation-split-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="premade/validation-alt.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:45.0%" alt="Una división inicial bidireccional en entrenamiento y prueba con un conjunto de validación adicional dividido en el conjunto de entrenamiento.">
 </div>
@@ -757,7 +761,7 @@ Figura&nbsp;10.6: Una división inicial bidireccional en entrenamiento y pruebas
 <p>Para un conjunto de entrenamiento de 30 muestras, en la siguiente figura se muestra un esquema de tres muestras bootstrap <a href="#fig-bootstrapping" class="quarto-xref">Figura&nbsp;<span>10.7</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-bootstrapping" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un diagrama del uso de datos en bootstrapping. Para cada remuestreo de bootstrap, el conjunto de análisis es del mismo tamaño que el conjunto de entrenamiento (debido al muestreo con reemplazo) y el conjunto de evaluación consta de muestras que no están en el conjunto de análisis.">
+<div id="fig-bootstrapping" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un diagrama del uso de datos en bootstrapping. Para cada remuestreo de bootstrap, el conjunto de análisis es del mismo tamaño que el conjunto de entrenamiento (debido al muestreo con reemplazo) y el conjunto de evaluación consta de muestras que no están en el conjunto de análisis." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-bootstrapping-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="premade/bootstraps.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="Un diagrama del uso de datos en bootstrapping. Para cada remuestreo de bootstrap, el conjunto de análisis es del mismo tamaño que el conjunto de entrenamiento (debido al muestreo con reemplazo) y el conjunto de evaluación consta de muestras que no están en el conjunto de análisis.">
 </div>
@@ -790,7 +794,7 @@ Figura&nbsp;10.7: Uso de datos Bootstraping
 <p>A modo de ilustración, se volvió a muestrear un conjunto de entrenamiento de quince muestras con un tamaño de análisis de ocho muestras y un tamaño de conjunto de evaluación de tres. La segunda iteración descarta la primera muestra del conjunto de entrenamiento y ambos conjuntos de datos avanzan uno. Esta configuración da como resultado cinco remuestreos, como se muestra en <a href="#fig-rolling" class="quarto-xref">Figura&nbsp;<span>10.8</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-rolling" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="El uso de datos para el remuestreo continuo del origen de la previsión. Para cada división, se utilizan datos anteriores para modelar y algunas instancias posteriores se utilizan para medir el desempeño.">
+<div id="fig-rolling" class="quarto-float quarto-figure quarto-figure-center anchored" alt="El uso de datos para el remuestreo continuo del origen de la previsión. Para cada división, se utilizan datos anteriores para modelar y algunas instancias posteriores se utilizan para medir el desempeño." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-rolling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="premade/rolling.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:65.0%" alt="El uso de datos para el remuestreo continuo del origen de la previsión. Para cada división, se utilizan datos anteriores para modelar y algunas instancias posteriores se utilizan para medir el desempeño.">
 </div>

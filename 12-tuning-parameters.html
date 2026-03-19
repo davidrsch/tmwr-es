@@ -2,9 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.8.27">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
+<meta name="description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
 <title>12&nbsp; Ajuste De Modelos Y Los Peligros Del Sobreajuste – Modelado Ordenado con R</title>
 <style>
 code{white-space: pre-wrap;}
@@ -91,10 +92,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a4f308e4280a6709c1859ed77e495bf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a73e7facfaf3f326b6370add29585988.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -148,6 +149,13 @@ window.Quarto = {
 };
 </script><link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="TMwR.css">
+<meta property="og:title" content="12&nbsp; Ajuste De Modelos Y Los Peligros Del Sobreajuste – Modelado Ordenado con R">
+<meta property="og:description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
+<meta property="og:image" content="https://davidrsch.github.io/tmwr-es/figures/fig-two-class-dat-1.png">
+<meta property="og:site_name" content="Modelado Ordenado con R">
+<meta property="og:image:alt" content="Un ejemplo de conjunto de datos de clasificación de dos clases con dos predictores. Los dos predictores tienen una correlación moderada y existen algunos puntos de separación entre las clases.">
+<meta property="og:image:height" content="960">
+<meta property="og:image:width" content="1344">
 </head>
 <body class="nav-sidebar floating quarto-light">
 
@@ -165,9 +173,7 @@ window.Quarto = {
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelado Ordenado con R</a> 
         <div class="sidebar-tools-main">
@@ -482,7 +488,7 @@ window.Quarto = {
 <p>Para demostrarlo, considere los datos de clasificación que se muestran en <a href="#fig-two-class-dat" class="quarto-xref">Figura&nbsp;<span>12.1</span></a> con dos predictores, dos clases y un conjunto de entrenamiento de puntos de datos 593.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-two-class-dat" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un ejemplo de conjunto de datos de clasificación de dos clases con dos predictores. Los dos predictores tienen una correlación moderada y existen algunos puntos de separación entre las clases.">
+<div id="fig-two-class-dat" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un ejemplo de conjunto de datos de clasificación de dos clases con dos predictores. Los dos predictores tienen una correlación moderada y existen algunos puntos de separación entre las clases." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-two-class-dat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-two-class-dat-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Un ejemplo de conjunto de datos de clasificación de dos clases con dos predictores. Los dos predictores tienen una correlación moderada y existen algunos puntos de separación entre las clases." width="672">
 </div>
@@ -568,7 +574,7 @@ Figura&nbsp;12.1: Un ejemplo de conjunto de datos de clasificación de dos clase
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-resampled-log-lhood" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Medias e intervalos de confianza aproximados del 90% para la probabilidad logarítmica binomial remuestreada con tres funciones de enlace diferentes. El enlace logit tiene el valor más grande, seguido del enlace probit. El enlace de registro complementario tiene valores mucho más bajos.">
+<div id="fig-resampled-log-lhood" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Medias e intervalos de confianza aproximados del 90% para la probabilidad logarítmica binomial remuestreada con tres funciones de enlace diferentes. El enlace logit tiene el valor más grande, seguido del enlace probit. El enlace de registro complementario tiene valores mucho más bajos." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-resampled-log-lhood-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-resampled-log-lhood-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Medias e intervalos de confianza aproximados del 90% para la probabilidad logarítmica binomial remuestreada con tres funciones de enlace diferentes. El enlace logit tiene el valor más grande, seguido del enlace probit. El enlace de registro complementario tiene valores mucho más bajos." width="672">
 </div>
@@ -585,7 +591,7 @@ Figura&nbsp;12.2: Medias e intervalos de confianza aproximados del 90% para la p
 <p>¿Qué tal una métrica diferente? También calculamos el área bajo la curva ROC para cada remuestreo. Estos resultados, que reflejan la capacidad discriminativa de los modelos a través de numerosos umbrales de probabilidad, muestran una falta de diferencia en <a href="#fig-resampled-roc" class="quarto-xref">Figura&nbsp;<span>12.3</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-resampled-roc" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Medias e intervalos de confianza aproximados del 90% para el área remuestreada bajo la curva ROC con tres funciones de enlace diferentes. El enlace logit tiene el valor más grande, seguido del enlace probit. Los intervalos de confianza muestran una gran superposición entre los dos métodos.">
+<div id="fig-resampled-roc" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Medias e intervalos de confianza aproximados del 90% para el área remuestreada bajo la curva ROC con tres funciones de enlace diferentes. El enlace logit tiene el valor más grande, seguido del enlace probit. Los intervalos de confianza muestran una gran superposición entre los dos métodos." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-resampled-roc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-resampled-roc-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Medias e intervalos de confianza aproximados del 90% para el área remuestreada bajo la curva ROC con tres funciones de enlace diferentes. El enlace logit tiene el valor más grande, seguido del enlace probit. Los intervalos de confianza muestran una gran superposición entre los dos métodos." width="672">
 </div>
@@ -598,7 +604,7 @@ Figura&nbsp;12.3: Medias e intervalos de confianza aproximados del 90% para el �
 <p>Dada la superposición de los intervalos, así como la escala del eje x, se podría utilizar cualquiera de estas opciones. Vemos esto nuevamente cuando los límites de clase para los tres modelos se superponen en el conjunto de prueba de puntos de datos 198 en <a href="#fig-three-link-fits" class="quarto-xref">Figura&nbsp;<span>12.4</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-three-link-fits" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="El límite de clase lineal se ajusta a tres funciones de enlace. Las líneas tienen pendientes muy similares y el registro complementario tiene una intersección ligeramente diferente a la de los otros dos enlaces.">
+<div id="fig-three-link-fits" class="quarto-float quarto-figure quarto-figure-center anchored" alt="El límite de clase lineal se ajusta a tres funciones de enlace. Las líneas tienen pendientes muy similares y el registro complementario tiene una intersección ligeramente diferente a la de los otros dos enlaces." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-three-link-fits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-three-link-fits-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="El límite de clase lineal se ajusta a tres funciones de enlace. Las líneas tienen pendientes muy similares y el registro complementario tiene una intersección ligeramente diferente a la de los otros dos enlaces." width="672">
 </div>
@@ -626,7 +632,7 @@ Figura&nbsp;12.4: El límite de clase lineal se ajusta a tres funciones de enlac
 <p>Los capítulos <a href="05-data-spending.html" class="quarto-xref"><span>5</span></a> y <a href="10-resampling.html" class="quarto-xref"><span>10</span></a> demostraron que simplemente repredecir el conjunto de entrenamiento es un enfoque deficiente para la evaluación de modelos. Aquí, la red neuronal muy rápidamente comienza a sobreinterpretar los patrones que ve en el conjunto de entrenamiento. Compare estos tres límites de clase de ejemplo (desarrollados con el conjunto de entrenamiento) superpuestos en los conjuntos de entrenamiento y prueba en <a href="#fig-two-class-boundaries" class="quarto-xref">Figura&nbsp;<span>12.5</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-two-class-boundaries" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Límites de clase para tres modelos con un número creciente de unidades ocultas. Los límites se ajustan al conjunto de entrenamiento y se muestran para los conjuntos de entrenamiento y prueba. Después de una única unidad oculta, los límites se vuelven tremendamente complejos. Los gráficos del conjunto de pruebas muestran que los modelos más complejos no se ajustan a los datos que no se utilizaron para ajustar el modelo.">
+<div id="fig-two-class-boundaries" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Límites de clase para tres modelos con un número creciente de unidades ocultas. Los límites se ajustan al conjunto de entrenamiento y se muestran para los conjuntos de entrenamiento y prueba. Después de una única unidad oculta, los límites se vuelven tremendamente complejos. Los gráficos del conjunto de pruebas muestran que los modelos más complejos no se ajustan a los datos que no se utilizaron para ajustar el modelo." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-two-class-boundaries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-two-class-boundaries-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Límites de clase para tres modelos con un número creciente de unidades ocultas. Los límites se ajustan al conjunto de entrenamiento y se muestran para los conjuntos de entrenamiento y prueba. Después de una única unidad oculta, los límites se vuelven tremendamente complejos. Los gráficos del conjunto de pruebas muestran que los modelos más complejos no se ajustan a los datos que no se utilizaron para ajustar el modelo." width="672">
 </div>
@@ -650,7 +656,7 @@ Figura&nbsp;12.5: Límites de clase para tres modelos con un número creciente d
 <p><a href="#fig-tuning-strategies" class="quarto-xref">Figura&nbsp;<span>12.6</span></a> muestra dos paneles que demuestran estos dos enfoques para una situación con dos parámetros de ajuste que oscilan entre cero y uno. En cada uno, un conjunto de contornos muestra la relación verdadera (simulada) entre los parámetros y el resultado. Los resultados óptimos se encuentran en las esquinas superiores derechas.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-tuning-strategies" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Ejemplos de ajuste de cuadrícula predefinido y método de búsqueda iterativo. Las líneas representan contornos de alguna métrica de desempeño que es mejor en el lado superior derecho del gráfico. La búsqueda de cuadrícula muestra puntos que cubren bien el espacio y tiene un punto cerca del óptimo. El método de búsqueda iterativa tiene muchos más puntos y serpentea hacia el óptimo, donde muchos puntos se concentran en el mejor valor.">
+<div id="fig-tuning-strategies" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Ejemplos de ajuste de cuadrícula predefinido y método de búsqueda iterativo. Las líneas representan contornos de alguna métrica de desempeño que es mejor en el lado superior derecho del gráfico. La búsqueda de cuadrícula muestra puntos que cubren bien el espacio y tiene un punto cerca del óptimo. El método de búsqueda iterativa tiene muchos más puntos y serpentea hacia el óptimo, donde muchos puntos se concentran en el mejor valor." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-tuning-strategies-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-tuning-strategies-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Ejemplos de ajuste de cuadrícula predefinido y método de búsqueda iterativo. Las líneas representan contornos de alguna métrica de desempeño que es mejor en el lado superior derecho del gráfico. La búsqueda de cuadrícula muestra puntos que cubren bien el espacio y tiene un punto cerca del óptimo. El método de búsqueda iterativa tiene muchos más puntos y serpentea hacia el óptimo, donde muchos puntos se concentran en el mejor valor." width="672">
 </div>
