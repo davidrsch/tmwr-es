@@ -724,7 +724,7 @@ div.csl-indent {
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-workflow-set-ranks" class="quarto-float quarto-figure quarto-figure-center anchored" alt="RMSE estimado (e intervalos de confianza aproximados) para la mejor configuración del modelo en cada flujo de trabajo. El eje y es el RMSE estimado y el eje x es el rango del modelo basado en RMSE. Las reglas cubistas y los árboles potenciados muestran los valores RMSE más pequeños. " data-fig-align="center">
+<div id="fig-workflow-set-ranks" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="RMSE estimado (e intervalos de confianza aproximados) para la mejor configuración del modelo en cada flujo de trabajo. El eje y es el RMSE estimado y el eje x es el rango del modelo basado en RMSE. Las reglas cubistas y los árboles potenciados muestran los valores RMSE más pequeños. ">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-workflow-set-ranks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-workflow-set-ranks-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%" alt="RMSE estimado (e intervalos de confianza aproximados) para la mejor configuración del modelo en cada flujo de trabajo. El eje y es el RMSE estimado y el eje x es el rango del modelo basado en RMSE. Las reglas cubistas y los árboles potenciados muestran los valores RMSE más pequeños. ">
 </div>
@@ -740,7 +740,7 @@ Figura&nbsp;15.1: RMSE estimado (e intervalos de confianza aproximados) para la 
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-workflow-sets-autoplot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Los resultados `autoplot()` para el modelo cubista contenido en el conjunto de flujo de trabajo. La visualización tiene un panel para cada parámetro de ajuste y muestra el rendimiento frente a los valores de los parámetros." data-fig-align="center">
+<div id="fig-workflow-sets-autoplot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Los resultados `autoplot()` para el modelo cubista contenido en el conjunto de flujo de trabajo. La visualización tiene un panel para cada parámetro de ajuste y muestra el rendimiento frente a los valores de los parámetros.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-workflow-sets-autoplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-workflow-sets-autoplot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%" alt="Los resultados `autoplot()` para el modelo cubista contenido en el conjunto de flujo de trabajo. La visualización tiene un panel para cada parámetro de ajuste y muestra el rendimiento frente a los valores de los parámetros.">
 </div>
@@ -803,7 +803,7 @@ Figura&nbsp;15.2: Los resultados <code><a href="https://ggplot2.tidyverse.org/re
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-workflow-set-racing-ranks" class="quarto-float quarto-figure quarto-figure-center anchored" alt="RMSE estimado (e intervalos de confianza aproximados) para la mejor configuración del modelo en cada flujo de trabajo en los resultados de las carreras. El eje y es el RMSE estimado y el eje x es el rango del modelo basado en RMSE. Las reglas cubistas y los árboles potenciados muestran los valores RMSE más pequeños." data-fig-align="center">
+<div id="fig-workflow-set-racing-ranks" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="RMSE estimado (e intervalos de confianza aproximados) para la mejor configuración del modelo en cada flujo de trabajo en los resultados de las carreras. El eje y es el RMSE estimado y el eje x es el rango del modelo basado en RMSE. Las reglas cubistas y los árboles potenciados muestran los valores RMSE más pequeños.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-workflow-set-racing-ranks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-workflow-set-racing-ranks-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%" alt="RMSE estimado (e intervalos de confianza aproximados) para la mejor configuración del modelo en cada flujo de trabajo en los resultados de las carreras. El eje y es el RMSE estimado y el eje x es el rango del modelo basado en RMSE. Las reglas cubistas y los árboles potenciados muestran los valores RMSE más pequeños.">
 </div>
@@ -813,7 +813,7 @@ Figura&nbsp;15.3: RMSE estimado (e intervalos de confianza aproximados) para la 
 </div>
 </div>
 </div>
-<p>En general, el enfoque de carreras estimó un total de 1,100 modelos, 8.73% del conjunto completo de 12,600 modelos en la cuadrícula completa. Como resultado, el enfoque de carrera fue 4.9-veces más rápido.</p>
+<p>En general, el enfoque de carreras estimó un total de 1,100 modelos, 8.73% del conjunto completo de 12,600 modelos en la cuadrícula completa. Como resultado, el enfoque de carrera fue 5-veces más rápido.</p>
 <p>¿Obtuvimos resultados similares? Para ambos objetos, clasificamos los resultados, los fusionamos y los comparamos entre sí en <a href="#fig-racing-concordance" class="quarto-xref">Figura&nbsp;<span>15.4</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">matched_results</span> <span class="op">&lt;-</span> </span>
@@ -839,7 +839,7 @@ Figura&nbsp;15.3: RMSE estimado (e intervalos de confianza aproximados) para la 
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-racing-concordance" class="quarto-float quarto-figure quarto-figure-center anchored" alt="RMSE estimado para la cuadrícula completa y los resultados de las carreras. Los resultados muestran que muchos modelos tienen el mismo resultado RMSE y los demás son muy similares." data-fig-align="center">
+<div id="fig-racing-concordance" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="RMSE estimado para la cuadrícula completa y los resultados de las carreras. Los resultados muestran que muchos modelos tienen el mismo resultado RMSE y los demás son muy similares.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-racing-concordance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-racing-concordance-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%" alt="RMSE estimado para la cuadrícula completa y los resultados de las carreras. Los resultados muestran que muchos modelos tienen el mismo resultado RMSE y los demás son muy similares.">
 </div>
@@ -890,7 +890,7 @@ Figura&nbsp;15.4: RMSE estimado para la cuadrícula completa y los resultados de
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-concrete-test-results" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Valores observados versus valores predichos para el conjunto de prueba. Los valores caen estrechamente a lo largo de la línea de identidad de 45 grados." data-fig-align="center">
+<div id="fig-concrete-test-results" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Valores observados versus valores predichos para el conjunto de prueba. Los valores caen estrechamente a lo largo de la línea de identidad de 45 grados.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-concrete-test-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-concrete-test-results-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%" alt="Valores observados versus valores predichos para el conjunto de prueba. Los valores caen estrechamente a lo largo de la línea de identidad de 45 grados.">
 </div>
