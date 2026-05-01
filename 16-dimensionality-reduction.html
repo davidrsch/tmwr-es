@@ -2,12 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.37">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <meta name="description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
 <title>16&nbsp; Reducción De Dimensionalidad – Modelado Ordenado con R</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -58,7 +61,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -87,15 +89,14 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a73e7facfaf3f326b6370add29585988.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-94509cf776e35d8cf5b7004333b6cf71.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -452,7 +453,7 @@ div.csl-indent {
 <p>El objetivo principal de este estudio es proporcionar un método para la obtención de variedades de semillas uniformes a partir de la producción de cultivos, la cual es en forma de población, por lo que las semillas no están certificadas como una única variedad. Así, se desarrolló un sistema de visión por computadora para distinguir siete variedades diferentes registradas de frijol seco con características similares con el fin de obtener una clasificación uniforme de las semillas. Para el modelo de clasificación se tomaron imágenes de 13.611 granos de 7 diferentes frijoles secos registrados con una cámara de alta resolución.</p>
 </blockquote>
 <p>Cada imagen contiene varios beans. El proceso de determinar qué píxeles corresponden a un frijol en particular se llama <em>segmentación de imágenes</em>. Estos píxeles se pueden analizar para producir características para cada frijol, como el color y la morfología (es decir, la forma). Estas características se utilizan luego para modelar el resultado (variedad de frijol) porque las diferentes variedades de frijol se ven diferentes. Los datos de entrenamiento provienen de un conjunto de imágenes etiquetadas manualmente, y este conjunto de datos se utiliza para crear un modelo predictivo que puede distinguir entre siete variedades de frijol: Cali, Horoz, Dermason, Seker, Bombay, Barbunya y Sira. Producir un modelo eficaz puede ayudar a los fabricantes a cuantificar la homogeneidad de un lote de granos.</p>
-<p>Existen numerosos métodos para cuantificar las formas de los objetos <span class="citation" data-cites="Mingqiang08">(<a href="references.html#ref-Mingqiang08" role="doc-biblioref">Mingqiang, Kidiyo, y Joseph 2008</a>)</span>. Muchos están relacionados con los límites o regiones del objeto de interés. Ejemplos de características incluyen:</p>
+<p>Existen numerosos métodos para cuantificar las formas de los objetos <span class="citation" data-cites="Mingqiang08">(<a href="references.html#ref-Mingqiang08" role="doc-biblioref">Mingqiang et&nbsp;al. 2008</a>)</span>. Muchos están relacionados con los límites o regiones del objeto de interés. Ejemplos de características incluyen:</p>
 <ul>
 <li><p>El <em>área</em> (o tamaño) se puede estimar utilizando el número de píxeles del objeto o el tamaño del casco convexo alrededor del objeto.</p></li>
 <li><p>Podemos medir el <em>perímetro</em> usando el número de píxeles en el límite así como el área del cuadro delimitador (el rectángulo más pequeño que encierra un objeto).</p></li>
@@ -693,7 +694,7 @@ Figura&nbsp;16.4: El predictor de <code>area</code> antes y después del preproc
 <span><span class="op">}</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Reutilizaremos esta función varias veces en este capítulo.</p>
-<p>Aquí se exploran una serie de varias metodologías de extracción de características. Se puede encontrar una descripción general de la mayoría en la <a href="https://bookdown.org/max/FES/numeric-many-to-many.html#linear-projection-methods">Sección 6.3.1</a> de <span class="citation" data-cites="fes">Kuhn y Johnson (<a href="references.html#ref-fes" role="doc-biblioref">2020</a>)</span> y las referencias allí contenidas. . El método UMAP se describe en <span class="citation" data-cites="mcinnes2020umap">McInnes, Healy, y Melville (<a href="references.html#ref-mcinnes2020umap" role="doc-biblioref">2020</a>)</span>.</p>
+<p>Aquí se exploran una serie de varias metodologías de extracción de características. Se puede encontrar una descripción general de la mayoría en la <a href="https://bookdown.org/max/FES/numeric-many-to-many.html#linear-projection-methods">Sección 6.3.1</a> de <span class="citation" data-cites="fes">Kuhn y Johnson (<a href="references.html#ref-fes" role="doc-biblioref">2020</a>)</span> y las referencias allí contenidas. . El método UMAP se describe en <span class="citation" data-cites="mcinnes2020umap">McInnes et&nbsp;al. (<a href="references.html#ref-mcinnes2020umap" role="doc-biblioref">2020</a>)</span>.</p>
 <section id="análisis-de-componentes-principales" class="level3" data-number="16.5.1"><h3 data-number="16.5.1" class="anchored" data-anchor-id="análisis-de-componentes-principales">
 <span class="header-section-number">16.5.1</span> Análisis de componentes principales</h3>
 <p>Ya hemos mencionado la PCA varias veces en este libro y es hora de entrar en más detalles. PCA es un método no supervisado que utiliza combinaciones lineales de predictores para definir nuevas características. Estas características intentan dar cuenta de la mayor variación posible en los datos originales. Agregamos <code><a href="https://recipes.tidymodels.org/reference/step_pca.html">step_pca()</a></code> a la receta original y usamos nuestra función para visualizar los resultados en el conjunto de validación en <a href="#fig-bean-pca" class="quarto-xref">Figura&nbsp;<span>16.5</span></a> usando:</p>
@@ -986,7 +987,7 @@ Figura&nbsp;16.12: Área bajo la curva ROC del conjunto de validación
 <p>La reducción de dimensionalidad puede ser un método útil para el análisis exploratorio de datos y el modelado. Los paquetes <span class="pkg">recipes</span> y <span class="pkg">embed</span> contienen pasos para una variedad de métodos diferentes y <span class="pkg">workflowsets</span> facilita la elección de un método apropiado para un conjunto de datos. Este capítulo también analizó cómo se pueden usar recetas por sí solas, ya sea para depurar problemas con una receta o directamente para análisis exploratorio de datos y visualización de datos.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-beans" class="csl-entry" role="listitem">
 Koklu, M, y IA Ozkan. 2020. <span>«Multiclass classification of dry beans using computer vision and machine learning techniques»</span>. <em>Computers and Electronics in Agriculture</em> 174: 105507.
 </div>
@@ -994,10 +995,10 @@ Koklu, M, y IA Ozkan. 2020. <span>«Multiclass classification of dry beans using
 Kuhn, M, y K Johnson. 2020. <em>Feature engineering and selection: A practical approach for predictive models</em>. CRC Press.
 </div>
 <div id="ref-mcinnes2020umap" class="csl-entry" role="listitem">
-McInnes, L, J Healy, y J Melville. 2020. <span>«UMAP: Uniform manifold approximation and projection for dimension reduction»</span>.
+McInnes, L, J Healy, y J Melville. 2020. <em>UMAP: Uniform manifold approximation and projection for dimension reduction</em>.
 </div>
 <div id="ref-Mingqiang08" class="csl-entry" role="listitem">
-Mingqiang, Y, K Kidiyo, y R Joseph. 2008. <span>«A survey of shape feature extraction techniques»</span>. En <em>Pattern Recognition</em>, editado por PY Yin. Rijeka: IntechOpen. <a href="https://doi.org/10.5772/6237">https://doi.org/10.5772/6237</a>.
+Mingqiang, Y, K Kidiyo, y R Joseph. 2008. <span>«A survey of shape feature extraction techniques»</span>. Chap. 3 en <em>Pattern Recognition</em>, editado por PY Yin. IntechOpen. <a href="https://doi.org/10.5772/6237">https://doi.org/10.5772/6237</a>.
 </div>
 <div id="ref-symons1988211" class="csl-entry" role="listitem">
 Symons, S, y RG Fulcher. 1988. <span>«Determination of wheat kernel morphological variation by digital image analysis: <span>I</span>. <span>Variation</span> in Eastern Canadian milling quality wheats»</span>. <em>Journal of Cereal Science</em> 8 (3): 211-18.

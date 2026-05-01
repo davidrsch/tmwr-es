@@ -2,12 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.37">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <meta name="description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
 <title>13&nbsp; Búsqueda De Cuadrícula – Modelado Ordenado con R</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -58,7 +61,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -87,15 +89,14 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a73e7facfaf3f326b6370add29585988.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-94509cf776e35d8cf5b7004333b6cf71.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -122,7 +123,7 @@ div.csl-indent {
     "search-label": "Buscar"
   }
 }</script><meta name="google-site-verification" content="kphyQu6n4JhBUuoLZxnJpD9dbw9q5FLwqXb9AkI2fhU">
-<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -540,7 +541,7 @@ window.Quarto = {
 <span><span class="co">## 6           10 1                10</span></span>
 <span><span class="co">## # ℹ 6 more rows</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Existen técnicas para crear cuadrículas regulares que no utilizan todos los valores posibles de cada conjunto de parámetros. Estos <em>diseños factoriales fraccionales</em> <span class="citation" data-cites="BHH">(<a href="references.html#ref-BHH" role="doc-biblioref">Box, Hunter, y Hunter 2005</a>)</span> también podrían usarse. Para obtener más información, consulte la Vista de tareas de CRAN para el diseño experimental.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Existen técnicas para crear cuadrículas regulares que no utilizan todos los valores posibles de cada conjunto de parámetros. Estos <em>diseños factoriales fraccionales</em> <span class="citation" data-cites="BHH">(<a href="references.html#ref-BHH" role="doc-biblioref">Box et&nbsp;al. 2005</a>)</span> también podrían usarse. Para obtener más información, consulte la Vista de tareas de CRAN para el diseño experimental.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div class="rmdwarning">
 <p>El uso de cuadrículas regulares puede ser costoso desde el punto de vista computacional, especialmente cuando hay una cantidad media a grande de parámetros de ajuste. Esto es cierto para muchos modelos pero no para todos. Como se analiza en <a href="#sec-efficient-grids" class="quarto-xref"><span>Sección 13.5</span></a> a continuación, ¡hay muchos modelos cuyo tiempo de ajuste <em>disminuye</em> con una cuadrícula normal!</p>
 </div>
@@ -576,7 +577,7 @@ window.Quarto = {
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-random-grid" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Una matriz de diagrama de dispersión para tres parámetros de ajuste con 20 puntos generados al azar. Existen lagunas importantes en el espacio de parámetros." data-fig-align="center">
+<div id="fig-random-grid" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Una matriz de diagrama de dispersión para tres parámetros de ajuste con 20 puntos generados al azar. Existen lagunas importantes en el espacio de parámetros.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-random-grid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-random-grid-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Una matriz de diagrama de dispersión para tres parámetros de ajuste con 20 puntos generados al azar. Existen lagunas importantes en el espacio de parámetros." width="576">
 </div>
@@ -586,7 +587,7 @@ Figura&nbsp;13.1: Tres parámetros de ajuste con 15 puntos generados al azar
 </div>
 </div>
 </div>
-<p>Un enfoque mucho mejor es utilizar un conjunto de diseños experimentales llamados <em>diseños de relleno de espacio</em>. Si bien los diferentes métodos de diseño tienen objetivos ligeramente diferentes, generalmente encuentran una configuración de puntos que cubre el espacio de parámetros con la menor posibilidad de superposición o valores redundantes. Ejemplos de tales diseños son los hipercubos latinos <span class="citation" data-cites="lhd">(<a href="references.html#ref-lhd" role="doc-biblioref">McKay, Beckman, y Conover 1979</a>)</span>, los diseños de máxima entropía <span class="citation" data-cites="maxent">(<a href="references.html#ref-maxent" role="doc-biblioref">Shewry y Wynn 1987</a>)</span>, los diseños de máxima proyección <span class="citation" data-cites="maxproj">(<a href="references.html#ref-maxproj" role="doc-biblioref">Joseph, Gul, y Ba 2015</a>)</span> y otros. Consulte <span class="citation" data-cites="santner2003design">Santner et&nbsp;al. (<a href="references.html#ref-santner2003design" role="doc-biblioref">2003</a>)</span> para obtener una descripción general.</p>
+<p>Un enfoque mucho mejor es utilizar un conjunto de diseños experimentales llamados <em>diseños de relleno de espacio</em>. Si bien los diferentes métodos de diseño tienen objetivos ligeramente diferentes, generalmente encuentran una configuración de puntos que cubre el espacio de parámetros con la menor posibilidad de superposición o valores redundantes. Ejemplos de tales diseños son los hipercubos latinos <span class="citation" data-cites="lhd">(<a href="references.html#ref-lhd" role="doc-biblioref">McKay et&nbsp;al. 1979</a>)</span>, los diseños de máxima entropía <span class="citation" data-cites="maxent">(<a href="references.html#ref-maxent" role="doc-biblioref">Shewry y Wynn 1987</a>)</span>, los diseños de máxima proyección <span class="citation" data-cites="maxproj">(<a href="references.html#ref-maxproj" role="doc-biblioref">Joseph et&nbsp;al. 2015</a>)</span> y otros. Consulte <span class="citation" data-cites="santner2003design">Santner et&nbsp;al. (<a href="references.html#ref-santner2003design" role="doc-biblioref">2003</a>)</span> para obtener una descripción general.</p>
 <p>El paquete <span class="pkg">dials</span> contiene funciones para diseños de hipercubo latino y de máxima entropía. Al igual que con <code>grid_random()</code>, las entradas principales son el número de combinaciones de parámetros y un objeto de parámetro. Comparemos un diseño aleatorio con un diseño de hipercubo latino para 20 valores de parámetros candidatos en <a href="#fig-space-filling-design" class="quarto-xref">Figura&nbsp;<span>13.2</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1303</span><span class="op">)</span></span>
@@ -602,7 +603,7 @@ Figura&nbsp;13.1: Tres parámetros de ajuste con 15 puntos generados al azar
 <pre><code>## Warning: `grid_latin_hypercube()` was deprecated in dials 1.3.0.
 ## ℹ Please use `grid_space_filling()` instead.</code></pre>
 <div class="cell-output-display">
-<div id="fig-space-filling-design" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Una matriz de diagrama de dispersión para tres parámetros de ajuste con 15 puntos generados mediante un diseño de relleno de espacio. Hay menos espacios en el espacio de parámetros en comparación con la cuadrícula aleatoria." data-fig-align="center">
+<div id="fig-space-filling-design" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Una matriz de diagrama de dispersión para tres parámetros de ajuste con 15 puntos generados mediante un diseño de relleno de espacio. Hay menos espacios en el espacio de parámetros en comparación con la cuadrícula aleatoria.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-space-filling-design-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-space-filling-design-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Una matriz de diagrama de dispersión para tres parámetros de ajuste con 15 puntos generados mediante un diseño de relleno de espacio. Hay menos espacios en el espacio de parámetros en comparación con la cuadrícula aleatoria." width="576">
 </div>
@@ -701,7 +702,7 @@ Figura&nbsp;13.2: Tres parámetros de ajuste con 20 puntos generados mediante un
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-regular-grid-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un gráfico de líneas de los resultados de la cuadrícula regular. El eje x muestra el número de unidades ocultas y el eje y es el AUC ROC remuestreado. Hay líneas separadas para el monto de la regularización. Hay nueve paneles para tres valores para la cantidad de componentes PCA y la cantidad de épocas. En promedio, la cantidad de regularización es importante cuando más es mejor. Además, en promedio, el aumento del número de unidades ocultas disminuye la eficacia del modelo." data-fig-align="center">
+<div id="fig-regular-grid-plot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un gráfico de líneas de los resultados de la cuadrícula regular. El eje x muestra el número de unidades ocultas y el eje y es el AUC ROC remuestreado. Hay líneas separadas para el monto de la regularización. Hay nueve paneles para tres valores para la cantidad de componentes PCA y la cantidad de épocas. En promedio, la cantidad de regularización es importante cuando más es mejor. Además, en promedio, el aumento del número de unidades ocultas disminuye la eficacia del modelo.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-regular-grid-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-regular-grid-plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Un gráfico de líneas de los resultados de la cuadrícula regular. El eje x muestra el número de unidades ocultas y el eje y es el AUC ROC remuestreado. Hay líneas separadas para el monto de la regularización. Hay nueve paneles para tres valores para la cantidad de componentes PCA y la cantidad de épocas. En promedio, la cantidad de regularización es importante cuando más es mejor. Además, en promedio, el aumento del número de unidades ocultas disminuye la eficacia del modelo." width="672">
 </div>
@@ -755,7 +756,7 @@ Figura&nbsp;13.3: Los resultados regulares de la cuadrícula.
 <p>El método <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> también funcionará con estos diseños, aunque el formato de los resultados será diferente. <a href="#fig-sfd-plot" class="quarto-xref">Figura&nbsp;<span>13.4</span></a> se produjo usando <code>autoplot(mlp_sfd_tune)</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-sfd-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="El método `autoplot()` resulta cuando se usa con un diseño que llena el espacio. Las tendencias muestran un rendimiento decreciente con la cantidad de componentes PCA, así como con la cantidad de unidades ocultas." data-fig-align="center">
+<div id="fig-sfd-plot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="El método `autoplot()` resulta cuando se usa con un diseño que llena el espacio. Las tendencias muestran un rendimiento decreciente con la cantidad de componentes PCA, así como con la cantidad de unidades ocultas.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-sfd-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-sfd-plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="El método `autoplot()` resulta cuando se usa con un diseño que llena el espacio. Las tendencias muestran un rendimiento decreciente con la cantidad de componentes PCA, así como con la cantidad de unidades ocultas." width="672">
 </div>
@@ -913,7 +914,7 @@ Figura&nbsp;13.4: El método <code><a href="https://ggplot2.tidyverse.org/refere
 <li><p>Los splines de regresión adaptativa multivariada (MARS) añaden un conjunto de características no lineales a los modelos de regresión lineal <span class="citation" data-cites="Friedman:1991p109">(<a href="references.html#ref-Friedman:1991p109" role="doc-biblioref">Friedman 1991</a>)</span>. El número de términos a retener es un parámetro de ajuste y es computacionalmente rápido hacer predicciones sobre muchos valores de este parámetro a partir de un único ajuste de modelo.</p></li>
 </ul>
 <p>El paquete <span class="pkg">tune</span> aplica automáticamente este tipo de optimización cada vez que se ajusta un modelo aplicable.</p>
-<p>Por ejemplo, si se ajustó un modelo de clasificación C5.0 mejorado <span class="citation" data-cites="apm">(<a href="references.html#ref-apm" role="doc-biblioref">M. Kuhn y Johnson 2013</a>)</span> a los datos de la celda, podemos ajustar el número de iteraciones de refuerzo (“árboles”). Con todos los demás parámetros establecidos en sus valores predeterminados, podemos evaluar iteraciones de 1 a 100 en las mismas muestras utilizadas anteriormente:</p>
+<p>Por ejemplo, si se ajustó un modelo de clasificación C5.0 mejorado <span class="citation" data-cites="apm">(<a href="references.html#ref-apm" role="doc-biblioref">Kuhn y Johnson 2013</a>)</span> a los datos de la celda, podemos ajustar el número de iteraciones de refuerzo (“árboles”). Con todos los demás parámetros establecidos en sus valores predeterminados, podemos evaluar iteraciones de 1 a 100 en las mismas muestras utilizadas anteriormente:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">c5_spec</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu">boost_tree</span><span class="op">(</span>trees <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
@@ -957,7 +958,7 @@ Figura&nbsp;13.4: El método <code><a href="https://ggplot2.tidyverse.org/refere
 <p>Para ilustrar cómo funciona el procesamiento paralelo, usaremos un caso en el que hay 7 valores de parámetros de ajuste del modelo, con validación cruzada quíntuple. <a href="#fig-one-resample-per-worker" class="quarto-xref">Figura&nbsp;<span>13.5</span></a> muestra cómo se asignan las tareas a los procesos de trabajo.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-one-resample-per-worker" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un diagrama de los procesos de trabajo cuando el procesamiento paralelo coincide con los remuestreos de un proceso de trabajo específico. Una vez finalizadas las operaciones de preproceso, cada ajuste de modelo se ejecuta en el mismo proceso de trabajo." data-fig-align="center">
+<div id="fig-one-resample-per-worker" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un diagrama de los procesos de trabajo cuando el procesamiento paralelo coincide con los remuestreos de un proceso de trabajo específico. Una vez finalizadas las operaciones de preproceso, cada ajuste de modelo se ejecuta en el mismo proceso de trabajo.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-one-resample-per-worker-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-one-resample-per-worker-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%" alt="Un diagrama de los procesos de trabajo cuando el procesamiento paralelo coincide con los remuestreos de un proceso de trabajo específico. Una vez finalizadas las operaciones de preproceso, cada ajuste de modelo se ejecuta en el mismo proceso de trabajo.">
 </div>
@@ -985,7 +986,7 @@ Figura&nbsp;13.5: Procesos de trabajo cuando el procesamiento paralelo hace coin
 <p><a href="#fig-distributed-tasks" class="quarto-xref">Figura&nbsp;<span>13.6</span></a> ilustra la delegación de tareas a los trabajadores en este plan; se utiliza el mismo ejemplo pero con 10 trabajadores.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-distributed-tasks" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un diagrama de los procesos de los trabajadores cuando las tareas de preprocesamiento y modelado se distribuyen a muchos trabajadores. En este caso, se utiliza una paralelización más completa, pero algunas tareas de preprocesamiento se repiten en todos los procesos de trabajo." data-fig-align="center">
+<div id="fig-distributed-tasks" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un diagrama de los procesos de los trabajadores cuando las tareas de preprocesamiento y modelado se distribuyen a muchos trabajadores. En este caso, se utiliza una paralelización más completa, pero algunas tareas de preprocesamiento se repiten en todos los procesos de trabajo.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-distributed-tasks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-distributed-tasks-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Un diagrama de los procesos de los trabajadores cuando las tareas de preprocesamiento y modelado se distribuyen a muchos trabajadores. En este caso, se utiliza una paralelización más completa, pero algunas tareas de preprocesamiento se repiten en todos los procesos de trabajo.">
 </div>
@@ -1010,7 +1011,7 @@ Figura&nbsp;13.6: Procesos de trabajo cuando las tareas de preprocesamiento y mo
 <p>Primero, consideremos los tiempos de ejecución sin procesar en <a href="#fig-parallel-times" class="quarto-xref">Figura&nbsp;<span>13.7</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-parallel-times" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Tiempos de ejecución para el ajuste del modelo versus la cantidad de trabajadores que utilizan diferentes esquemas de delegación." data-fig-align="center">
+<div id="fig-parallel-times" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Tiempos de ejecución para el ajuste del modelo versus la cantidad de trabajadores que utilizan diferentes esquemas de delegación.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-parallel-times-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-parallel-times-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Tiempos de ejecución para el ajuste del modelo versus la cantidad de trabajadores que utilizan diferentes esquemas de delegación.">
 </div>
@@ -1030,7 +1031,7 @@ Figura&nbsp;13.7: Tiempos de ejecución para el ajuste del modelo versus la cant
 <p>También podemos ver estos datos en términos de aceleraciones en <a href="#fig-parallel-speedups" class="quarto-xref">Figura&nbsp;<span>13.8</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-parallel-speedups" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Aceleraciones en el ajuste del modelo frente al número de trabajadores que utilizan diferentes esquemas de delegación. La línea negra diagonal indica una aceleración lineal donde la adición de un nuevo proceso de trabajo tiene el máximo efecto. El esquema 'todo' muestra que los beneficios disminuyen después de tres o cuatro trabajadores, especialmente cuando hay un procesamiento previo costoso. El esquema de 'nuevas muestras' tiene aceleraciones casi lineales en todas las tareas." data-fig-align="center">
+<div id="fig-parallel-speedups" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Aceleraciones en el ajuste del modelo frente al número de trabajadores que utilizan diferentes esquemas de delegación. La línea negra diagonal indica una aceleración lineal donde la adición de un nuevo proceso de trabajo tiene el máximo efecto. El esquema 'todo' muestra que los beneficios disminuyen después de tres o cuatro trabajadores, especialmente cuando hay un procesamiento previo costoso. El esquema de 'nuevas muestras' tiene aceleraciones casi lineales en todas las tareas.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-parallel-speedups-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-parallel-speedups-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Aceleraciones en el ajuste del modelo frente al número de trabajadores que utilizan diferentes esquemas de delegación. La línea negra diagonal indica una aceleración lineal donde la adición de un nuevo proceso de trabajo tiene el máximo efecto. El esquema 'todo' muestra que los beneficios disminuyen después de tres o cuatro trabajadores, especialmente cuando hay un procesamiento previo costoso. El esquema de 'nuevas muestras' tiene aceleraciones casi lineales en todas las tareas.">
 </div>
@@ -1141,7 +1142,7 @@ Figura&nbsp;13.8: Aceleraciones en el ajuste del modelo frente al número de tra
 <p>Como ejemplo, en el proceso de ajuste del perceptrón multicapa con una cuadrícula regular explorado en este capítulo, ¿cómo se verían los resultados después de solo los primeros tres pliegues? Usando técnicas similares a las que se muestran en el <a href="11-comparing-models.html" class="quarto-xref">Capítulo&nbsp;<span>11</span></a>, podemos ajustar un modelo donde el resultado es el área remuestreada bajo la curva ROC y el predictor es un indicador para la combinación de parámetros. El modelo tiene en cuenta el efecto de remuestreo a remuestreo y produce estimaciones puntuales y de intervalo para cada configuración de parámetro. Los resultados del modelo son intervalos de confianza unilaterales del 95% que miden la pérdida del valor ROC en relación con los parámetros de mejor rendimiento actualmente, como se muestra en <a href="#fig-racing-process" class="quarto-xref">Figura&nbsp;<span>13.9</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-racing-process" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Una ilustración del proceso de carrera para 20 parámetros de ajuste y 10 remuestreos. El análisis se realiza en la primera, tercera y última muestra. A medida que aumenta el número de remuestras, los intervalos de confianza muestran algunas configuraciones del modelo que no tienen intervalos de confianza que se superpongan con cero. Estos quedan excluidos de remuestreos posteriores." data-fig-align="center">
+<div id="fig-racing-process" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Una ilustración del proceso de carrera para 20 parámetros de ajuste y 10 remuestreos. El análisis se realiza en la primera, tercera y última muestra. A medida que aumenta el número de remuestras, los intervalos de confianza muestran algunas configuraciones del modelo que no tienen intervalos de confianza que se superpongan con cero. Estos quedan excluidos de remuestreos posteriores.">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-racing-process-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-racing-process-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="Una ilustración del proceso de carrera para 20 parámetros de ajuste y 10 remuestreos. El análisis se realiza en la primera, tercera y última muestra. A medida que aumenta el número de remuestras, los intervalos de confianza muestran algunas configuraciones del modelo que no tienen intervalos de confianza que se superpongan con cero. Estos quedan excluidos de remuestreos posteriores.">
 </div>
@@ -1186,7 +1187,7 @@ Figura&nbsp;13.9: El proceso de carrera para 20 parámetros de afinación y 10 r
 <span><span class="co">## 4            5 1.30e-10     89        5 roc_auc binary     0.879    10 0.00967</span></span>
 <span><span class="co">## # ℹ 1 more variable: .config &lt;chr&gt;</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Existen otras técnicas de análisis intermedio para descartar configuraciones. Por ejemplo, <span class="citation" data-cites="krueger15a">Krueger, Panknin, y Braun (<a href="references.html#ref-krueger15a" role="doc-biblioref">2015</a>)</span> usa métodos de análisis secuencial tradicionales, mientras que <span class="citation" data-cites="kuhn2014futility">Max Kuhn (<a href="references.html#ref-kuhn2014futility" role="doc-biblioref">2014</a>)</span> trata los datos como una competencia deportiva y usa el modelo Bradley-Terry <span class="citation" data-cites="bradley1952rank">(<a href="references.html#ref-bradley1952rank" role="doc-biblioref">Bradley y Terry 1952</a>)</span> para medir la capacidad ganadora de la configuración de parámetros.</p>
+<p>Existen otras técnicas de análisis intermedio para descartar configuraciones. Por ejemplo, <span class="citation" data-cites="krueger15a">Krueger et&nbsp;al. (<a href="references.html#ref-krueger15a" role="doc-biblioref">2015</a>)</span> usa métodos de análisis secuencial tradicionales, mientras que <span class="citation" data-cites="kuhn2014futility">Kuhn (<a href="references.html#ref-kuhn2014futility" role="doc-biblioref">2014</a>)</span> trata los datos como una competencia deportiva y usa el modelo Bradley-Terry <span class="citation" data-cites="bradley1952rank">(<a href="references.html#ref-bradley1952rank" role="doc-biblioref">Bradley y Terry 1952</a>)</span> para medir la capacidad ganadora de la configuración de parámetros.</p>
 </section></section><section id="sec-grid-summary" class="level2" data-number="13.6"><h2 data-number="13.6" class="anchored" data-anchor-id="sec-grid-summary">
 <span class="header-section-number">13.6</span> Resumen Del Capítulo</h2>
 <p>Este capítulo analizó las dos clases principales de búsqueda de cuadrículas (regular y no regular) que se pueden usar para ajustar el modelo y demostró cómo construir estas cuadrículas, ya sea manualmente o usando la familia de funciones <code>grid_*()</code>. La función <code><a href="https://tune.tidymodels.org/reference/tune_grid.html">tune_grid()</a></code> puede evaluar estos conjuntos candidatos de parámetros del modelo mediante remuestreo. El capítulo también mostró cómo finalizar un modelo, receta o flujo de trabajo para actualizar los valores de los parámetros para el ajuste final. La búsqueda en cuadrícula puede ser costosa desde el punto de vista computacional, pero las decisiones bien pensadas en el diseño experimental de dichas búsquedas pueden hacerlas manejables.</p>
@@ -1204,7 +1205,7 @@ Figura&nbsp;13.9: El proceso de carrera para 20 parámetros de afinación y 10 r
 </div>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-BHH" class="csl-entry" role="listitem">
 Box, GEP, W Hunter, y J Hunter. 2005. <em>Statistics for Experimenters: An Introduction to Design, Data Analysis, and Model Building</em>. Wiley.
 </div>
@@ -1227,13 +1228,13 @@ Joseph, V, E Gul, y S Ba. 2015. <span>«Maximum projection designs for computer 
 Krueger, T, D Panknin, y M Braun. 2015. <span>«Fast Cross-Validation via Sequential Testing»</span>. <em>Journal of Machine Learning Research</em> 16 (33): 1103-55.
 </div>
 <div id="ref-kuhn2014futility" class="csl-entry" role="listitem">
-Kuhn, Max. 2014. <span>«Futility Analysis in the Cross-Validation of Machine Learning Models»</span>. <a href="https://arxiv.org/abs/1405.6974">https://arxiv.org/abs/1405.6974</a>.
+Kuhn, Max. 2014. <em>Futility Analysis in the Cross-Validation of Machine Learning Models</em>. <a href="https://arxiv.org/abs/1405.6974">https://arxiv.org/abs/1405.6974</a>.
 </div>
 <div id="ref-apm" class="csl-entry" role="listitem">
 Kuhn, M, y K Johnson. 2013. <em>Applied Predictive Modeling</em>. Springer.
 </div>
 <div id="ref-maron1994hoeffding" class="csl-entry" role="listitem">
-Maron, O, y A Moore. 1994. <span>«Hoeffding races: Accelerating model selection search for classification and function approximation»</span>. En <em>Advances in neural information processing systems</em>, 59-66.
+Maron, O, y A Moore. 1994. <span>«Hoeffding races: Accelerating model selection search for classification and function approximation»</span>. <em>Advances in neural information processing systems</em>, 59-66.
 </div>
 <div id="ref-lhd" class="csl-entry" role="listitem">
 McKay, M, R Beckman, y W Conover. 1979. <span>«A Comparison of Three Methods for Selecting Values of Input Variables in the Analysis of Output from a Computer Code»</span>. <em>Technometrics</em> 21 (2): 239-45.
@@ -1254,7 +1255,7 @@ Yeo, I-K, y R Johnson. 2000. <span>«A new family of power transformations to im
 </section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
 <ol>
 <li id="fn1"><p><a href="https://CRAN.R-project.org/view=ExperimentalDesign" class="uri">https://CRAN.R-project.org/view=ExperimentalDesign</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Consulte <span class="citation" data-cites="kuhn2014futility">Max Kuhn (<a href="references.html#ref-kuhn2014futility" role="doc-biblioref">2014</a>)</span> para obtener más detalles sobre los aspectos computacionales de este enfoque.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Consulte <span class="citation" data-cites="kuhn2014futility">Kuhn (<a href="references.html#ref-kuhn2014futility" role="doc-biblioref">2014</a>)</span> para obtener más detalles sobre los aspectos computacionales de este enfoque.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol></section></main><!-- /main --><script>
 
   // Chapter name

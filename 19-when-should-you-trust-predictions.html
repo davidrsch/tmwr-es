@@ -2,12 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.37">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <meta name="description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
 <title>19&nbsp; ¿Cuándo Debería Confiar En Sus Predicciones? – Modelado Ordenado con R</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -58,7 +61,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -87,15 +89,14 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a73e7facfaf3f326b6370add29585988.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-94509cf776e35d8cf5b7004333b6cf71.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -122,7 +123,7 @@ div.csl-indent {
     "search-label": "Buscar"
   }
 }</script><meta name="google-site-verification" content="kphyQu6n4JhBUuoLZxnJpD9dbw9q5FLwqXb9AkI2fhU">
-<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -768,7 +769,7 @@ Figura&nbsp;19.5: Dos semanas de predicciones de 2020 para los datos de Chicago 
 <div class="rmdwarning">
 <p>A veces las estadísticas producidas por los modelos no miden muy bien la calidad de las predicciones.</p>
 </div>
-<p>Esta situación se puede evitar teniendo una metodología secundaria que pueda cuantificar qué tan aplicable es el modelo para cualquier nueva predicción (es decir, el <em>dominio de aplicabilidad</em> del modelo). Existe una variedad de métodos para calcular un modelo de dominio de aplicabilidad, como <span class="citation" data-cites="Jaworska">Jaworska, Nikolova-Jeliazkova, y Aldenberg (<a href="references.html#ref-Jaworska" role="doc-biblioref">2005</a>)</span> o <span class="citation" data-cites="Netzeva">Netzeva et&nbsp;al. (<a href="references.html#ref-Netzeva" role="doc-biblioref">2005</a>)</span>. El enfoque utilizado en este capítulo es un método no supervisado bastante simple que intenta medir cuánto (si lo hay) un nuevo punto de datos está más allá de los datos de entrenamiento.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Esta situación se puede evitar teniendo una metodología secundaria que pueda cuantificar qué tan aplicable es el modelo para cualquier nueva predicción (es decir, el <em>dominio de aplicabilidad</em> del modelo). Existe una variedad de métodos para calcular un modelo de dominio de aplicabilidad, como <span class="citation" data-cites="Jaworska">Jaworska et&nbsp;al. (<a href="references.html#ref-Jaworska" role="doc-biblioref">2005</a>)</span> o <span class="citation" data-cites="Netzeva">Netzeva et&nbsp;al. (<a href="references.html#ref-Netzeva" role="doc-biblioref">2005</a>)</span>. El enfoque utilizado en este capítulo es un método no supervisado bastante simple que intenta medir cuánto (si lo hay) un nuevo punto de datos está más allá de los datos de entrenamiento.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div class="rmdnote">
 <p>La idea es acompañar una predicción con una puntuación que mida qué tan similar es el nuevo punto al conjunto de entrenamiento.</p>
 </div>
@@ -875,7 +876,7 @@ Figura&nbsp;19.8: Los resultados de usar el método <code><a href="https://ggplo
 <p>Los modelos de dominio de aplicabilidad tratan con características/predictores y cuantifican la cantidad de extrapolación (si la hay) que ocurre al hacer una predicción. Este capítulo mostró un método básico que utiliza el análisis de componentes principales, aunque hay muchas otras formas de medir la aplicabilidad. El paquete <span class="pkg">applicable</span> también contiene métodos especializados para conjuntos de datos donde todos los predictores son binarios. Este método calcula puntuaciones de similitud entre los puntos de datos del conjunto de entrenamiento para definir la distribución de referencia.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Bartley" class="csl-entry" role="listitem">
 Bartley, E AND Schliep, M . AND Hanks. 2019. <span>«Identifying and characterizing extrapolation in multivariate response data»</span>. <em>PLOS ONE</em> 14 (diciembre): 1-20.
 </div>
@@ -892,7 +893,7 @@ Jaworska, J, N Nikolova-Jeliazkova, y T Aldenberg. 2005. <span>«QSAR Applicabil
 Kerleguer, A., J.-L. Koeck, M. Fabre, P. Gérôme, R. Teyssou, y V. Hervé. 2003. <span>«Use of equivocal zone in interpretation of results of the amplified <span>Mycobacterium Tuberculosis</span> direct test for diagnosis of tuberculosis»</span>. <em>Journal of Clinical Microbiology</em> 41 (4): 1783-84.
 </div>
 <div id="ref-Netzeva" class="csl-entry" role="listitem">
-Netzeva, T, A Worth, T Aldenberg, R Benigni, M Cronin, P Gramatica, J Jaworska, et&nbsp;al. 2005. <span>«Current Status of Methods for Defining the Applicability Domain of (Quantitative) Structure-Activity Relationships: The Report and Recommendations of ECVAM Workshop 52»</span>. <em>Alternatives to Laboratory Animals</em> 33 (2): 155-73.
+Netzeva, T, A Worth, T Aldenberg, et&nbsp;al. 2005. <span>«Current Status of Methods for Defining the Applicability Domain of (Quantitative) Structure-Activity Relationships: The Report and Recommendations of ECVAM Workshop 52»</span>. <em>Alternatives to Laboratory Animals</em> 33 (2): 155-73.
 </div>
 </div>
 </section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>

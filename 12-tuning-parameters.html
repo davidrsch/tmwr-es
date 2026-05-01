@@ -2,12 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.37">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <meta name="description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
 <title>12&nbsp; Ajuste De Modelos Y Los Peligros Del Sobreajuste – Modelado Ordenado con R</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -58,7 +61,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -87,15 +89,14 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a73e7facfaf3f326b6370add29585988.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-94509cf776e35d8cf5b7004333b6cf71.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -122,7 +123,7 @@ div.csl-indent {
     "search-label": "Buscar"
   }
 }</script><meta name="google-site-verification" content="kphyQu6n4JhBUuoLZxnJpD9dbw9q5FLwqXb9AkI2fhU">
-<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -462,7 +463,7 @@ window.Quarto = {
 <ul>
 <li><p>Boosting es un método conjunto que combina una serie de modelos base, cada uno de los cuales se crea secuencialmente y depende de los modelos anteriores. El número de iteraciones de impulso es un parámetro de ajuste importante que normalmente requiere optimización.</p></li>
 <li><p>En la clásica red neuronal artificial de una sola capa (también conocida como perceptrón multicapa), los predictores se combinan utilizando dos o más unidades ocultas. Las unidades ocultas son combinaciones lineales de los predictores que se capturan en una <em>función de activación</em> (normalmente una función no lineal, como una sigmoidea). Las unidades ocultas se conectan luego con las unidades resultantes; se utiliza una unidad de resultado para los modelos de regresión y se requieren múltiples unidades de resultado para la clasificación. El número de unidades ocultas y el tipo de función de activación son parámetros de ajuste estructural importantes.</p></li>
-<li><p>Los métodos modernos de descenso de gradientes se mejoran al encontrar los parámetros de optimización adecuados. Ejemplos de tales hiperparámetros son las tasas de aprendizaje, el impulso y el número de iteraciones/épocas de optimización <span class="citation" data-cites="Goodfellow">(<a href="references.html#ref-Goodfellow" role="doc-biblioref">Goodfellow, Bengio, y Courville 2016</a>)</span>. Las redes neuronales y algunos modelos de conjuntos utilizan el descenso de gradiente para estimar los parámetros del modelo. Si bien los parámetros de ajuste asociados con el descenso del gradiente no son parámetros estructurales, a menudo requieren ajuste.</p></li>
+<li><p>Los métodos modernos de descenso de gradientes se mejoran al encontrar los parámetros de optimización adecuados. Ejemplos de tales hiperparámetros son las tasas de aprendizaje, el impulso y el número de iteraciones/épocas de optimización <span class="citation" data-cites="Goodfellow">(<a href="references.html#ref-Goodfellow" role="doc-biblioref">Goodfellow et&nbsp;al. 2016</a>)</span>. Las redes neuronales y algunos modelos de conjuntos utilizan el descenso de gradiente para estimar los parámetros del modelo. Si bien los parámetros de ajuste asociados con el descenso del gradiente no son parámetros estructurales, a menudo requieren ajuste.</p></li>
 </ul>
 <p>En algunos casos, las técnicas de preprocesamiento requieren ajustes:</p>
 <ul>
@@ -472,7 +473,7 @@ window.Quarto = {
 <p>Algunos modelos estadísticos clásicos también tienen parámetros estructurales:</p>
 <ul>
 <li><p>En la regresión binaria, el enlace logit se usa comúnmente (es decir, regresión logística). También están disponibles otras funciones de enlace, como probit y log-log complementario <span class="citation" data-cites="Dobson99">(<a href="references.html#ref-Dobson99" role="doc-biblioref">Dobson 1999</a>)</span>. Este ejemplo se describe con más detalle en <a href="#sec-what-to-optimize" class="quarto-xref"><span>Sección 12.3</span></a>.</p></li>
-<li><p>Los modelos de medidas repetidas y longitudinales no bayesianos requieren una especificación para la estructura de covarianza o correlación de los datos. Las opciones incluyen compuesto simétrico (también conocido como intercambiable), autorregresivo, Toeplitz y otros <span class="citation" data-cites="littell2000modelling">(<a href="references.html#ref-littell2000modelling" role="doc-biblioref">Littell, Pendergast, y Natarajan 2000</a>)</span>.</p></li>
+<li><p>Los modelos de medidas repetidas y longitudinales no bayesianos requieren una especificación para la estructura de covarianza o correlación de los datos. Las opciones incluyen compuesto simétrico (también conocido como intercambiable), autorregresivo, Toeplitz y otros <span class="citation" data-cites="littell2000modelling">(<a href="references.html#ref-littell2000modelling" role="doc-biblioref">Littell et&nbsp;al. 2000</a>)</span>.</p></li>
 </ul>
 <p>Un contraejemplo en el que no es apropiado ajustar un parámetro es la distribución previa requerida para el análisis bayesiano. Lo anterior resume la creencia del analista sobre la distribución de una cantidad antes de que se tengan en cuenta la evidencia o los datos. Por ejemplo, en <a href="11-comparing-models.html#sec-tidyposterior" class="quarto-xref"><span>Sección 11.4</span></a>, utilizamos un modelo ANOVA bayesiano y no teníamos claro cuál debería ser el valor previo para los parámetros de regresión (más allá de ser una distribución simétrica). Elegimos una distribución t con un grado de libertad para la anterior ya que tiene colas más pesadas; esto refleja nuestra incertidumbre adicional. Nuestras creencias previas no deberían estar sujetas a optimización. Los parámetros de ajuste generalmente se optimizan para el rendimiento, mientras que los anteriores no deben modificarse para obtener “los resultados correctos”.</p>
 <div class="rmdwarning">
@@ -488,7 +489,7 @@ window.Quarto = {
 <p>Para demostrarlo, considere los datos de clasificación que se muestran en <a href="#fig-two-class-dat" class="quarto-xref">Figura&nbsp;<span>12.1</span></a> con dos predictores, dos clases y un conjunto de entrenamiento de puntos de datos 593.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-two-class-dat" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Un ejemplo de conjunto de datos de clasificación de dos clases con dos predictores. Los dos predictores tienen una correlación moderada y existen algunos puntos de separación entre las clases.">
+<div id="fig-two-class-dat" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Un ejemplo de conjunto de datos de clasificación de dos clases con dos predictores. Los dos predictores tienen una correlación moderada y existen algunos puntos de separación entre las clases." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-two-class-dat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-two-class-dat-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Un ejemplo de conjunto de datos de clasificación de dos clases con dos predictores. Los dos predictores tienen una correlación moderada y existen algunos puntos de separación entre las clases." width="672">
 </div>
@@ -574,7 +575,7 @@ Figura&nbsp;12.1: Un ejemplo de conjunto de datos de clasificación de dos clase
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-resampled-log-lhood" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Medias e intervalos de confianza aproximados del 90% para la probabilidad logarítmica binomial remuestreada con tres funciones de enlace diferentes. El enlace logit tiene el valor más grande, seguido del enlace probit. El enlace de registro complementario tiene valores mucho más bajos.">
+<div id="fig-resampled-log-lhood" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Medias e intervalos de confianza aproximados del 90% para la probabilidad logarítmica binomial remuestreada con tres funciones de enlace diferentes. El enlace logit tiene el valor más grande, seguido del enlace probit. El enlace de registro complementario tiene valores mucho más bajos." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-resampled-log-lhood-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-resampled-log-lhood-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Medias e intervalos de confianza aproximados del 90% para la probabilidad logarítmica binomial remuestreada con tres funciones de enlace diferentes. El enlace logit tiene el valor más grande, seguido del enlace probit. El enlace de registro complementario tiene valores mucho más bajos." width="672">
 </div>
@@ -591,7 +592,7 @@ Figura&nbsp;12.2: Medias e intervalos de confianza aproximados del 90% para la p
 <p>¿Qué tal una métrica diferente? También calculamos el área bajo la curva ROC para cada remuestreo. Estos resultados, que reflejan la capacidad discriminativa de los modelos a través de numerosos umbrales de probabilidad, muestran una falta de diferencia en <a href="#fig-resampled-roc" class="quarto-xref">Figura&nbsp;<span>12.3</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-resampled-roc" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Medias e intervalos de confianza aproximados del 90% para el área remuestreada bajo la curva ROC con tres funciones de enlace diferentes. El enlace logit tiene el valor más grande, seguido del enlace probit. Los intervalos de confianza muestran una gran superposición entre los dos métodos.">
+<div id="fig-resampled-roc" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Medias e intervalos de confianza aproximados del 90% para el área remuestreada bajo la curva ROC con tres funciones de enlace diferentes. El enlace logit tiene el valor más grande, seguido del enlace probit. Los intervalos de confianza muestran una gran superposición entre los dos métodos." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-resampled-roc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-resampled-roc-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Medias e intervalos de confianza aproximados del 90% para el área remuestreada bajo la curva ROC con tres funciones de enlace diferentes. El enlace logit tiene el valor más grande, seguido del enlace probit. Los intervalos de confianza muestran una gran superposición entre los dos métodos." width="672">
 </div>
@@ -604,7 +605,7 @@ Figura&nbsp;12.3: Medias e intervalos de confianza aproximados del 90% para el �
 <p>Dada la superposición de los intervalos, así como la escala del eje x, se podría utilizar cualquiera de estas opciones. Vemos esto nuevamente cuando los límites de clase para los tres modelos se superponen en el conjunto de prueba de puntos de datos 198 en <a href="#fig-three-link-fits" class="quarto-xref">Figura&nbsp;<span>12.4</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-three-link-fits" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="El límite de clase lineal se ajusta a tres funciones de enlace. Las líneas tienen pendientes muy similares y el registro complementario tiene una intersección ligeramente diferente a la de los otros dos enlaces.">
+<div id="fig-three-link-fits" class="quarto-float quarto-figure quarto-figure-center anchored" alt="El límite de clase lineal se ajusta a tres funciones de enlace. Las líneas tienen pendientes muy similares y el registro complementario tiene una intersección ligeramente diferente a la de los otros dos enlaces." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-three-link-fits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-three-link-fits-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="El límite de clase lineal se ajusta a tres funciones de enlace. Las líneas tienen pendientes muy similares y el registro complementario tiene una intersección ligeramente diferente a la de los otros dos enlaces." width="672">
 </div>
@@ -632,7 +633,7 @@ Figura&nbsp;12.4: El límite de clase lineal se ajusta a tres funciones de enlac
 <p>Los capítulos <a href="05-data-spending.html" class="quarto-xref"><span>5</span></a> y <a href="10-resampling.html" class="quarto-xref"><span>10</span></a> demostraron que simplemente repredecir el conjunto de entrenamiento es un enfoque deficiente para la evaluación de modelos. Aquí, la red neuronal muy rápidamente comienza a sobreinterpretar los patrones que ve en el conjunto de entrenamiento. Compare estos tres límites de clase de ejemplo (desarrollados con el conjunto de entrenamiento) superpuestos en los conjuntos de entrenamiento y prueba en <a href="#fig-two-class-boundaries" class="quarto-xref">Figura&nbsp;<span>12.5</span></a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-two-class-boundaries" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Límites de clase para tres modelos con un número creciente de unidades ocultas. Los límites se ajustan al conjunto de entrenamiento y se muestran para los conjuntos de entrenamiento y prueba. Después de una única unidad oculta, los límites se vuelven tremendamente complejos. Los gráficos del conjunto de pruebas muestran que los modelos más complejos no se ajustan a los datos que no se utilizaron para ajustar el modelo.">
+<div id="fig-two-class-boundaries" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Límites de clase para tres modelos con un número creciente de unidades ocultas. Los límites se ajustan al conjunto de entrenamiento y se muestran para los conjuntos de entrenamiento y prueba. Después de una única unidad oculta, los límites se vuelven tremendamente complejos. Los gráficos del conjunto de pruebas muestran que los modelos más complejos no se ajustan a los datos que no se utilizaron para ajustar el modelo." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-two-class-boundaries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-two-class-boundaries-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Límites de clase para tres modelos con un número creciente de unidades ocultas. Los límites se ajustan al conjunto de entrenamiento y se muestran para los conjuntos de entrenamiento y prueba. Después de una única unidad oculta, los límites se vuelven tremendamente complejos. Los gráficos del conjunto de pruebas muestran que los modelos más complejos no se ajustan a los datos que no se utilizaron para ajustar el modelo." width="672">
 </div>
@@ -656,7 +657,7 @@ Figura&nbsp;12.5: Límites de clase para tres modelos con un número creciente d
 <p><a href="#fig-tuning-strategies" class="quarto-xref">Figura&nbsp;<span>12.6</span></a> muestra dos paneles que demuestran estos dos enfoques para una situación con dos parámetros de ajuste que oscilan entre cero y uno. En cada uno, un conjunto de contornos muestra la relación verdadera (simulada) entre los parámetros y el resultado. Los resultados óptimos se encuentran en las esquinas superiores derechas.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-tuning-strategies" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Ejemplos de ajuste de cuadrícula predefinido y método de búsqueda iterativo. Las líneas representan contornos de alguna métrica de desempeño que es mejor en el lado superior derecho del gráfico. La búsqueda de cuadrícula muestra puntos que cubren bien el espacio y tiene un punto cerca del óptimo. El método de búsqueda iterativa tiene muchos más puntos y serpentea hacia el óptimo, donde muchos puntos se concentran en el mejor valor.">
+<div id="fig-tuning-strategies" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Ejemplos de ajuste de cuadrícula predefinido y método de búsqueda iterativo. Las líneas representan contornos de alguna métrica de desempeño que es mejor en el lado superior derecho del gráfico. La búsqueda de cuadrícula muestra puntos que cubren bien el espacio y tiene un punto cerca del óptimo. El método de búsqueda iterativa tiene muchos más puntos y serpentea hacia el óptimo, donde muchos puntos se concentran en el mejor valor." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-tuning-strategies-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/fig-tuning-strategies-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Ejemplos de ajuste de cuadrícula predefinido y método de búsqueda iterativo. Las líneas representan contornos de alguna métrica de desempeño que es mejor en el lado superior derecho del gráfico. La búsqueda de cuadrícula muestra puntos que cubren bien el espacio y tiene un punto cerca del óptimo. El método de búsqueda iterativa tiene muchos más puntos y serpentea hacia el óptimo, donde muchos puntos se concentran en el mejor valor." width="672">
 </div>
@@ -682,7 +683,7 @@ Figura&nbsp;12.6: Ejemplos de ajuste de cuadrícula predefinido y método de bú
 <li><p>el importe de la regularización en los modelos penalizados (<code>penalty</code>, <a href="06-fitting-models.html#sec-create-a-model" class="quarto-xref"><span>Sección 6.1</span></a>)</p></li>
 </ul>
 <p>Para las especificaciones del modelo <span class="pkg">parsnip</span>, hay dos tipos de argumentos de parámetros. <em>Los argumentos principales</em> son aquellos que con mayor frecuencia están optimizados para el rendimiento y están disponibles en múltiples motores. Los principales parámetros de ajuste son argumentos de nivel superior para la función de especificación del modelo. Por ejemplo, la función <code>rand_forest()</code> tiene argumentos principales <code>trees</code>, <code>min_n</code> y <code>mtry</code>, ya que estos se especifican u optimizan con mayor frecuencia.</p>
-<p>Un conjunto secundario de parámetros de ajuste son <em>específicos del motor</em>. Estos se optimizan con poca frecuencia o son específicos solo para ciertos motores. Nuevamente usando random forest como ejemplo, el paquete <span class="pkg">ranger</span> contiene algunos argumentos que no son utilizados por otros paquetes. Un ejemplo es la penalización de ganancia, que regulariza la selección de predictores en el proceso de inducción del árbol. Este parámetro puede ayudar a modular el equilibrio entre la cantidad de predictores utilizados en el conjunto y el rendimiento <span class="citation" data-cites="wundervald2020generalizing">(<a href="references.html#ref-wundervald2020generalizing" role="doc-biblioref">Wundervald, Parnell, y Domijan 2020</a>)</span>. El nombre de este argumento en <code>ranger()</code> es <code>regularization.factor</code>. Para especificar un valor mediante una especificación de modelo <span class="pkg">parsnip</span>, se agrega como argumento complementario a <code>set_engine()</code>:</p>
+<p>Un conjunto secundario de parámetros de ajuste son <em>específicos del motor</em>. Estos se optimizan con poca frecuencia o son específicos solo para ciertos motores. Nuevamente usando random forest como ejemplo, el paquete <span class="pkg">ranger</span> contiene algunos argumentos que no son utilizados por otros paquetes. Un ejemplo es la penalización de ganancia, que regulariza la selección de predictores en el proceso de inducción del árbol. Este parámetro puede ayudar a modular el equilibrio entre la cantidad de predictores utilizados en el conjunto y el rendimiento <span class="citation" data-cites="wundervald2020generalizing">(<a href="references.html#ref-wundervald2020generalizing" role="doc-biblioref">Wundervald et&nbsp;al. 2020</a>)</span>. El nombre de este argumento en <code>ranger()</code> es <code>regularization.factor</code>. Para especificar un valor mediante una especificación de modelo <span class="pkg">parsnip</span>, se agrega como argumento complementario a <code>set_engine()</code>:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">rand_forest</span><span class="op">(</span>trees <span class="op">=</span> <span class="fl">2000</span>, min_n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span>                   <span class="co"># &lt;- argumentos principales</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"ranger"</span>, regularization.factor <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>         <span class="co"># &lt;- específico del motor</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
@@ -894,30 +895,30 @@ Figura&nbsp;12.6: Ejemplos de ajuste de cuadrícula predefinido y método de bú
 <p>Este capítulo presentó el proceso de ajuste de los hiperparámetros del modelo que no se pueden estimar directamente a partir de los datos. Ajustar dichos parámetros puede conducir a un sobreajuste, a menudo al permitir que un modelo se vuelva demasiado complejo, por lo que es importante utilizar conjuntos de datos remuestreados junto con métricas apropiadas para la evaluación. Hay dos estrategias generales para determinar los valores correctos, la búsqueda en cuadrícula y la búsqueda iterativa, que exploraremos en profundidad en los dos capítulos siguientes. En tidymodels, la función <code>tune()</code> se usa para identificar parámetros para optimización, y las funciones del paquete <span class="pkg">dials</span> pueden extraer e interactuar con objetos de parámetros de ajuste.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-cybenko1989approximation" class="csl-entry" role="listitem">
 Cybenko, G. 1989. <span>«Approximation by superpositions of a sigmoidal function»</span>. <em>Mathematics of Control, Signals and Systems</em> 2 (4): 303-14.
 </div>
 <div id="ref-Dobson99" class="csl-entry" role="listitem">
-Dobson, A. 1999. <em>An introduction to generalized linear models</em>. Chapman; Hall: Boca Raton.
+Dobson, A. 1999. <em>An introduction to generalized linear models</em>. Boca Raton.
 </div>
 <div id="ref-FriedmanGFA" class="csl-entry" role="listitem">
-Friedman, J. 2001. <span>«Greedy Function Approximation: A Gradient Boosting Machine»</span>. <em>Annals of Statistics</em> 29 (5): 1189-1232.
+Friedman, J. 2001. <span>«Greedy Function Approximation: A Gradient Boosting Machine»</span>. <em>Annals of Statistics</em> 29 (5): 1189-232.
 </div>
 <div id="ref-Goodfellow" class="csl-entry" role="listitem">
 Goodfellow, I, Y Bengio, y A Courville. 2016. <em>Deep Learning</em>. MIT Press.
 </div>
 <div id="ref-littell2000modelling" class="csl-entry" role="listitem">
-Littell, R, J Pendergast, y R Natarajan. 2000. <span>«Modelling covariance structure in the analysis of repeated measures data»</span>. <em>Statistics in Medicine</em> 19 (13): 1793-1819.
+Littell, R, J Pendergast, y R Natarajan. 2000. <span>«Modelling covariance structure in the analysis of repeated measures data»</span>. <em>Statistics in Medicine</em> 19 (13): 1793-819.
 </div>
 <div id="ref-Olsson:1975p3609" class="csl-entry" role="listitem">
 Olsson, D, y L Nelson. 1975. <span>«The <span>N</span>elder-<span>M</span>ead Simplex Procedure for Function Minimization»</span>. <em>Technometrics</em> 17 (1): 45-51.
 </div>
 <div id="ref-thomas2020problem" class="csl-entry" role="listitem">
-Thomas, R, y D Uminsky. 2020. <span>«The Problem with Metrics is a Fundamental Problem for AI»</span>. <a href="https://arxiv.org/abs/2002.08512">https://arxiv.org/abs/2002.08512</a>.
+Thomas, R, y D Uminsky. 2020. <em>The Problem with Metrics is a Fundamental Problem for AI</em>. <a href="https://arxiv.org/abs/2002.08512">https://arxiv.org/abs/2002.08512</a>.
 </div>
 <div id="ref-wundervald2020generalizing" class="csl-entry" role="listitem">
-Wundervald, B, A Parnell, y K Domijan. 2020. <span>«Generalizing Gain Penalization for Feature Selection in Tree-based Models»</span>. <a href="https://arxiv.org/abs/2006.07515">https://arxiv.org/abs/2006.07515</a>.
+Wundervald, B, A Parnell, y K Domijan. 2020. <em>Generalizing Gain Penalization for Feature Selection in Tree-based Models</em>. <a href="https://arxiv.org/abs/2006.07515">https://arxiv.org/abs/2006.07515</a>.
 </div>
 </div>
 </section></main><!-- /main --><script>

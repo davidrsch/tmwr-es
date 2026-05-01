@@ -2,12 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.37">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <meta name="description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
 <title>Modelado Ordenado con R</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -23,7 +26,6 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -51,15 +53,14 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a73e7facfaf3f326b6370add29585988.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-94509cf776e35d8cf5b7004333b6cf71.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -403,7 +404,7 @@ div.csl-indent {
 <p>La siguiente parte del libro avanza con más detalles sobre el proceso de creación de un modelo eficaz. Los capítulos <a href="10-resampling.html" class="quarto-xref"><span>10&nbsp; Remuestrear Para Evaluar El Rendimiento</span></a> a <a href="15-workflow-sets.html" class="quarto-xref"><span>15&nbsp; Probando Muchos Modelos</span></a> se centran en crear buenas estimaciones de rendimiento, así como en ajustar los hiperparámetros del modelo.</p>
 <p>Finalmente, la última sección de este libro, Capítulos <a href="16-dimensionality-reduction.html" class="quarto-xref"><span>16&nbsp; Reducción De Dimensionalidad</span></a> a <a href="21-inferential-analysis.html" class="quarto-xref"><span>21&nbsp; Análisis Inferencial</span></a>, cubre otros temas importantes para la construcción de modelos. Analizamos enfoques de ingeniería de características más avanzados, como la reducción de dimensionalidad y la codificación de predictores de alta cardinalidad, así como también cómo responder preguntas sobre por qué un modelo hace ciertas predicciones y cuándo confiar en las predicciones de su modelo.</p>
 <p>No asumimos que los lectores tengan una amplia experiencia en la construcción de modelos y estadísticas. Se requieren algunos conocimientos estadísticos, como muestreo aleatorio, varianza, correlación, regresión lineal básica y otros temas que generalmente se encuentran en un curso básico de estadística o análisis de datos de pregrado. Suponemos que el lector está al menos ligeramente familiarizado con dplyr, ggplot2 y el operador “pipe” <code>%&gt;%</code> en R, y que está interesado en aplicar estas herramientas al modelado. Para los usuarios que aún no tienen estos conocimientos básicos de R, recomendamos libros como <a href="https://r4ds.had.co.nz/"><em>R for Data Science</em></a> de Wickham y Grolemund (2016). La investigación y el análisis de datos son una parte importante de cualquier proceso de modelo.</p>
-<p>Este libro no pretende ser una referencia exhaustiva sobre técnicas de modelado; sugerimos otros recursos para aprender más sobre los propios métodos estadísticos. Para obtener información general sobre el tipo de modelo más común, el modelo lineal, sugerimos <span class="citation" data-cites="fox08">Fox (<a href="references.html#ref-fox08" role="doc-biblioref">2008</a>)</span>. Para modelos predictivos, <span class="citation" data-cites="apm">Kuhn y Johnson (<a href="references.html#ref-apm" role="doc-biblioref">2013</a>)</span> y <span class="citation" data-cites="fes">Kuhn y Johnson (<a href="references.html#ref-fes" role="doc-biblioref">2020</a>)</span> son buenos recursos. Para los métodos de aprendizaje automático, <span class="citation" data-cites="Goodfellow">Goodfellow, Bengio, y Courville (<a href="references.html#ref-Goodfellow" role="doc-biblioref">2016</a>)</span> es una fuente de información excelente (pero formal). En algunos casos, describimos los modelos que utilizamos con cierto detalle, pero de una manera menos matemática y, con suerte, más intuitiva.</p>
+<p>Este libro no pretende ser una referencia exhaustiva sobre técnicas de modelado; sugerimos otros recursos para aprender más sobre los propios métodos estadísticos. Para obtener información general sobre el tipo de modelo más común, el modelo lineal, sugerimos <span class="citation" data-cites="fox08">Fox (<a href="references.html#ref-fox08" role="doc-biblioref">2008</a>)</span>. Para modelos predictivos, <span class="citation" data-cites="apm">Kuhn y Johnson (<a href="references.html#ref-apm" role="doc-biblioref">2013</a>)</span> y <span class="citation" data-cites="fes">Kuhn y Johnson (<a href="references.html#ref-fes" role="doc-biblioref">2020</a>)</span> son buenos recursos. Para los métodos de aprendizaje automático, <span class="citation" data-cites="Goodfellow">Goodfellow et&nbsp;al. (<a href="references.html#ref-Goodfellow" role="doc-biblioref">2016</a>)</span> es una fuente de información excelente (pero formal). En algunos casos, describimos los modelos que utilizamos con cierto detalle, pero de una manera menos matemática y, con suerte, más intuitiva.</p>
 <section id="reconocimientos" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="reconocimientos">Reconocimientos</h2>
 <p>Estamos muy agradecidos por las contribuciones, la ayuda y las perspectivas de las personas que nos han apoyado en este proyecto. Hay varios a los que nos gustaría agradecer en particular.</p>
 <p>Nos gustaría agradecer a nuestros colegas de RStudio en el equipo <span class="pkg">tidymodels</span> (Davis Vaughan, Hannah Frick, Emil Hvitfeldt y Simon Couch), así como al resto de nuestros compañeros de trabajo en el equipo de código abierto de RStudio. Gracias a Desirée De Leon por el diseño del sitio del trabajo en línea. También nos gustaría agradecer a nuestros revisores técnicos, Chelsea Parlett-Pelleriti y Dan Simpson, por sus comentarios detallados y perspicaces que mejoraron sustancialmente este libro, así como a nuestros editores, Nicole Tache y Rita Fernando, por su perspectiva y orientación durante el proceso. de escritura y publicación.</p>
@@ -412,16 +413,16 @@ div.csl-indent {
 </div>
 </section><section id="usando-ejemplos-de-código" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="usando-ejemplos-de-código">Usando Ejemplos De Código</h2>
 <p>Este libro fue escrito con <a href="http://www.rstudio.com/ide/">RStudio</a> usando <a href="http://bookdown.org/">bookdown</a>. El <a href="https://tmwr.org">sito web</a> está alojado a través de <a href="http://netlify.com/">Netlify</a>, y construido automáticamente después de cada push por <a href="https://help.github.com/actions">GitHub Actions</a>. La fuente completa está disponible en <a href="https://github.com/tidymodels/TMwR">GitHub</a>. Generamos todos los gráficos de este libro usando <a href="https://ggplot2.tidyverse.org/">ggplot2</a> y su tema blanco y negro (<code>theme_bw()</code>).</p>
-<p>Esta versión del libro fue construida con R version 4.4.0 (2024-04-24), <a href="https://pandoc.org/">pandoc</a> versión 3.6.3, y los siguientes paquetes: applicable (0.1.1, RSPM), av (0.9.0, RSPM), baguette (1.0.2, RSPM), beans (0.1.0, RSPM), bestNormalize (1.9.1, RSPM), bookdown (0.40, RSPM), broom (1.0.6, RSPM), censored (0.3.2, RSPM), corrplot (0.92, RSPM), corrr (0.4.4, RSPM), Cubist (0.4.4, RSPM), DALEXtra (2.3.0, RSPM), dials (1.3.0, RSPM), dimRed (0.2.6, RSPM), discrim (1.0.1, RSPM), doMC (1.3.5, RSPM), dplyr (1.1.4, RSPM), earth (5.3.3, RSPM), embed (1.1.4, RSPM), fastICA (1.2-4, RSPM), finetune (1.2.0, RSPM), forcats (1.0.0, RSPM), ggforce (0.4.2, RSPM), ggplot2 (3.5.1, RSPM), glmnet (4.1-8, RSPM), gridExtra (2.3, RSPM), infer (1.0.7, RSPM), kableExtra (1.4.0, RSPM), kernlab (0.9-33, RSPM), kknn (1.3.1, RSPM), klaR (1.7-3, RSPM), knitr (1.48, RSPM), learntidymodels (0.0.0.9001, Github), lime (0.5.3, RSPM), lme4 (1.1-35.5, RSPM), lubridate (1.9.3, RSPM), mda (0.5-4, RSPM), mixOmics (6.28.0, Bioconductor), modeldata (1.4.0, RSPM), multilevelmod (1.0.0, RSPM), nlme (3.1-166, RSPM), nnet (7.3-19, CRAN), parsnip (1.2.1, RSPM), patchwork (1.2.0, RSPM), pillar (1.9.0, RSPM), poissonreg (1.0.1, RSPM), prettyunits (1.2.0, RSPM), probably (1.0.3, RSPM), pscl (1.5.9, RSPM), purrr (1.0.2, RSPM), ranger (0.16.0, RSPM), recipes (1.1.0, RSPM), rlang (1.1.4, RSPM), rmarkdown (2.27, RSPM), rpart (4.1.23, CRAN), rsample (1.2.1, RSPM), rstanarm (2.32.1, RSPM), rules (1.0.2, RSPM), sessioninfo (1.2.2, RSPM), stacks (1.0.5, RSPM), stringr (1.5.1, RSPM), svglite (2.1.3, RSPM), text2vec (0.6.4, RSPM), textrecipes (1.0.6, RSPM), themis (1.0.2, RSPM), tibble (3.2.1, RSPM), tidymodels (1.2.0, RSPM), tidyposterior (1.0.1, RSPM), tidyverse (2.0.0, RSPM), tune (1.2.1, RSPM), uwot (0.2.2, RSPM), workflows (1.1.4, RSPM), workflowsets (1.1.0, RSPM), xgboost (1.7.8.1, RSPM), and yardstick (1.3.1, RSPM).</p>
+<p>Esta versión del libro fue construida con R version 4.4.0 (2024-04-24), <a href="https://pandoc.org/">pandoc</a> versión 3.8.3, y los siguientes paquetes: applicable (0.1.1, RSPM), av (0.9.0, RSPM), baguette (1.0.2, RSPM), beans (0.1.0, RSPM), bestNormalize (1.9.1, RSPM), bookdown (0.40, RSPM), broom (1.0.6, RSPM), censored (0.3.2, RSPM), corrplot (0.92, RSPM), corrr (0.4.4, RSPM), Cubist (0.4.4, RSPM), DALEXtra (2.3.0, RSPM), dials (1.3.0, RSPM), dimRed (0.2.6, RSPM), discrim (1.0.1, RSPM), doMC (1.3.5, RSPM), dplyr (1.1.4, RSPM), earth (5.3.3, RSPM), embed (1.1.4, RSPM), fastICA (1.2-4, RSPM), finetune (1.2.0, RSPM), forcats (1.0.0, RSPM), ggforce (0.4.2, RSPM), ggplot2 (3.5.1, RSPM), glmnet (4.1-8, RSPM), gridExtra (2.3, RSPM), infer (1.0.7, RSPM), kableExtra (1.4.0, RSPM), kernlab (0.9-33, RSPM), kknn (1.3.1, RSPM), klaR (1.7-3, RSPM), knitr (1.48, RSPM), learntidymodels (0.0.0.9001, Github), lime (0.5.3, RSPM), lme4 (1.1-35.5, RSPM), lubridate (1.9.3, RSPM), mda (0.5-4, RSPM), mixOmics (6.28.0, Bioconductor), modeldata (1.4.0, RSPM), multilevelmod (1.0.0, RSPM), nlme (3.1-166, RSPM), nnet (7.3-19, CRAN), parsnip (1.2.1, RSPM), patchwork (1.2.0, RSPM), pillar (1.9.0, RSPM), poissonreg (1.0.1, RSPM), prettyunits (1.2.0, RSPM), probably (1.0.3, RSPM), pscl (1.5.9, RSPM), purrr (1.0.2, RSPM), ranger (0.16.0, RSPM), recipes (1.1.0, RSPM), rlang (1.1.4, RSPM), rmarkdown (2.27, RSPM), rpart (4.1.23, CRAN), rsample (1.2.1, RSPM), rstanarm (2.32.1, RSPM), rules (1.0.2, RSPM), sessioninfo (1.2.2, RSPM), stacks (1.0.5, RSPM), stringr (1.5.1, RSPM), svglite (2.1.3, RSPM), text2vec (0.6.4, RSPM), textrecipes (1.0.6, RSPM), themis (1.0.2, RSPM), tibble (3.2.1, RSPM), tidymodels (1.2.0, RSPM), tidyposterior (1.0.1, RSPM), tidyverse (2.0.0, RSPM), tune (1.2.1, RSPM), uwot (0.2.2, RSPM), workflows (1.1.4, RSPM), workflowsets (1.1.0, RSPM), xgboost (1.7.8.1, RSPM), and yardstick (1.3.1, RSPM).</p>
 </section><section id="sobre-la-traducción" class="level2"><h2 class="anchored" data-anchor-id="sobre-la-traducción">Sobre La Traducción</h2>
 <p><a href="https://amzn.to/35Hn96s"><img src="logo.png" alt="Cover image" width="285" align="right" style="margin: 0 1em 0 1em"></a> Esta traducción de “Modelado Ordenado con R” es un proyecto personal de <a href="https://github.com/davidrsch">David Díaz Rodríguez</a> con el objetivo de facilitar el estudio de construcción de modelos mediante el uso de R, tanto al propio traductor como a todas aquellas personas de habla hispana que deseen aprender sobre este tema.</p>
 <p>Señalar que esta es una traducción textual del libro por lo que cuando los autores se refieren a sí mismos en primera persona, serán Max Kuhn &amp; Julia Slige no el traductor.</p>
 <p>La traducción fue realizada usando Google Translate y fueron corregidos algunos errores gramaticales y de coherencia. Si detecta algún error relacionado con el contenido de la traducción, siéntase libre de abrir un issue o un pull request en este <a href="https://github.com/davidrsch/TMwRes">repositorio</a>.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-fox08" class="csl-entry" role="listitem">
-Fox, J. 2008. <em>Applied Regression Analysis and Generalized Linear Models</em>. Second. Thousand Oaks, <span>CA</span>: Sage.
+Fox, J. 2008. <em>Applied Regression Analysis and Generalized Linear Models</em>. Second. Sage.
 </div>
 <div id="ref-Goodfellow" class="csl-entry" role="listitem">
 Goodfellow, I, Y Bengio, y A Courville. 2016. <em>Deep Learning</em>. MIT Press.
@@ -430,7 +431,7 @@ Goodfellow, I, Y Bengio, y A Courville. 2016. <em>Deep Learning</em>. MIT Press.
 Kuhn, M, y K Johnson. 2013. <em>Applied Predictive Modeling</em>. Springer.
 </div>
 <div id="ref-fes" class="csl-entry" role="listitem">
-———. 2020. <em>Feature engineering and selection: A practical approach for predictive models</em>. CRC Press.
+Kuhn, M, y K Johnson. 2020. <em>Feature engineering and selection: A practical approach for predictive models</em>. CRC Press.
 </div>
 </div>
 </section></section></main><!-- /main --><script>

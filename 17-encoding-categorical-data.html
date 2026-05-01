@@ -2,12 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.37">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Max Kuhn, y Julia Silge">
 <meta name="description" content="Traducción al español de “Tidy Modeling with R” de Max Kuhn y Julia Silge. Aprende a construir modelos con el ecosistema tidymodels siguiendo principios ordenados y reproducibles.">
 <title>17&nbsp; Codificación De Datos Categóricos – Modelado Ordenado con R</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -58,7 +61,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -87,15 +89,14 @@ div.csl-indent {
 <link href="./logo.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a73e7facfaf3f326b6370add29585988.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-94509cf776e35d8cf5b7004333b6cf71.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -801,7 +802,7 @@ Figura&nbsp;17.2: Comparación de las codificaciones de efectos para el vecindar
 Tabla&nbsp;17.3: La cantidad de características hash en cada número de vecindarios.
 </figcaption><div aria-describedby="tbl-encoding-hash-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<table class="table do-not-create-environment cell caption-top table-sm table-striped small">
+<table class="table cell caption-top table-sm table-striped small">
 <thead><tr class="header">
 <th style="text-align: right;" data-quarto-table-cell-role="th">Número de vecindarios dentro de una característica hash</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">Numero de incidentes</th>
@@ -860,12 +861,12 @@ Tabla&nbsp;17.3: La cantidad de características hash en cada número de vecinda
 <p>La mayoría de los algoritmos modelo requieren algún tipo de transformación o codificación de este tipo para variables categóricas. Una minoría de modelos, incluidos los basados ​​en árboles y reglas, pueden manejar variables categóricas de forma nativa y no requieren dichas codificaciones.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Good1985" class="csl-entry" role="listitem">
 Good, I. J. 1985. <span>«Weight of evidence: A brief survey»</span>. <em>Bayesian Statistics</em> 2: 249-70.
 </div>
 <div id="ref-Guo2016" class="csl-entry" role="listitem">
-Guo, Cheng, y Felix Berkhahn. 2016. <span>«Entity Embeddings of Categorical Variables»</span>. <a href="http://arxiv.org/abs/1604.06737">http://arxiv.org/abs/1604.06737</a>.
+Guo, Cheng, y Felix Berkhahn. 2016. <em>Entity Embeddings of Categorical Variables</em>. <a href="http://arxiv.org/abs/1604.06737">http://arxiv.org/abs/1604.06737</a>.
 </div>
 <div id="ref-Hvitfeldt2021" class="csl-entry" role="listitem">
 Hvitfeldt, E., y J. Silge. 2021. <em>Supervised Machine Learning for Text Analysis in R</em>. A Chapman &amp; Hall libro. CRC Press. <a href="https://smltar.com/">https://smltar.com/</a>.
@@ -874,13 +875,13 @@ Hvitfeldt, E., y J. Silge. 2021. <em>Supervised Machine Learning for Text Analys
 Kuhn, M, y K Johnson. 2020. <em>Feature engineering and selection: A practical approach for predictive models</em>. CRC Press.
 </div>
 <div id="ref-MicciBarreca2001" class="csl-entry" role="listitem">
-Micci-Barreca, Daniele. 2001. <span>«A Preprocessing Scheme for High-Cardinality Categorical Attributes in Classification and Prediction Problems»</span>. <em>SIGKDD Explor. Newsl.</em> 3 (1): 27-32. <a href="https://doi.org/10.1145/507533.507538">https://doi.org/10.1145/507533.507538</a>.
+Micci-Barreca, Daniele. 2001. <span>«A Preprocessing Scheme for High-Cardinality Categorical Attributes in Classification and Prediction Problems»</span>. <em>SIGKDD Explor. Newsl.</em> (New York, NY, USA) 3 (1): 27-32. <a href="https://doi.org/10.1145/507533.507538">https://doi.org/10.1145/507533.507538</a>.
 </div>
 <div id="ref-weinberger2009feature" class="csl-entry" role="listitem">
-Weinberger, K, A Dasgupta, J Langford, A Smola, y J Attenberg. 2009. <span>«Feature hashing for large scale multitask learning»</span>. En <em>Proceedings of the 26th Annual International Conference on Machine Learning</em>, 1113-20. ACM.
+Weinberger, K, A Dasgupta, J Langford, A Smola, y J Attenberg. 2009. <span>«Feature hashing for large scale multitask learning»</span>. <em>Proceedings of the 26th Annual International Conference on Machine Learning</em>, 1113-20.
 </div>
 <div id="ref-Zumel2019" class="csl-entry" role="listitem">
-Zumel, Nina, y John Mount. 2019. <span>«vtreat: a data.frame Processor for Predictive Modeling»</span>. <a href="http://arxiv.org/abs/1611.09477">http://arxiv.org/abs/1611.09477</a>.
+Zumel, Nina, y John Mount. 2019. <em>vtreat: a data.frame Processor for Predictive Modeling</em>. <a href="http://arxiv.org/abs/1611.09477">http://arxiv.org/abs/1611.09477</a>.
 </div>
 </div>
 </section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
